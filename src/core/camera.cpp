@@ -54,9 +54,9 @@ void Camera::orbit(const Vector2f& mouseDelta)
 	normalize(v);
 	u = cross(v, w);
 	Matrix3f basis;
-	basis.setColumn(0, u);
-	basis.setColumn(1, v);
-	basis.setColumn(2, w);
+	basis[0] = u;
+	basis[1] = v;
+	basis[2] = w;
 	Matrix3f basisInv;
 	invert(basisInv, basis);
 
@@ -102,9 +102,9 @@ void Camera::panDolly(const Vector2f& mouseDelta, bool dolly)
 	normalize(v);
 	w = cross(u, v);
 	Matrix3f basis;
-	basis.setColumn(0, u);
-	basis.setColumn(1, v);
-	basis.setColumn(2, w);
+	basis[0] = u;
+	basis[1] = v;
+	basis[2] = w;
 	Matrix3f basisInv;
 	invert(basisInv, basis);
 
