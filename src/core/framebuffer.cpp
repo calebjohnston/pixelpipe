@@ -82,10 +82,10 @@ void FrameBuffer::clear(float r, float g, float b, float z)
 	char ib = (char) ((int) (255 * b) & 0xff);
 
 	for (int k = 0; k < width * height; k++) {
-	  cData[3 * k + 0] = ir;
-	  cData[3 * k + 1] = ig;
-	  cData[3 * k + 2] = ib;
-	  zData[k] = z;
+		cData[3 * k + 0] = ir;
+		cData[3 * k + 1] = ig;
+		cData[3 * k + 2] = ib;
+		zData[k] = z;
 	}
 }
 
@@ -95,7 +95,7 @@ void FrameBuffer::clear(float r, float g, float b, float z)
  * 
  * @param fname The name of the output file.
  */
-void FrameBuffer::write(String fname)
+void FrameBuffer::write(std::string fname)
 {
 	// try {
 	//   FileOutputStream stream = new FileOutputStream(fname);

@@ -34,11 +34,11 @@ endif(APPLE AND UNIX)
 set( pipeline_SRCS
   core/main.cpp
   core/camera.cpp
-  # core/clipper.cpp
-  # core/framebuffer.cpp
+  core/clipper.cpp
+  core/framebuffer.cpp
   # core/pipeline.cpp
   # core/rasterizer.cpp
-  # core/texture.cpp
+  core/texture.cpp
   # logger/logger.cpp
   # logger/logwriter.cpp
   # logger/stdiowriter.cpp

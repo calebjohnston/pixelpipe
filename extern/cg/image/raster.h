@@ -44,6 +44,9 @@ public:
     T& operator[](int i)       { return data[i]; }
     T  operator[](int i) const { return data[i]; }
 
+    T& at(int i) { return data[i]; }
+	T  at(int i) const { return data[i]; }
+
     virtual T       *pixel(int i, int j)       { return data + (j*W+i)*nchan; }
     virtual const T *pixel(int i, int j) const { return data + (j*W+i)*nchan; }
     T       *pixel(const PixelAddress &a)       { return pixel(a[0], a[1]); }

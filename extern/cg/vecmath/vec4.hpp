@@ -1,8 +1,5 @@
-#ifndef __GFX_VEC4_INCLUDED // -*- C++ -*-
+#ifndef __GFX_VEC4_INCLUDED
 #define __GFX_VEC4_INCLUDED
-#if !defined(__GNUC__)
-#  pragma once
-#endif
 
 /************************************************************************
 

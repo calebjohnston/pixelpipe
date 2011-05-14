@@ -4,7 +4,7 @@
 #include <string>
 
 #include "cg/image/raster.h"
-#include "cg/vecmath/vec3.h"
+#include "cg/vecmath/vec3.hpp"
 #include "cg/vecmath/color.h"
 
 namespace pipeline {
@@ -21,7 +21,7 @@ public:
 	
 	int width() const;
 	int height() const;
-	void sample(const float s, const float t, cg::vecmath::Color3f* cOut) const;	// TO-DO: THERE IS NO Color3f type. see vecmath/color.h
+	cg::vecmath::Color3f sample(const float s, const float t) const;	// TO-DO: THERE IS NO Color3f type. see vecmath/color.h
 	
 protected:
 	std::string filename;	// The name of the file from where the data was loaded.

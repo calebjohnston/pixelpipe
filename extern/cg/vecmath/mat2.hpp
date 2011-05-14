@@ -1,8 +1,5 @@
-#ifndef __CG_MAT2_H // -*- C++ -*-
+#ifndef __CG_MAT2_H  
 #define __CG_MAT2_H
-#if !defined(__GNUC__)
-#  pragma once
-#endif
 
 /************************************************************************
 
@@ -16,8 +13,6 @@
 
 namespace cg {
 namespace vecmath {
-
-/* IN THE PROCESS OF TEMPLATING THE MAT2 CLASS */
 
 template<class T>
 class Mat2

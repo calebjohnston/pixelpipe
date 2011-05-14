@@ -1,3 +1,4 @@
+#include <string>
 
 #include "core/texture.h"
 
@@ -43,18 +44,18 @@ Texture::Texture(std::string filename)
 	// }
 	
 	// NEW..
-	cBuf = pipeline::read_image(filename.c_str());	// only supports TIFF, JPEG, and PNG
+	cBuf = cg::image::read_image(filename.c_str());	// only supports TIFF, JPEG, and PNG
 	std::cout << "loaded " << cBuf->width() << " x " << cBuf->height() << " texture with " << cBuf->channels() << " channels." << std::endl;
 }
 
-int Texture::width()
+int Texture::width() const 
 {
 	int w = 0;
 	if(cBuf!=NULL) w = cBuf->width();
 	return w;
 }
 
-int Texture::height()
+int Texture::height() const 
 {
 	int h = 0;
 	if(cBuf!=NULL) h = cBuf->height();
@@ -68,8 +69,10 @@ int Texture::height()
  * @param p The 2D texture coordinate.
  * @param cOut The result of sampling the texture.
  */
-void Texture::sample(const float s, const float t, cg::vecmath::Color3f* cOut) const
+cg::vecmath::Color3f Texture::sample(const float s, const float t) const
 {
+	cg::vecmath::Color3f cOut;
+	
 	// TO-DO: Check for null input in cOut parameter...
 	int nx = cBuf->width();
 	int ny = cBuf->height();
@@ -83,38 +86,45 @@ void Texture::sample(const float s, const float t, cg::vecmath::Color3f* cOut) c
 	float uWeighted = 1.0f - uRatio;
 	float vWeighted = 1.0f - vRatio;
 	
-	cg::vecmath::Color3f* leftTop = new cg::vecmath::Color3f();
-	cg::vecmath::Color3f* rightTop = new cg::vecmath::Color3f();
-	cg::vecmath::Color3f* leftBottom = new cg::vecmath::Color3f();
-	cg::vecmath::Color3f* rightBottom = new cg::vecmath::Color3f();
+	cg::vecmath::Color3f leftTop;
+	cg::vecmath::Color3f rightTop;
+	cg::vecmath::Color3f leftBottom;
+	cg::vecmath::Color3f rightBottom;
+	
+	unsigned char r,g,b;
 	
 	int offset = 3 * (nx * y + x);
 	if(offset >= cBuf->length()) offset = cBuf->length() - 3;
-	leftTop->set((cBuf[offset + 0] & 0xff) / 255.0f, (cBuf[offset + 1] & 0xff) / 255.0f, (cBuf[offset + 2] & 0xff) / 255.0f);
-	leftTop->scale(uWeighted);
+	r = cBuf->at(offset + 0);
+	g = cBuf->at(offset + 1);
+	b = cBuf->at(offset + 2);
+	leftTop.set((r & 0xff) / 255.0f, (g & 0xff) / 255.0f, (b & 0xff) / 255.0f);
+	leftTop *= uWeighted;
 	
 	offset = 3 * (nx * y + x + 1);
 	if(offset >= cBuf->length()) offset = cBuf->length() - 3;
-	rightTop->set((cBuf[offset + 0] & 0xff) / 255.0f, (cBuf[offset + 1] & 0xff) / 255.0f, (cBuf[offset + 2] & 0xff) / 255.0f);
-	rightTop->scale(uRatio);
+	rightTop.set((cBuf->at(offset + 0) & 0xff) / 255.0f, (cBuf->at(offset + 1) & 0xff) / 255.0f, (cBuf->at(offset + 2) & 0xff) / 255.0f);
+	rightTop *= uRatio;
 	
-	rightTop->add(leftTop);
-	rightTop->scale(vWeighted);
+	rightTop += leftTop;
+	rightTop *= vWeighted;
 	
 	offset = 3 * (nx * (y+1) + x);
 	if(offset >= cBuf->length()) offset = cBuf->length() - 3;
-	leftBottom->set((cBuf[offset + 0] & 0xff) / 255.0f, (cBuf[offset + 1] & 0xff) / 255.0f, (cBuf[offset + 2] & 0xff) / 255.0f);
-	leftBottom->scale(uWeighted);
+	leftBottom.set((cBuf->at(offset + 0) & 0xff) / 255.0f, (cBuf->at(offset + 1) & 0xff) / 255.0f, (cBuf->at(offset + 2) & 0xff) / 255.0f);
+	leftBottom *= uWeighted;
 	
 	offset = 3 * (nx * (y+1) + x + 1);
 	if(offset >= cBuf->length()) offset = cBuf->length() - 3;
-	rightBottom->set((cBuf[offset + 0] & 0xff) / 255.0f, (cBuf[offset + 1] & 0xff) / 255.0f, (cBuf[offset + 2] & 0xff) / 255.0f);
-	rightBottom->scale(uRatio);
+	rightBottom.set((cBuf->at(offset + 0) & 0xff) / 255.0f, (cBuf->at(offset + 1) & 0xff) / 255.0f, (cBuf->at(offset + 2) & 0xff) / 255.0f);
+	rightBottom *= uRatio;
 	
-	rightBottom->add(leftBottom);
-	rightBottom->scale(vRatio);
+	rightBottom += leftBottom;
+	rightBottom *= vRatio;
 	
-	cOut->add(rightBottom, rightTop);
+	cOut = rightBottom + rightTop;
+	
+	return cOut;
 }
 
 }	// namespace pipeline

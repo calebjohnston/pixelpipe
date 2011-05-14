@@ -1,8 +1,5 @@
 #ifndef __CG_MAT4_H
 #define __CG_MAT4_H
-#if !defined(__GNUC__)
-#  pragma once
-#endif
 
 /************************************************************************
 
@@ -296,13 +293,13 @@ template<class T> Mat4<T> adjoint(const Mat4<T>& m)
 	}
 
 
-	// Matrix inversion code for 4x4 matrices using Gaussian elimination
-	// with partial pivoting.  This is a specialized version of a
-	// procedure originally due to Paul Heckbert <ph@cs.cmu.edu>.
-	//
-	// Returns determinant of A, and B=inverse(A)
-	// If matrix A is singular, returns 0 and leaves trash in B.
-	//
+// Matrix inversion code for 4x4 matrices using Gaussian elimination
+// with partial pivoting.  This is a specialized version of a
+// procedure originally due to Paul Heckbert <ph@cs.cmu.edu>.
+//
+// Returns determinant of A, and B=inverse(A)
+// If matrix A is singular, returns 0 and leaves trash in B.
+//
 	
 template<class T> T invert(Mat4<T>& m_inv, const Mat4<T>& m)
 	{

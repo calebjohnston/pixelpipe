@@ -1,8 +1,5 @@
-#ifndef __GFX_QUAT_INCLUDED // -*- C++ -*-
+#ifndef __GFX_QUAT_INCLUDED  
 #define __GFX_QUAT_INCLUDED
-#if !defined(__GNUC__)
-#  pragma once
-#endif
 
 /************************************************************************
 

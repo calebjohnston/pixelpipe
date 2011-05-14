@@ -2,12 +2,16 @@
 #define __PIPELINE_VERTEX_H
 
 #include <stdlib.h>
-#include "cg/vecmath/vec4.h"
+#include "cg/vecmath/vec4.hpp"
 
 namespace pipeline {
 
 struct Vertex {
 public:
+	Vertex(){
+		length = 0;
+	}
+	
 	Vertex(int n) {
 		length = n;
 		attributes = (float*) malloc(length*sizeof(float));
@@ -38,5 +42,7 @@ public:
 	/** The total number of attributes associated with this vertex. */
 	int length;
 };
+
+}
 
 #endif	// __PIPELINE_VERTEX_H

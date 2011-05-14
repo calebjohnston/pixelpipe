@@ -1,8 +1,5 @@
 #ifndef __CG_MAT3_H
 #define __CG_MAT3_H
-#if !defined(__GNUC__)
-#  pragma once
-#endif
 
 /************************************************************************
 
