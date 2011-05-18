@@ -2,8 +2,8 @@
 #define __PIPELINE_TEXTURED_FRAG_H
 
 #include "cg/vecmath/color.h"
-#include "cg/vecmath/vec3.h"
-#include "cg/vecmath/vec2.h"
+#include "cg/vecmath/vec3.hpp"
+#include "cg/vecmath/vec2.hpp"
 #include "core/fragment.h"
 #include "core/framebuffer.h"
 #include "core/pointlight.h"

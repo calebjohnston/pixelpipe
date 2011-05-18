@@ -1,14 +1,6 @@
 #ifndef __CG_MAT2_H  
 #define __CG_MAT2_H
 
-/************************************************************************
-
-  2x2 Matrix class
-  
-  $Id: mat2.h 427 2004-09-27 04:45:31Z garland $
-
- ************************************************************************/
-
 #include "cg/vecmath/vec2.hpp"
 
 namespace cg {
@@ -28,6 +20,8 @@ public:
 	{ row[0][0]=a; row[0][1]=b; row[1][0]=c; row[1][1]=d; }
     template<class U> Mat2(const TVec2<U> &r0,const TVec2<U> &r1) { row[0]=r0; row[1]=r1; }
     template<class U> Mat2(const Mat2<U> &m) { *this = m; }
+	template<class U> Mat2(const T* arr)
+		{ row[0] = TVec2<T>(arr[0], arr[2]); row[1] = TVec2<T>(arr[1], arr[3]); }
 
     // Descriptive interface
     //
@@ -61,8 +55,7 @@ public:
 
 
     // Construction of standard matrices
-    //
-	static Mat2<T> I();
+    //	
 	static Mat2<T> outer_product(const TVec2<T> &u, const TVec2<T> &v)
 	{
 		return Mat2<T>(u[0]*v[0], u[0]*v[1], u[1]*v[0], u[1]*v[1]);
@@ -73,10 +66,17 @@ public:
 		return outer_product(u,u);
 	}
 	
-	inline void setColumn(int i, const TVec2<T>& v);
-	inline void setRow(int i, const TVec2<T>& v);
+	inline void setColumn(int i, const TVec2<T>& v)
+	{
+		row[0][i] = v.x; row[1][i] = v.y;
+	}
+	
+	inline void setRow(int i, const TVec2<T>& v)
+	{
+		row[i] = v;
+	}
 
-	Mat2<T> &diag(T d)
+	Mat2<T>& diagonal(T d)
 	{
 	    row[0][0] = d;   row[0][1] = 0;
 	    row[1][0] = 0;   row[1][1] = d;
@@ -84,9 +84,42 @@ public:
 	    return *this;
 	}
 	
-    Mat2<T> &ident()
+    Mat2<T>& identity()
 	{
-		return diag(1.0);
+		return diagonal(1.0);
+	}
+	
+	static Mat2<T> I()
+	{
+		return Mat2<T>(1,0,  0,1);
+	}
+	
+	inline T getDeterminant()
+	{
+		return det(*this);
+	}
+
+	inline T getTrace()
+	{
+		return trace(*this);
+	}
+
+	inline Mat2<T> getTranspose()
+	{
+		return transpose(*this);
+	}
+
+	inline Mat2<T> getAdjoint()
+	{
+		return adjoint(*this);
+	}
+
+	inline T* toArray()
+	{
+		T arr[4] = {	row[0][0],	row[1][0],	
+						row[0][1],	row[1][1]
+					};
+		return arr;
 	}
 };
 
@@ -224,13 +257,6 @@ template<class T> bool eigen(const Mat2<T>& M, TVec2<T>& evals, TVec2<T> evecs[2
 		eigenvectors(M, evals, evecs);
 	    return result;
 	}
-
-template<class T> Mat2<T> Mat2<T>::I() { return Mat2<T>(1,0,  0,1); }
-
-template<class T> inline void Mat2<T>::setColumn(int i, const TVec2<T>& v)
-	{ row[0][i] = v.x; row[1][i] = v.y; }
-
-template<class T> inline void Mat2<T>::setRow(int i, const TVec2<T>& v) { row[i] = v; }
 
 typedef Mat2<double> Matrix2;
 typedef Mat2<float>  Matrix2f;

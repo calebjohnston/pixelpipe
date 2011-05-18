@@ -1,13 +1,5 @@
-#ifndef __GFX_VEC3_INCLUDED  
-#define __GFX_VEC3_INCLUDED
-
-/************************************************************************
-
-  3D Vector class
-
-  $Id: vec3.h 427 2004-09-27 04:45:31Z garland $
-
- ************************************************************************/
+#ifndef __CG_VEC3_H  
+#define __CG_VEC3_H
 
 #include "cg/vecmath/vec2.hpp"
 
@@ -64,6 +56,7 @@ public:
     inline TVec3& operator/=(T s);
 	inline T lengthSquared() { return elt[0]*elt[0] + elt[1]*elt[1] + elt[2]*elt[2]; }
 	inline T length() { return sqrt(lengthSquared()); }
+	inline void normalize() { unitize(*this); }
 	inline void set(T _x, T _y, T _z) { elt[0] = _x, elt[1] = _y; elt[2] = _z; }
 };
 
@@ -156,15 +149,15 @@ inline std::istream &operator>>(std::istream &in, TVec3<T>& v)
 
 template<class T> inline T norm2(const TVec3<T>& v)	{ return v*v; }
 template<class T> inline T norm(const TVec3<T>& v)	{ return sqrt(norm2(v)); }
-template<class T> inline T dot(const TVec3<T>&v1, const TVec3<T>&v2) { return v1[0]*v2[0] + v1[1]*v2[1] + v1[2]*v2[2]; }
+template<class T> inline T dot(const TVec3<T>& v1, const TVec3<T>& v2) { return v1[0]*v2[0] + v1[1]*v2[1] + v1[2]*v2[2]; }
 
-template<class T> inline void normalize(TVec3<T>& v)
+template<class T> inline void unitize(TVec3<T>& v)
 {
     T l = norm2(v);
     if( l!=1.0 && l!=0.0 )  v /= sqrt(l);
 }
 
-template<class T> inline TVec2<T> proj(const TVec3<T>& v)
+template<class T> inline TVec2<T> project(const TVec3<T>& v)
 {
     TVec2<T> u(v[0], v[1]);
     if( v[2]!=1.0 && v[2]!=0.0 )
@@ -184,5 +177,4 @@ typedef TVec3<float>  Point3f;
 } // namespace vecmath 
 } // namespace cg
 
-// __GFX_VEC3_INCLUDED
-#endif
+#endif	// __CG_VEC3_H

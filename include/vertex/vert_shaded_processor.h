@@ -1,10 +1,10 @@
 #ifndef __PIPELINE_SMOOTH_SHADED_PROCESSOR_H
 #define __PIPELINE_SMOOTH_SHADED_PROCESSOR_H
 
-#include "cg/vecmath/vec2.h"
-#include "cg/vecmath/vec3.h"
-#include "cg/vecmath/vec4.h"
-#include "cg/vecmath/mat4.h"
+#include "cg/vecmath/vec2.hpp"
+#include "cg/vecmath/vec3.hpp"
+#include "cg/vecmath/vec4.hpp"
+#include "cg/vecmath/mat4.hpp"
 #include "cg/vecmath/color.h"
 #include "core/pipeline.h"
 #include "core/pointlight.h"
@@ -25,22 +25,22 @@ public:
 	SmoothShadedVP();
 	int nAttr() { return 3; }
 	void updateTransforms(const Pipeline& pipe);
-	void vertex(Vector3f v, Color3f c, Vector3f n, Vector2f t, Vertex output);
-	void triangle(Vector3f[] vs, Color3f[] cs, Vector3f[] ns, Vector2f[] ts, Vertex[] outputs);
+	void vertex(const cg::vecmath::Vector3f& v, const cg::vecmath::Color3f& c, const cg::vecmath::Vector3f& n, const cg::vecmath::Vector2f& t, cg::vecmath::Vertex output);
+	void triangle(const cg::vecmath::Vector3f* vs, const cg::vecmath::Color3f* cs, const cg::vecmath::Vector3f* ns, const cg::vecmath::Vector2f* ts, Vertex* outputs);
 	
 protected:	
 	float nDotH;
 	float nDotL;
-	Matrix4f modelViewMatrix;
-	Matrix4f m;
-	Vector4f vertex;
-	Vector4f normal;
-	Vector3f viewVector;
-	Vector3f lightVector;
-	Vector3f halfVector;
-	Vector3f transformedNormal;
-	Point3f transformedVertex;
-	Color3f outColor;
+	cg::vecmath::Matrix4f modelViewMatrix;
+	cg::vecmath::Matrix4f m;
+	cg::vecmath::Vector4f vertex;
+	cg::vecmath::Vector4f normal;
+	cg::vecmath::Vector3f viewVector;
+	cg::vecmath::Vector3f lightVector;
+	cg::vecmath::Vector3f halfVector;
+	cg::vecmath::Vector3f transformedNormal;
+	cg::vecmath::Point3f transformedVertex;
+	cg::vecmath::Color3f outColor;
 	
 };
 

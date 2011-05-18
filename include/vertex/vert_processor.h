@@ -1,13 +1,15 @@
 #ifndef __PIPELINE_VERTEX_PROCESSOR_H
 #define __PIPELINE_VERTEX_PROCESSOR_H
 
-#include "cg/vecmath/vec2.h"
-#include "cg/vecmath/vec3.h"
+#include "cg/vecmath/vec2.hpp"
+#include "cg/vecmath/vec3.hpp"
 #include "cg/vecmath/color.h"
 #include "core/pipeline.h"
 #include "core/vertex.h"
 
 namespace pipeline {
+	
+class Pipeline;
 	
 /**
  * This class is a wrapper for the code that does triangle processing -- or
@@ -72,7 +74,7 @@ public:
 	 * @param output The array of 3 vertices that serves as the output for this
 	 *          method.
 	 */
-	virtual void triangle(cg::vecmath::Vector3f[] v, cg::vecmath::Color3f[] c, cg::vecmath::Vector3f[] n, cg::vecmath::Vector2f[] t, Vertex[] output) = 0;
+	virtual void triangle(const cg::vecmath::Vector3f* v, const cg::vecmath::Color3f* c, const cg::vecmath::Vector3f* n, const cg::vecmath::Vector2f* t, Vertex* output) = 0;
 	
 	/**
 	 * This is the main function of this class, which is called once for every
@@ -85,7 +87,7 @@ public:
 	 * @param t Texture coordinates for each vertex (null if unused).
 	 * @param output The processed vertex.
 	 */
-	virtual void vertex(cg::vecmath::Vector3f v, cg::vecmath::Color3f c, cg::vecmath::Vector3f n, cg::vecmath::Vector2f t, Vertex output) = 0;
+	virtual void vertex(const cg::vecmath::Vector3f v, const cg::vecmath::Color3f c, const cg::vecmath::Vector3f n, const cg::vecmath::Vector2f t, Vertex output) = 0;
 };
 
 }

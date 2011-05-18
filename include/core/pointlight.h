@@ -2,7 +2,7 @@
 #define __PIPELINE_POINTLIGHT_H
 
 #include "cg/vecmath/color.h"
-#include "cg/vecmath/vec3.h"
+#include "cg/vecmath/vec3.hpp"
 
 namespace pipeline {
 

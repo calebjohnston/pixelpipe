@@ -1,13 +1,5 @@
-#ifndef __GFX_VEC4_INCLUDED
-#define __GFX_VEC4_INCLUDED
-
-/************************************************************************
-
-  4D Vector class
-  
-  $Id: vec4.h 427 2004-09-27 04:45:31Z garland $
-
- ************************************************************************/
+#ifndef __CG_VEC4_H
+#define __CG_VEC4_H
 
 #include "cg/vecmath/vec3.hpp"
 
@@ -66,6 +58,7 @@ public:
     inline TVec4& operator/=(T s);
 	inline T lengthSquared() { return elt[0]*elt[0] + elt[1]*elt[1] + elt[2]*elt[2] + elt[3]*elt[3]; }
 	inline T length() { return sqrt(lengthSquared()); }
+	inline void normalize() { unitize(*this); }
 	inline void set(T _x, T _y, T _z, T _w) { elt[0] = _x, elt[1] = _y; elt[2] = _z; elt[3] = _w; }
 };
 
@@ -172,7 +165,7 @@ template<class T> inline void unitize(TVec4<T>& v)
     if( l!=1.0 && l!=0.0 )  v /= sqrt(l);
 }
 
-template<class T> inline TVec3<T> proj(const TVec4<T>& v)
+template<class T> inline TVec3<T> project(const TVec4<T>& v)
 {
     TVec3<T> u(v[0], v[1], v[2]);
     if( v[3]!=1.0 && v[3]!=0.0 )
@@ -192,5 +185,4 @@ typedef TVec4<float>  Point4f;
 } // namespace vecmath
 } // namespace cg
 
-// __GFX_VEC4_INCLUDED
-#endif
+#endif	// __CG_VEC4_H

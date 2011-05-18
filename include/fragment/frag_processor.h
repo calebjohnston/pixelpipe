@@ -15,8 +15,7 @@ namespace pipeline {
  * @author ags
  */
 class FragmentProcessor {
-public:
-	
+public:	
 	/** A list of valid Fragment Processors */
 	// static public Class[] classes = {
 	// 	TrivialColorFP.class,
@@ -27,17 +26,19 @@ public:
 	// 	ReflectionMapFP.class
 	// 	};
 	
+	virtual int nAttr() = 0;
+	virtual void fragment(Fragment& f, FrameBuffer& fb) = 0;
+	
 	/**
 	 * This sets the texture that the fragment processor should use.
 	 */
-	void setTexture(Texture newTexture) { texture = newTexture; }
+	void setTexture(const Texture& newTexture) { texture = newTexture; }
 	
 protected:
 	Texture texture;	// A reference to the currently loaded texture.
 	
-	virtual int nAttr() = 0;
-	virtual void fragment(const Fragment& f, FrameBuffer& fb) = 0;
-	
-}
+};	// class FragmentProcessor
+
+};	// namespace pipeline
 
 #endif	// __PIPELINE_FRAGMENT_PROCESSOR_H

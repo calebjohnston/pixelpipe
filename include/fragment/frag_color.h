@@ -14,12 +14,12 @@ namespace pipeline {
  * @author ags
  */
 class ColorFP : public FragmentProcessor {
-public:
-	int nAttr() { return 3; }
+public:	
+	virtual int nAttr() const { return 3; }
 	
-	void fragment(const Fragment& f, FrameBuffer& fb);	
+	virtual void fragment(Fragment& f, FrameBuffer& fb);	
 };
 
-}
+}	// namespace pipeline
 
 #endif	// #define __PIPELINE_COLOR_FRAG_H

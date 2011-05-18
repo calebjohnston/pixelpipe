@@ -1,14 +1,6 @@
 #ifndef __CG_MAT3_H
 #define __CG_MAT3_H
 
-/************************************************************************
-
-  3x3 Matrix class
-
-  $Id: mat3.h 427 2004-09-27 04:45:31Z garland $
-
- ************************************************************************/
-
 #include "cg/vecmath/vec3.hpp"
 
 namespace cg {
@@ -27,6 +19,12 @@ public:
     template<class U> Mat3(const TVec3<U>& r0,const TVec3<U>& r1,const TVec3<U>& r2)
     	{ row[0]=r0; row[1]=r1; row[2]=r2; }
     template<class U> Mat3(const Mat3<U>& m) { *this = m; }
+	template<class U> Mat3(const T* arr)
+	{
+		row[0] = TVec3<T>(arr[0], arr[3], arr[6]);
+		row[1] = TVec3<T>(arr[1], arr[4], arr[7]);
+		row[2] = TVec3<T>(arr[2], arr[5], arr[8]);
+	}
 
     // Descriptive interface
     //
@@ -63,12 +61,7 @@ public:
 
 
     // Construction of standard matrices
-    //
-    static Mat3<T> I()
-	{
-		return Mat3<T>(TVec3<T>(1,0,0), TVec3<T>(0,1,0), TVec3<T>(0,0,1));
-	}
-	
+    //	
     static Mat3<T> outer_product(const TVec3<T>& u, const TVec3<T>& v)
 	{
 	    Mat3<T> A;
@@ -84,11 +77,10 @@ public:
     static Mat3<T> outer_product(const TVec3<T>& v)
 	{
 	    Mat3<T> A;
-	    T x=v[0], y=v[1], z=v[2];
-
-	    A(0,0) = x*x;  A(0,1) = x*y;  A(0,2) = x*z;
-	    A(1,0)=A(0,1); A(1,1) = y*y;  A(1,2) = y*z;
-	    A(2,0)=A(0,2); A(2,1)=A(1,2); A(2,2) = z*z;
+	
+	    A(0,0) = v.x*v.x;	A(0,1) = v.x*v.y;	A(0,2) = v.x*v.z;
+	    A(1,0) = A(0,1);	A(1,1) = v.y*v.y;	A(1,2) = v.y*v.z;
+	    A(2,0) = A(0,2);	A(2,1) = A(1,2);	A(2,2) = v.z*v.z;
 
 	    return A;
 	}
@@ -105,19 +97,52 @@ public:
 		row[i] = v;
 	}
 
-    Mat3<T> &diag(T d)
+    Mat3<T>& diagonal(T d)
 	{
 	    *this = 0.0;
 	    row[0][0] = row[1][1] = row[2][2] = d;
 	    return *this;
 	}
 	
-    Mat3<T> &ident()
+    Mat3<T>& identity()
 	{
-		return diag(1.0);
+		return diagonal(1.0);
 	}
 
+	static Mat3<T> I()
+	{
+		return Mat3<T>(TVec3<T>(1,0,0), TVec3<T>(0,1,0), TVec3<T>(0,0,1));
+	}
+	
+	inline T getDeterminant() const
+	{
+		return det(*this);
+	}
 
+	inline T getTrace() const
+	{
+		//return trace(const_cast<const Mat3<T>& > (*this));
+		return trace(*this);
+	}
+
+	inline Mat3<T> getTranspose() const
+	{
+		return transpose(*this);
+	}
+
+	Mat3<T> getAdjoint() const
+	{
+		return adjoint(*this);
+	}
+
+	inline T* toArray()
+	{
+		T arr[9] = {	row[0][0],	row[1][0],	row[2][0],
+						row[0][1],	row[1][1],	row[2][1],
+						row[0][2],	row[1][2],	row[2][2]
+					};
+		return arr;
+	}
 };
 
 ////////////////////////////////////////////////////////////////////////
@@ -226,7 +251,7 @@ template<class T> T invert(Mat3<T>& m_inv, const Mat3<T>& m)
 
 template<class T> inline Mat3<T> row_extend(const TVec3<T>& v) { return Mat3<T>(v, v, v); }
 
-template<class T> Mat3<T> diag(const TVec3<T>& v)
+template<class T> Mat3<T> diagonal(const TVec3<T>& v)
 	{
 	    return Mat3<T>(TVec3<T>(v[0],0,0),  TVec3<T>(0,v[1],0),  TVec3<T>(0,0,v[2]));
 	}

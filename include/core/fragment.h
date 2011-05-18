@@ -30,4 +30,6 @@ public:
 
 };
 
+}
+
 #endif	// __PIPELINE_FRAGMENT_H

@@ -48,10 +48,10 @@ void Camera::orbit(const Vector2f& mouseDelta)
 	// Build arbitrary frame at target point with w = up
 	Vector3f u,v,w;
 	w = up;
-	normalize(w);
+	w.normalize();
 	u = nonParallelVector(w);
 	v = cross(w, u);
-	normalize(v);
+	v.normalize();
 	u = cross(v, w);
 	Matrix3f basis;
 	basis[0] = u;
@@ -95,11 +95,11 @@ void Camera::panDolly(const Vector2f& mouseDelta, bool dolly)
 	u = target;
 	u -= eye;
 	Vector3f t(u);
-	normalize(u);
+	u.normalize();
 	w = up;
-	normalize(w);
+	w.normalize();
 	v = cross(w, u);
-	normalize(v);
+	v.normalize();
 	w = cross(u, v);
 	Matrix3f basis;
 	basis[0] = u;
@@ -137,7 +137,7 @@ void Camera::panDolly(const Vector2f& mouseDelta, bool dolly)
 	t.set((float) (r * std::cos(phi) * std::cos(theta)), (float) (r * std::sin(phi) * std::cos(theta)), (float) (r * std::sin(theta)));
 	//basis.transform(t, target);	// instead ...
 	target = basis * t;
-	normalize(target);
+	target.normalize();
 	// target.add(eye);	// instead ...
 	target += eye;
 }

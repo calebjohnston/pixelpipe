@@ -1,13 +1,5 @@
-#ifndef __GFX_QUAT_INCLUDED  
-#define __GFX_QUAT_INCLUDED
-
-/************************************************************************
-
-  TQuaternion class
-  
-  $Id: quat.h 440 2005-02-23 05:14:13Z garland $
-
- ************************************************************************/
+#ifndef __CG_QUAT_H  
+#define __CG_QUAT_H
 
 #include "cg/vecmath/mat4.hpp"
 
@@ -41,8 +33,10 @@ public:
     TQuat<T>& operator*=(T d);
     TQuat<T>& operator/=(T d);
 
+	inline void normalize() { unitize(*this); }
+
     // Construction of standard quaternions
-    static TQuat<T> ident();
+    static TQuat<T> identity();
 };
 
 ////////////////////////////////////////////////////////////////////////
@@ -56,7 +50,7 @@ template<class T> inline TQuat<T>& TQuat<T>::operator-=(const TQuat<T>& q) { v-=
 template<class T> inline TQuat<T>& TQuat<T>::operator=(T d)  { v=d;  s=d;  return *this; }
 template<class T> inline TQuat<T>& TQuat<T>::operator*=(T d) { v*=d; s*=d; return *this; }
 template<class T> inline TQuat<T>& TQuat<T>::operator/=(T d) { v/=d; s/=d; return *this; }
-template<class T> inline TQuat<T> TQuat<T>::ident() { return TQuat<T>(0, 0, 0, 1); }
+template<class T> inline TQuat<T> TQuat<T>::identity() { return TQuat<T>(0, 0, 0, 1); }
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -224,5 +218,4 @@ typedef TQuat<float>  Quaternionf;
 } // namespace vecmath
 } // namespace cg
 
-// __GFX_QUAT_INCLUDED
-#endif
+#endif	// __CG_QUAT_H

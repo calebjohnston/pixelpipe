@@ -5,7 +5,7 @@
 #include "core/framebuffer.h"
 #include "core/vertex.h"
 #include "fragment/frag_processor.h"
-#include "cg/vecmath/vec4.h"
+#include "cg/vecmath/vec4.hpp"
 
 namespace pipeline {
 
@@ -21,6 +21,8 @@ public:
 	Rasterizer(int newNa, int newNx, int newNy);
 	~Rasterizer();
 	
+	void rasterize(const Vertex* vs, FragmentProcessor& fp, FrameBuffer& fb);
+	
 protected:
 	int na;
 	int nx;
@@ -31,10 +33,8 @@ protected:
 	float* yInc;
 	float* rowData;
 	float* pixData;
-	Fragment frag;
-	Vector4f posn[3];
-	
-	void rasterize(Vertex[] vs, FragmentProcessor& fp, FrameBuffer& fb);
+	Fragment* frag;
+	cg::vecmath::Vector4f posn[3];
 	
 private:
 	static int ceil(float x);

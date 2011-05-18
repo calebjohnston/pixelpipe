@@ -1,10 +1,10 @@
 #ifndef __PIPELINE_FRAG_SHADED_PROCESSOR_H
 #define __PIPELINE_FRAG_SHADED_PROCESSOR_H
 
-#include "cg/vecmath/vec2.h"
-#include "cg/vecmath/vec3.h"
-#include "cg/vecmath/vec4.h"
-#include "cg/vecmath/mat4.h"
+#include "cg/vecmath/vec2.hpp"
+#include "cg/vecmath/vec3.hpp"
+#include "cg/vecmath/vec4.hpp"
+#include "cg/vecmath/mat4.hpp"
 #include "cg/vecmath/color.h"
 #include "core/pipeline.h"
 #include "core/pointlight.h"

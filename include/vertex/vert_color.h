@@ -1,9 +1,9 @@
 #ifndef __PIPELINE_CONSTANT_COLOR_PROCESSOR_H
 #define __PIPELINE_CONSTANT_COLOR_PROCESSOR_H
 
-#include "cg/vecmath/vec2.h"
-#include "cg/vecmath/vec3.h"
-#include "cg/vecmath/mat4.h"
+#include "cg/vecmath/vec2.hpp"
+#include "cg/vecmath/vec3.hpp"
+#include "cg/vecmath/mat4.hpp"
 #include "cg/vecmath/color.h"
 #include "core/pipeline.h"
 #include "core/vertex.h"
@@ -21,12 +21,20 @@ class ConstColorVP : public VertexProcessor {
 public:	
 	int nAttr() { return 3; }
 	void updateTransforms(const Pipeline& pipe);
-	void triangle(cg::vecmath::Vector3f[] vs, cg::vecmath::Color3f[] cs, cg::vecmath::Vector3f[] ns_ign, cg::vecmath::Vector2f[] ts_ign, Vertex[] output);
-	void vertex(cg::vecmath::Vector3f v, cg::vecmath::Color3f c, cg::vecmath::Vector3f n_ign, cg::vecmath::Vector2f t_ign, Vertex output);
+	void triangle(	const cg::vecmath::Vector3f* vs, 
+					const cg::vecmath::Color3f* cs, 
+					const cg::vecmath::Vector3f* ns_ign, 
+					const cg::vecmath::Vector2f* ts_ign, 
+					Vertex* output);
+	void vertex(const cg::vecmath::Vector3f& v, 
+				const cg::vecmath::Color3f& c, 
+				const cg::vecmath::Vector3f& n_ign, 
+				const cg::vecmath::Vector2f& t_ign, 
+				Vertex& output);
 	
 protected:
 	/** This is the composed modelling, viewing, projection, and viewport matrix. */
-	Matrix4f m;
+	cg::vecmath::Matrix4f mvp;
 
 };
 

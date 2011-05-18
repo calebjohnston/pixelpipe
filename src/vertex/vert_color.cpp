@@ -1,30 +1,36 @@
 #include "vertex/vert_color.h"
 
+using namespace cg::vecmath;
+
 namespace pipeline {
 	
 void ConstColorVP::updateTransforms(const Pipeline& pipe)
 {
-	m.set(pipe.modelviewMatrix);
-	m.leftCompose(pipe.projectionMatrix);
-	m.leftCompose(pipe.viewportMatrix);
+	mvp = pipe.modelviewMatrix;
+	Matrix4f temp = mvp;
+	mvp = temp * pipe.projectionMatrix;
+	temp = mvp;
+	mvp = temp * pipe.viewportMatrix;
 }
 
-void ConstColorVP::triangle(cg::vecmath::Vector3f[] vs, cg::vecmath::Color3f[] cs, cg::vecmath::Vector3f[] ns_ign, cg::vecmath::Vector2f[] ts_ign, Vertex[] output)
+void ConstColorVP::triangle(const Vector3f* vs, const Color3f* cs, const Vector3f* ns_ign, const Vector2f* ts_ign, Vertex* output)
 {
 	for (int k = 0; k < 3; k++) {
-		vertex(vs[k], cs[k], NULL, NULL, output[k]);
+		vertex(vs[k], cs[k], ns_ign[0], ts_ign[0], output[k]);
 	}
 }
 
-void ConstColorVP::vertex(cg::vecmath::Vector3f v, cg::vecmath::Color3f c, cg::vecmath::Vector3f n_ign, cg::vecmath::Vector2f t_ign, Vertex output)
+void ConstColorVP::vertex(const Vector3f& v, const Color3f& c, const Vector3f& n_ign, const Vector2f& t_ign, Vertex& output)
 {
 	output.v.set(v.x, v.y, v.z, 1);
-	m.rightMultiply(output.v);
+	cg::vecmath::Vector4f temp = output.v;
+	output.v = mvp * temp;
+	// mvp.rightMultiply(output.v);
 
 	output.setAttrs(nAttr());
-	output.attrs[0] = c.x;
-	output.attrs[1] = c.y;
-	output.attrs[2] = c.z;
+	output.attributes[0] = c.x;
+	output.attributes[1] = c.y;
+	output.attributes[2] = c.z;
 }
 
 }

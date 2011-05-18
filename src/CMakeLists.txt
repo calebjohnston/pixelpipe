@@ -36,30 +36,22 @@ set( pipeline_SRCS
   core/camera.cpp
   core/clipper.cpp
   core/framebuffer.cpp
-  # core/pipeline.cpp
-  # core/rasterizer.cpp
+  core/pipeline.cpp
+  core/rasterizer.cpp
   core/texture.cpp
-  # logger/logger.cpp
-  # logger/logwriter.cpp
-  # logger/stdiowriter.cpp
-  # logger/syslogwriter.cpp
-  # vertex/vert_color.cpp
+  logger/logger.cpp
+  logger/logwriter.cpp
+  logger/stdiowriter.cpp
+  logger/syslogwriter.cpp
+  vertex/vert_color.cpp
   # vertex/vert_frag_shaded.cpp
   # vertex/vert_frag_shaded.cpp
   # vertex/vert_frag_textured.cpp
   # vertex/vert_shaded_processor.cpp
-  # fragment/frag_color.cpp
+  fragment/frag_color.cpp
   # fragment/frag_phong.cpp
   # fragment/frag_textured.cpp
   # fragment/frag_zbuffer.cpp
-  # vecmath/color.cpp
-  # vecmath/mat2.cpp
-  # vecmath/mat3.cpp
-  # vecmath/mat4.cpp
-  # vecmath/quat.cpp
-  # vecmath/symmat2.cpp
-  # vecmath/symmat3.cpp
-  # vecmath/symmat4.cpp
 )
 
 set(CG_LIBRARIES

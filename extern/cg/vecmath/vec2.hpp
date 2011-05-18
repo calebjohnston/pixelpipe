@@ -1,13 +1,5 @@
-#ifndef __GFX_VEC2_INCLUDED  
-#define __GFX_VEC2_INCLUDED
-
-/************************************************************************
-
-  2D Vector class
-
-  $Id: vec2.h 427 2004-09-27 04:45:31Z garland $
-
- ************************************************************************/
+#ifndef __CG_VEC2_H  
+#define __CG_VEC2_H
 
 #include "cg/cg.h"
 
@@ -62,6 +54,7 @@ public:
     inline TVec2& operator/=(T s);
 	inline T length() { return sqrt(lengthSquared()); }
 	inline T lengthSquared() { return elt[0]*elt[0] + elt[1]*elt[1]; }
+	inline void normalize() { unitize(*this); }
 	inline void set(T _x, T _y) { elt[0] = _x; elt[1] = _y; }
 };
 
@@ -148,8 +141,8 @@ template<class T> inline T norm2(const TVec2<T>& v) { return v*v; }
 template<class T> inline T norm(const TVec2<T>& v)  { return sqrt(norm2(v)); }
 template<class T> inline T dot(const TVec2<T>&v1, const TVec2<T>&v2) { return v1[0]*v2[0] + v1[1]*v2[1]; }
 
-template<class T> inline void normalize(TVec2<T>& v)
-{
+template<class T> inline void unitize(TVec2<T>& v)
+{	
     T l = norm2(v);
     if( l!=1.0 && l!=0.0 )  v /= sqrt(l);
 }
@@ -163,5 +156,4 @@ typedef TVec2<float>  Point2f;
 } // namespace vecmath 
 } // namespace cg
 
-// __GFX_VEC2_INCLUDED
-#endif
+#endif	// __CG_VEC2_H

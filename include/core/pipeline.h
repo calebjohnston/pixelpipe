@@ -7,11 +7,13 @@
 #include "core/framebuffer.h"
 #include "core/vertex.h"
 #include "core/pointlight.h"
+#include "core/clipper.h"
+#include "core/rasterizer.h"
 #include "fragment/frag_processor.h"
 #include "vertex/vert_processor.h"
 #include "cg/vecmath/color.h"
-#include "cg/vecmath/vec4.h"
-#include "cg/vecmath/mat4.h"
+#include "cg/vecmath/vec4.hpp"
+#include "cg/vecmath/mat4.hpp"
 
 namespace pipeline {
 
@@ -23,7 +25,7 @@ namespace pipeline {
  */
 class Pipeline {
 public:
-	Pipeline(int nx, int ny, std::vector<PointLight> lights);
+	Pipeline(int nx, int ny, const std::vector<PointLight>& lights);
 	~Pipeline();
 	
 	cg::vecmath::Matrix4f modelviewMatrix;
@@ -31,31 +33,31 @@ public:
 	cg::vecmath::Matrix4f viewportMatrix;
 	
 	std::vector<PointLight> lights;
-	const float ambientIntensity;
+	float ambientIntensity;
 	float specularExponent;
 	cg::vecmath::Color3f specularColor;	// THERE IS NO Color3f type. See vecmath/color.h
 	
-	void configure(Class fpClass, Class vpClass);
+	// void configure(Class fpClass, Class vpClass);
 	bool validConfiguration();
 	bool isFlatShaded();
 //	Class getTriangleClass();
-	void setTexture(Texture texture);
-	void clearFrameBuffer()
-	byte[] getFrameData();
+	void setTexture(const Texture& texture);
+	void clearFrameBuffer();
+	const char* getFrameData();
 	void loadIdentity();
 	
-	void rotate(float angle, cg::vecmath::Vector3f axis);
-	void translate(cg::vecmath::Vector3f v);
-	void scale(cg::vecmath::Vector3f v);
+	void rotate(float angle, const cg::vecmath::Vector3f& axis);
+	void translate(const cg::vecmath::Vector3f& delta);
+	void scale(const cg::vecmath::Vector3f& scale);
 	
 	void lookAt(cg::vecmath::Vector3f eye, cg::vecmath::Vector3f target, cg::vecmath::Vector3f up);
 	void frustum(float l, float r, float b, float t, float n, float f);
 	void viewport(int x, int y, int w, int h);
 	
 	void begin(int primType);
-	void vertex(cg::vecmath::Vector3f v, cg::vecmath::Color3f c, cg::vecmath::Vector3f n, cg::vecmath::Vector2f t);
+	void vertex(const cg::vecmath::Vector3f& v, const cg::vecmath::Color3f& c, const cg::vecmath::Vector3f& n, const cg::vecmath::Vector2f& t);
 	void end();
-	void renderTriangle(cg::vecmath::Vector3f[] v, cg::vecmath::Color3f[] c, cg::vecmath::Vector3f[] n, cg::vecmath::Vector2f[] t);
+	void renderTriangle(const cg::vecmath::Vector3f* v, const cg::vecmath::Color3f* c, const cg::vecmath::Vector3f* n, const cg::vecmath::Vector2f* t);
 
 protected:
 	int vertexIndex;
@@ -64,8 +66,8 @@ protected:
 	void recomputeMatrix();
 	
 private:
-	Class[] EMPTY_CLASS_ARRAY;
-	Object[] EMPTY_OBJECT_ARRAY;
+	// Class[] EMPTY_CLASS_ARRAY;
+	// Object[] EMPTY_OBJECT_ARRAY;
 	
 	VertexProcessor* vp;
 	
@@ -77,12 +79,12 @@ private:
 	
 	FrameBuffer* framebuffer;
 	
-	Vertex[4] vertexCache;
-	Vertex[3] triangle1;
-	Vertex[3] triangle2;
+	Vertex vertexCache[4];
+	Vertex triangle1[3];
+	Vertex triangle2[3];
 	
-	void swap(Vertex[] va, int i, int j);
-	void renderTriangle(Vertex[] vertices);
+	void swap(Vertex* va, int i, int j) const;
+	void renderTriangle(const Vertex* vertices);
 	
 };	// class Pipeline
 

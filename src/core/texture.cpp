@@ -4,6 +4,10 @@
 
 namespace pipeline {
 
+Texture::Texture()
+{
+}
+
 /**
  * Reads in a texture from the given file and stores the data. The image file
  * given must be stored in a format recognizable by javax.imageio.ImageIO.
@@ -48,6 +52,11 @@ Texture::Texture(std::string filename)
 	std::cout << "loaded " << cBuf->width() << " x " << cBuf->height() << " texture with " << cBuf->channels() << " channels." << std::endl;
 }
 
+Texture::~Texture()
+{
+	if(cBuf!=NULL) delete cBuf;
+}
+
 int Texture::width() const 
 {
 	int w = 0;
@@ -60,6 +69,13 @@ int Texture::height() const
 	int h = 0;
 	if(cBuf!=NULL) h = cBuf->height();
 	return h;
+}
+
+void Texture::setTextureData(const cg::image::ByteRaster& buffer)
+{
+	if(cBuf!=NULL) delete cBuf;
+	
+	*cBuf = buffer;
 }
 
 /**

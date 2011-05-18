@@ -22,7 +22,7 @@ Rasterizer::Rasterizer(int newNa, int newNx, int newNy) {
 	
 	int n = 5 + na;
 	// vData is intended to be a multi-dimensional array of size [3][5+na]
-	vData = (float*) malloc(3*n*sizeof(float));
+	vData = (float**) malloc(3*n*sizeof(float*));
 	xInc = (float*) malloc(n*sizeof(float));
 	yInc = (float*) malloc(n*sizeof(float));
 	rowData = (float*) malloc(n*sizeof(float));
@@ -40,7 +40,7 @@ Rasterizer::~Rasterizer()
 	free(pixData);
 }
 
-void Rasterizer::rasterize(Vertex[] vs, FragmentProcessor& fp, FrameBuffer& fb) {
+void Rasterizer::rasterize(const Vertex* vs, FragmentProcessor& fp, FrameBuffer& fb) {
 	
 	// Assemble the vertex data.  Entries 0--2 are barycentric
 	// coordinates; entry 3 is the screen-space depth; entries
@@ -50,13 +50,13 @@ void Rasterizer::rasterize(Vertex[] vs, FragmentProcessor& fp, FrameBuffer& fb) 
 	// perspective correction.
 	for (int iv=0; iv<3; iv++) {
 		float invW = 1.0f / vs[iv].v.w;
-		posn[iv].scale(invW, vs[iv].v);
+		posn[iv] = vs[iv].v * invW;
 		for (int k=0; k<3; k++){
 			vData[iv][k] = (k == iv ? 1 : 0);
 		}
 		vData[iv][3] = posn[iv].z;
 		for (int ia=0; ia<na; ia++){
-			vData[iv][4 + ia] = invW * vs[iv].attrs[ia];
+			vData[iv][4 + ia] = invW * vs[iv].attributes[ia];
 		}
 		vData[iv][4 + na] = invW;
 	}
@@ -93,18 +93,18 @@ void Rasterizer::rasterize(Vertex[] vs, FragmentProcessor& fp, FrameBuffer& fb) 
 	// For each pixel where the barycentric coordinates are in range, emit 
 	// a fragment.  In our case this means calling the fragment processor to
 	// process it immediately.
-	for (frag.y = iyMin; frag.y <= iyMax; frag.y++) {
+	for (frag->y = iyMin; frag->y <= iyMax; frag->y++) {
 		for (int k = 0; k < 5 + na; k++){
 			pixData[k] = rowData[k];
 		}
-		for (frag.x = ixMin; frag.x <= ixMax; frag.x++) {
+		for (frag->x = ixMin; frag->x <= ixMax; frag->x++) {
 			if (pixData[0] >= 0 && pixData[1] >= 0 && pixData[2] >= 0) {
-				frag.attrs[0] = pixData[3];
+				frag->attributes[0] = pixData[3];
 				float w = 1.0f / pixData[4 + na];
 				for (int ia = 0; ia < na; ia++){
-					frag.attrs[1 + ia] = pixData[4 + ia] * w;
+					frag->attributes[1 + ia] = pixData[4 + ia] * w;
 				}
-				fp.fragment(frag, fb);
+				fp.fragment(*frag, fb);
 			}
 			for (int k = 0; k < 5 + na; k++){
 				pixData[k] += xInc[k];
@@ -118,22 +118,22 @@ void Rasterizer::rasterize(Vertex[] vs, FragmentProcessor& fp, FrameBuffer& fb) 
 
 
 // Utility routines for clarity
-static int Rasterizer::ceil(float x)
+int Rasterizer::ceil(float x)
 {	
 	return (int) std::ceil(x);
 }
 
-static int Rasterizer::floor(float x)
+int Rasterizer::floor(float x)
 {	
 	return (int) std::floor(x);
 }
 
-static float Rasterizer::min(float a, float b, float c)
+float Rasterizer::min(float a, float b, float c)
 {	
 	return std::min(std::min(a, b), c);
 }
 
-static float Rasterizer::max(float a, float b, float c)
+float Rasterizer::max(float a, float b, float c)
 {
 	return std::max(std::max(a, b), c);
 }

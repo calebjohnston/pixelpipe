@@ -1,5 +1,8 @@
 
+#include "core/common.h"
 #include "core/pipeline.h"
+
+using namespace cg::vecmath;
 
 namespace pipeline {
 
@@ -10,22 +13,22 @@ namespace pipeline {
  * @param nx The width of the frame buffer.
  * @param ny The height of the frame buffer.
  */
-Pipeline::Pipeline(int nx, int ny, std::vector<PointLight> lights)
+Pipeline::Pipeline(int nx, int ny, const std::vector<PointLight>& lights)
 {
-	framebuffer* = new FrameBuffer(nx, ny);
-	configure(TrivialColorFP.class, ConstColorVP.class);
-	Pipeline.lights = lights;
+	framebuffer = new FrameBuffer(nx, ny);
+	// configure(TrivialColorFP.class, ConstColorVP.class);
+	this->lights = lights;
 	
-	mode = MODE_NONE;
-	modelviewMatrix = new cg::vecmath::Matrix4f();
-	projectionMatrix = new cg::vecmath::Matrix4f();
-	viewportMatrix = new cg::vecmath::Matrix4f();
-	ambientIntensity = 0.1f;
-	specularColor = new cg::vecmath::Color3f(0.4f, 0.4f, 0.4f);
-	specularExponent = 40.0f;
+	mode = PIPELINE_MODE_NONE;
+	modelviewMatrix.identity();
+	projectionMatrix.identity();
+	viewportMatrix.identity();
+	ambientIntensity = 0.1;
+	specularColor.set(0.4, 0.4, 0.4);
+	specularExponent = 40.0;
 	
-	EMPTY_CLASS_ARRAY = new Class[0];
-	EMPTY_OBJECT_ARRAY = new Object[0];
+	// EMPTY_CLASS_ARRAY = new Class[0];
+	// EMPTY_OBJECT_ARRAY = new Object[0];
 }
 
 Pipeline::~Pipeline()
@@ -41,6 +44,7 @@ Pipeline::~Pipeline()
  * @param fpClass The class of the new fragment shader.
  * @param vpClass The class of the new triangle shader.
  */
+/*
 void Pipeline::configure(Class fpClass, Class vpClass)
 {
 	// try {
@@ -61,6 +65,7 @@ void Pipeline::configure(Class fpClass, Class vpClass)
 	// 	throw new RuntimeException(e);
 	// }
 }
+*/
 
 /**
  * Returns true as long as the triangle and fragment processors expect the
@@ -88,18 +93,18 @@ bool Pipeline::isFlatShaded()
  * Returns the current fragment program class
  * @return the class of the triangle processor
  */
-Class Pipeline::getTriangleClass()
-{
-	return vp->getClass();
-	
-}
+// Class Pipeline::getTriangleClass()
+// {
+// 	return vp->getClass();
+// 	
+// }
 
 /**
  * Sets the texture for the underlying FP.
  * 
  * @param texture The new texture to use.
  */
-void Pipeline::setTexture(Texture texture)
+void Pipeline::setTexture(const Texture& texture)
 {
 	fp->setTexture(texture);
 }
@@ -117,7 +122,7 @@ void Pipeline::clearFrameBuffer()
  * 
  * @return The data in the framebuffer.
  */
-byte[] Pipeline::getFrameData()
+const char* Pipeline::getFrameData()
 {
 	return framebuffer->getData();
 }
@@ -127,7 +132,7 @@ byte[] Pipeline::getFrameData()
  */
 void Pipeline::loadIdentity()
 {
-	modelviewMatrix.setIdentity();
+	modelviewMatrix.identity();
 	recomputeMatrix();
 }
 
@@ -138,11 +143,11 @@ void Pipeline::loadIdentity()
  * @param angle The amount to rotate (in radians).
  * @param axis The axis about which to rotate.
  */
-void Pipeline::rotate(float angle, cg::vecmath::Vector3f axis)
+void Pipeline::rotate(float angle, const Vector3f& axis)
 {
-	cg::vecmath::Matrix4f T;
-	T.setRotate(angle, axis);
-	modelviewMatrix.rightCompose(T);
+	Matrix4f temp = rotationMatrix(angle, axis, false);
+	Matrix4f mv(modelviewMatrix);
+	modelviewMatrix = mv * temp;
 	recomputeMatrix();
 }
 
@@ -152,11 +157,11 @@ void Pipeline::rotate(float angle, cg::vecmath::Vector3f axis)
  * 
  * @param v The translation amount.
  */
-void Pipeline::translate(cg::vecmath::Vector3f v)
+void Pipeline::translate(const Vector3f& delta)
 {
-	cg::vecmath::Matrix4f T;
-	T.setTranslate(v);
-	modelviewMatrix.rightCompose(T);
+	Matrix4f temp = translationMatrix(delta);
+	Matrix4f mv(modelviewMatrix);
+	modelviewMatrix = mv * temp;
 	recomputeMatrix();
 }
 
@@ -166,11 +171,11 @@ void Pipeline::translate(cg::vecmath::Vector3f v)
  * 
  * @param v The amount to scale by.
  */
-void Pipeline::scale(cg::vecmath::Vector3f v) 
+void Pipeline::scale(const Vector3f& scale)
 {
-	cg::vecmath::Matrix4f T;
-	T.setScale(v);
-	modelviewMatrix.rightCompose(T);
+	Matrix4f temp = scalingMatrix(scale);
+	Matrix4f mv(modelviewMatrix);
+	modelviewMatrix = mv * temp;
 	recomputeMatrix();
 }
 
@@ -180,7 +185,8 @@ void Pipeline::scale(cg::vecmath::Vector3f v)
  */
 void Pipeline::recomputeMatrix()
 {
-	vp->updateTransforms(this);
+	// TO-DO: compile time error for this? GCC says incompatible type form Pipline cast to int.
+	// vp->updateTransforms(this);
 }
 
 /**
@@ -192,19 +198,21 @@ void Pipeline::recomputeMatrix()
  * @param up A vector that is not parallel to (target - eye) so as to indicate
  *          which direction is up.
  */
-void Pipeline::lookAt(cg::vecmath::Vector3f eye, cg::vecmath::Vector3f target, cg::vecmath::Vector3f up)
+void Pipeline::lookAt(Vector3f eye, Vector3f target, Vector3f up)
 {
-	cg::vecmath::Matrix4f T;
-	cg::vecmath::Vector3f w;
-	w.sub(eye, target);
+	Matrix4f T;
+	Vector3f w;
+	w = eye - target;
 	w.normalize();
-	cg::vecmath::Vector3f u;
-	u.cross(up, w);
+	Vector3f u;
+	u = cross(up, w);
 	u.normalize();
-	cg::vecmath::Vector3f v;
-	v.cross(w, u);
-	T.setCtoF(u, v, w, eye);
-	modelviewMatrix.rightCompose(T);
+	Vector3f v;
+	v = cross(w, u);
+	T = cameraToFrame(u, v, w, eye);
+	// modelviewMatrix.rightCompose(T);
+	Matrix4f mv(modelviewMatrix);
+	modelviewMatrix = mv * T;
 	recomputeMatrix();
 }
 
@@ -221,15 +229,15 @@ void Pipeline::lookAt(cg::vecmath::Vector3f eye, cg::vecmath::Vector3f target, c
  */
 void Pipeline::frustum(float l, float r, float b, float t, float n, float f)
 {
-	projectionMatrix.setIdentity();
-	projectionMatrix.m[0][0] = 2 * n / (r - l);
-	projectionMatrix.m[0][2] = (r + l) / (r - l);
-	projectionMatrix.m[1][1] = 2 * n / (t - b);
-	projectionMatrix.m[1][3] = (t + b) / (t - b);
-	projectionMatrix.m[2][2] = -(f + n) / (f - n);
-	projectionMatrix.m[2][3] = -2 * f * n / (f - n);
-	projectionMatrix.m[3][2] = -1;
-	projectionMatrix.m[3][3] = 0;
+	projectionMatrix.identity();
+	projectionMatrix[0][0] = 2 * n / (r - l);
+	projectionMatrix[0][2] = (r + l) / (r - l);
+	projectionMatrix[1][1] = 2 * n / (t - b);
+	projectionMatrix[1][3] = (t + b) / (t - b);
+	projectionMatrix[2][2] = -(f + n) / (f - n);
+	projectionMatrix[2][3] = -2 * f * n / (f - n);
+	projectionMatrix[3][2] = -1;
+	projectionMatrix[3][3] = 0;
 	recomputeMatrix();
 }
 
@@ -244,14 +252,14 @@ void Pipeline::frustum(float l, float r, float b, float t, float n, float f)
  */
 void Pipeline::viewport(int x, int y, int w, int h)
 {
-	float cx = x + 0.5f * w, cy = y + 0.5f * h;
-	viewportMatrix.setIdentity();
-	viewportMatrix.m[0][0] = 0.5f * w;
-	viewportMatrix.m[0][3] = cx;
-	viewportMatrix.m[1][1] = 0.5f * h;
-	viewportMatrix.m[1][3] = cy;
-	viewportMatrix.m[2][2] = 0.5f;
-	viewportMatrix.m[2][3] = 0.5f;
+	float cx = x + 0.5 * w, cy = y + 0.5 * h;
+	viewportMatrix.identity();
+	viewportMatrix[0][0] = 0.5 * w;
+	viewportMatrix[0][3] = cx;
+	viewportMatrix[1][1] = 0.5 * h;
+	viewportMatrix[1][3] = cy;
+	viewportMatrix[2][2] = 0.5;
+	viewportMatrix[2][3] = 0.5;
 	recomputeMatrix();
 	
 }
@@ -266,7 +274,7 @@ void Pipeline::begin(int primType)
 	stripParity = 0;
 }
 
-void Pipeline::vertex(cg::vecmath::Vector3f v, cg::vecmath::Color3f c, cg::vecmath::Vector3f n, cg::vecmath::Vector2f t)
+void Pipeline::vertex(const Vector3f& v, const Color3f& c, const Vector3f& n, const Vector2f& t)
 {
 	vp->vertex(v, c, n, t, vertexCache[vertexIndex]);
 	switch (mode) {
@@ -323,10 +331,10 @@ void Pipeline::vertex(cg::vecmath::Vector3f v, cg::vecmath::Color3f c, cg::vecma
 
 void Pipeline::end()
 {
-	mode = MODE_NONE;
+	mode = PIPELINE_MODE_NONE;
 }
 
-void Pipeline::swap(Vertex[] va, int i, int j)
+void Pipeline::swap(Vertex* va, int i, int j) const
 {
 	Vertex temp = va[i];
 	va[i] = va[j];
@@ -341,7 +349,7 @@ void Pipeline::swap(Vertex[] va, int i, int j)
  * @param n The 3 normals of the triangle - one for each vertex.
  * @param t The 3 texture coordinates of the triangle - one for each vertex.
  */
-void Pipeline::renderTriangle(cg::vecmath::Vector3f[] v, cg::vecmath::Color3f[] c, cg::vecmath::Vector3f[] n, cg::vecmath::Vector2f[] t)
+void Pipeline::renderTriangle(const Vector3f* v, const Color3f* c, const Vector3f* n, const Vector2f* t)
 {
 	// Send to TP, get back attributes to interpolate
 	vp->triangle(v, c, n, t, vertexCache);
@@ -357,7 +365,7 @@ void Pipeline::renderTriangle(cg::vecmath::Vector3f[] v, cg::vecmath::Color3f[] 
  * @param n The 3 normals of the triangle - one for each vertex.
  * @param t The 3 texture coordinates of the triangle - one for each vertex.
  */
-void Pipeline::renderTriangle(Vertex[] vertices)
+void Pipeline::renderTriangle(const Vertex* vertices)
 {
 	// See how many "unclipped" triangles we have
 	int numberOfTriangles = clipper->clip(vertices, triangle1, triangle2);
@@ -368,13 +376,13 @@ void Pipeline::renderTriangle(Vertex[] vertices)
 	// If we have two...render the second one
 	if (numberOfTriangles == 2) {
 		// Rasterize triangle, sending results to fp
-		rasterizer->rasterize(triangle2, fp, framebuffer);
+		rasterizer->rasterize(triangle2, *fp, *framebuffer);
 	}
 	
 	// And if we have 1 or 2, render the first one
 	
 	//Rasterize triangle, sending results to fp
-	rasterizer->rasterize(triangle1, fp, framebuffer);
+	rasterizer->rasterize(triangle1, *fp, *framebuffer);
 }
 	
 }	// namespace pipeline
