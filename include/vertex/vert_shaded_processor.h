@@ -25,15 +25,23 @@ public:
 	SmoothShadedVP();
 	int nAttr() { return 3; }
 	void updateTransforms(const Pipeline& pipe);
-	void vertex(const cg::vecmath::Vector3f& v, const cg::vecmath::Color3f& c, const cg::vecmath::Vector3f& n, const cg::vecmath::Vector2f& t, cg::vecmath::Vertex output);
-	void triangle(const cg::vecmath::Vector3f* vs, const cg::vecmath::Color3f* cs, const cg::vecmath::Vector3f* ns, const cg::vecmath::Vector2f* ts, Vertex* outputs);
+	void triangle(	const cg::vecmath::Vector3f* vs, 
+					const cg::vecmath::Color3f* cs, 
+					const cg::vecmath::Vector3f* ns_ign, 
+					const cg::vecmath::Vector2f* ts_ign, 
+					Vertex* output);
+	void vertex(const cg::vecmath::Vector3f& v, 
+				const cg::vecmath::Color3f& c, 
+				const cg::vecmath::Vector3f& n_ign, 
+				const cg::vecmath::Vector2f& t_ign, 
+				Vertex& output);
 	
 protected:	
 	float nDotH;
 	float nDotL;
 	cg::vecmath::Matrix4f modelViewMatrix;
 	cg::vecmath::Matrix4f m;
-	cg::vecmath::Vector4f vertex;
+	cg::vecmath::Vector4f vert;
 	cg::vecmath::Vector4f normal;
 	cg::vecmath::Vector3f viewVector;
 	cg::vecmath::Vector3f lightVector;

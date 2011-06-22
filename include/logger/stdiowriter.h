@@ -7,8 +7,8 @@
  *
  */
 
-#ifndef __FDL_StdOutWriter_H
-#define __FDL_StdOutWriter_H
+#ifndef __PIPELINE_StdOutWriter_H
+#define __PIPELINE_StdOutWriter_H
 
 #include "logger/logwriter.h"
 
@@ -16,8 +16,7 @@ namespace boost {
 	class mutex;
 }
 
-namespace fdl {
-namespace logger {
+namespace pipeline {
 	
 class StdOutWriter : public LogWriter {
 	
@@ -32,7 +31,6 @@ private:
 	
 };
 
-}	// namespace logger
-}	// namespace fdl
+}	// namespace pipeline
 
-#endif	//__FDL_StdOutWriter_H
+#endif	//__PIPELINE_StdOutWriter_H

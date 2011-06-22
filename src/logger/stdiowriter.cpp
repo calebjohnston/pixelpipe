@@ -13,8 +13,7 @@
 
 #include <boost/thread/mutex.hpp>
 
-namespace fdl {
-namespace logger {
+namespace pipeline {
 	
 boost::mutex StdOutWriter::_coutMutex;
 
@@ -31,5 +30,4 @@ void StdOutWriter::Write( Logger::LEVEL level, const std::string& identity, cons
 	std::cout << "[" << Logger::CurrentTime() << " " << Logger::LoggerLevelAsString( level ) << "] " <<  message << std::endl;
 }
 
-}	// namespace logger
-}	// namespace fdl
+}	// namespace pipeline

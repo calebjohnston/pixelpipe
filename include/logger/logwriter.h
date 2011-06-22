@@ -7,14 +7,13 @@
  *
  */
 
-#ifndef __FDL_LogWriter_H
-#define __FDL_LogWriter_H
+#ifndef __PIPELINE_LogWriter_H
+#define __PIPELINE_LogWriter_H
 
 #include <string>
 #include "logger/logger.h"
 
-namespace fdl {
-namespace logger {
+namespace pipeline {
 
 class LogWriter {
 	
@@ -29,7 +28,6 @@ public:
 
 };
 
-}	// namespace logger
-}	// namespace fdl
+}	// namespace pipeline
 
-#endif	//__FDL_LogWriter_H
+#endif	//__PIPELINE_LogWriter_H

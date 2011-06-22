@@ -24,16 +24,16 @@ public:
 	void fragment(const Fragment& f, FrameBuffer& fb);
 	
 protected:	
-	static int size;
+	int size;
 	int position;
 	float nDotL;
 	float nDotH;
 	float specularIntensity;
-	Color3f outColor;
-	Vector3f normal;
-	Vector3f viewVector;
-	Vector3f lightVector;
-	Vector3f halfVector;
+	cg::vecmath::Color3f outColor;
+	cg::vecmath::Vector3f normal;
+	cg::vecmath::Vector3f viewVector;
+	cg::vecmath::Vector3f lightVector;
+	cg::vecmath::Vector3f halfVector;
 };
 
 }

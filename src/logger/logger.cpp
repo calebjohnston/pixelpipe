@@ -18,13 +18,12 @@
 #include <iostream>
 #include <locale>
 
-namespace fdl {
-namespace logger {
+namespace pipeline {
 	
 int Logger::_level = Logger::DEFAULT_REPORTING_LEVEL;
 std::vector<int> Logger::_levelStack( 1, Logger::DEFAULT_REPORTING_LEVEL );
 std::list<LogWriter *> Logger::_registeredWriters;
-std::string Logger::_identity = "fdlLogger";
+std::string Logger::_identity = "Logger";
 
 Logger::Logger() :
 _local_identity( NULL ) {
@@ -278,5 +277,4 @@ int Logger::LevelAndBelow( Logger::LEVEL level ) {
 	
 }
 
-}	// namespace logger
-}	// namespace fdl
+}	// namespace pipeline

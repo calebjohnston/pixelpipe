@@ -3,6 +3,16 @@
 
 #include <string>
 
+#ifdef __APPLE__
+#include <GLUT/glut.h>
+#include <OpenGL/gl.h>
+#include <OpenGL/glu.h>
+#else
+#include <GL/glut.h>
+#include <GL/gl.h>
+#include <GL/glu.h>
+#endif
+
 namespace pipeline {
 
 /**
@@ -29,6 +39,11 @@ protected:
 	int height;	// The height of the image in the frame buffer.
 	char* cData;	// The rgb data that forms the image.
 	float* zData;	// The z buffer - holds the z value of the current fragment.
+	
+	void allocateGLTexture();
+	void drawGLTexture(float x=0, float y=0) const;
+	GLuint textureHandle;
+	bool bAllocated;
 
 };	// class FrameBuffer
 

@@ -110,7 +110,7 @@ int main(int argc, char **argv)
 
 /* MUST ADD SOME MORE DECLARATIONS HERE!!! */
 
-		fdl::logger::Logger out;
+		pipeline::Logger out;
     }
     catch(std::exception& e) {
         std::cerr << " * error: " << e.what() << "\n";

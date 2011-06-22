@@ -6,64 +6,63 @@ namespace pipeline {
 
 PhongShadedFP::PhongShadedFP()
 {
-	size = 9 + 6*Pipeline.lights.size();
+	size = 9 + 6 * Pipeline::getInstance()->getLights().size();
 }
-
 
 void PhongShadedFP::fragment(const Fragment& f, FrameBuffer& fb)
 {
-	if(f.attrs[0] < fb.getZ(f.x, f.y)){
+	if(f.attributes[0] < fb.getZ(f.x, f.y)){
 		//get normal
-		normal.x = f.attrs[4];
-		normal.y = f.attrs[5];
-		normal.z = f.attrs[6];
+		normal.x = f.attributes[4];
+		normal.y = f.attributes[5];
+		normal.z = f.attributes[6];
 		normal.normalize();
 		
 		//get viewVector
-		viewVector.x = f.attrs[7];
-		viewVector.y = f.attrs[8];
-		viewVector.z = f.attrs[9];
+		viewVector.x = f.attributes[7];
+		viewVector.y = f.attributes[8];
+		viewVector.z = f.attributes[9];
 		viewVector.normalize();
 				
 		//add lighting
-		outColor.set(0.0f,0.0f,0.0f);
-		for(int i = 0; i < Pipeline.lights.size(); i++)
+		outColor.set(0.0,0.0,0.0);
+		for(int i = 0; i < Pipeline::getInstance()->getLights().size(); i++)
 		{	
 			position = 6*i;
 			//get lightVector
-			lightVector.x = f.attrs[10 + position];
-			lightVector.y = f.attrs[11 + position];
-			lightVector.z = f.attrs[12 + position];				
+			lightVector.x = f.attributes[10 + position];
+			lightVector.y = f.attributes[11 + position];
+			lightVector.z = f.attributes[12 + position];				
 			lightVector.normalize();
 			
 			//get halfVector
-			halfVector.x = f.attrs[13 + position];
-			halfVector.y = f.attrs[14 + position];
-			halfVector.z = f.attrs[15 + position];	
+			halfVector.x = f.attributes[13 + position];
+			halfVector.y = f.attributes[14 + position];
+			halfVector.z = f.attributes[15 + position];	
 			halfVector.normalize();
 			
 			//computer dot products
-			nDotL = normal.dot(lightVector);
-			nDotH = normal.dot(halfVector);	
+			nDotL = dot(normal, lightVector);
+			nDotH = dot(normal, halfVector);	
 			
 	   		//add diffuse color
-	   		outColor.x += f.attrs[1] * nDotL * Pipeline.lights.get(i).getIntensity().x;
-	   		outColor.y += f.attrs[2] * nDotL * Pipeline.lights.get(i).getIntensity().y;
-	   		outColor.z += f.attrs[3] * nDotL * Pipeline.lights.get(i).getIntensity().z;
+	   		outColor.x += f.attributes[1] * nDotL * Pipeline::getInstance()->getLights().at(i).getIntensity().x;
+	   		outColor.y += f.attributes[2] * nDotL * Pipeline::getInstance()->getLights().at(i).getIntensity().y;
+	   		outColor.z += f.attributes[3] * nDotL * Pipeline::getInstance()->getLights().at(i).getIntensity().z;
 	   
 	   		//calculate specular intensity
-			specularIntensity = std::pow(nDotH, Pipeline.specularExponent);
-			if(specularIntensity < 0.0f){
-				specularIntensity = 0.0f;
+			specularIntensity = std::pow(nDotH, Pipeline::getInstance()->specularExponent);
+			if(specularIntensity < 0.0){
+				specularIntensity = 0.0;
 			}
-			else if(specularIntensity > 1.0f){
-				specularIntensity = 1.0f;
+			else if(specularIntensity > 1.0){
+				specularIntensity = 1.0;
 			}
 	   
 			//add specular
-			outColor.x += (Pipeline.specularColor.x * specularIntensity);
-			outColor.y += (Pipeline.specularColor.y * specularIntensity);
-			outColor.z += (Pipeline.specularColor.z * specularIntensity);		   
+			outColor.x += (Pipeline::getInstance()->specularColor.x * specularIntensity);
+			outColor.y += (Pipeline::getInstance()->specularColor.y * specularIntensity);
+			outColor.z += (Pipeline::getInstance()->specularColor.z * specularIntensity);		   
 		}	
 	
 		//clamp colors
@@ -78,9 +77,9 @@ void PhongShadedFP::fragment(const Fragment& f, FrameBuffer& fb)
 		}
 	
 		//add ambient
-		outColor.x += Pipeline.ambientIntensity;
-		outColor.y += Pipeline.ambientIntensity;
-		outColor.z += Pipeline.ambientIntensity;
+		outColor.x += Pipeline::getInstance()->ambientIntensity;
+		outColor.y += Pipeline::getInstance()->ambientIntensity;
+		outColor.z += Pipeline::getInstance()->ambientIntensity;
 	
 		//clamp colors
 		if(outColor.x > 1.0f){
@@ -93,7 +92,7 @@ void PhongShadedFP::fragment(const Fragment& f, FrameBuffer& fb)
 			outColor.z = 1.0f;
 		}
 	
-		fb.set(f.x, f.y, outColor.x, outColor.y, outColor.z, f.attrs[0]);	
+		fb.set(f.x, f.y, outColor.x, outColor.y, outColor.z, f.attributes[0]);	
 	}
 }
 

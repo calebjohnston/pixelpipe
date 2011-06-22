@@ -7,22 +7,33 @@
  *
  */
 
-#ifndef __FDL_Logger_H
-#define __FDL_Logger_H
+#ifndef __PIPELINE_Logger_H
+#define __PIPELINE_Logger_H
 
 #define LOG(level) \
-ecs::Logger::CanLog(level) && ecs::Logger().Log(level)
+pipeline::Logger::CanLog(level) && pipeline::Logger().Log(level)
+
+#define DEV() \
+pipeline::Logger::CanLog(pipeline::Logger::DEV) && pipeline::Logger().Log(pipeline::Logger::DEV)
+
+#define DEBUG() \
+pipeline::Logger::CanLog(pipeline::Logger::DEBUG) && pipeline::Logger().Log(pipeline::Logger::DEBUG)
+
+#define INFO() \
+pipeline::Logger::CanLog(pipeline::Logger::INFO) && pipeline::Logger().Log(pipeline::Logger::INFO)
+
+#define ERROR() \
+pipeline::Logger::CanLog(pipeline::Logger::ERROR) && pipeline::Logger().Log(pipeline::Logger::ERROR)
 
 #define LOGIdent(level, identity) \
-ecs::Logger::CanLog(level) && ecs::Logger().Log(level, identity)
+pipeline::Logger::CanLog(level) && pipeline::Logger().Log(level, identity)
 
 #include <sstream>
 #include <string>
 #include <list>
 #include <vector>
 
-namespace fdl {
-namespace logger {
+namespace pipeline {
 	
 class LogWriter;
 
@@ -110,7 +121,6 @@ protected:
 	
 };
 
-}	// namespace logger
-}	// namespace fdl
+}	// namespace pipeline
 
-#endif	//__FDL_Logger_H
+#endif	//__PIPELINE_Logger_H

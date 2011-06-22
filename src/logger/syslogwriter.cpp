@@ -14,8 +14,7 @@
 #include <stdarg.h>
 
 
-namespace fdl {
-namespace logger {
+namespace pipeline {
 	
 boost::mutex SyslogWriter::_syslogOutMutex;
 
@@ -60,5 +59,4 @@ int SyslogWriter::_map_level( const Logger::LEVEL& level ) {
 	return LOG_DEBUG;
 }
 
-}	// namespace logger
-}	// namespace fdl
+}	// namespace pipeline

@@ -22,22 +22,32 @@ namespace pipeline {
  */
 class FragmentShadedVP : public VertexProcessor {
 public:	
+	FragmentShadedVP();
+	~FragmentShadedVP();
 	int nAttr() { return size; }
 	void updateTransforms(const Pipeline& pipe);
-	void vertex(Vector3f v, Color3f c, Vector3f n, Vector2f t, Vertex output);
-	void triangle(Vector3f[] vs, Color3f[] cs, Vector3f[] ns, Vector2f[] ts, Vertex[] outputs);
+	void triangle(	const cg::vecmath::Vector3f* vs, 
+					const cg::vecmath::Color3f* cs, 
+					const cg::vecmath::Vector3f* ns, 
+					const cg::vecmath::Vector2f* ts, 
+					Vertex* output);
+	void vertex(const cg::vecmath::Vector3f& v, 
+				const cg::vecmath::Color3f& c, 
+				const cg::vecmath::Vector3f& n, 
+				const cg::vecmath::Vector2f& t, 
+				Vertex& output);
 	
 protected:
-	Matrix4f modelViewMatrix;
-	Matrix4f m;
-	Vector4f vertex;
-	Vector4f normal;
-	Vector3f viewVector;
-	Vector3f lightVector;
-	Vector3f halfVector;
-	Vector3f transformedNormal;
-	Point3f transformedVertex;
-	static int size;
+	cg::vecmath::Matrix4f modelViewMatrix;
+	cg::vecmath::Matrix4f m;
+	cg::vecmath::Vector4f vert;
+	cg::vecmath::Vector4f normal;
+	cg::vecmath::Vector3f viewVector;
+	cg::vecmath::Vector3f lightVector;
+	cg::vecmath::Vector3f halfVector;
+	cg::vecmath::Vector3f transformedNormal;
+	cg::vecmath::Point3f transformedVertex;
+	int size;
 	
 private:
 	int position;

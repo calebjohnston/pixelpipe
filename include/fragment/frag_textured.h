@@ -25,7 +25,7 @@ public:
 	void fragment(const Fragment& f, FrameBuffer& fb);
 	
 protected:
-	Color3f color;
+	cg::vecmath::Color3f color;
 };
 
 }

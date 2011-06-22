@@ -7,8 +7,8 @@
  *
  */
 
-#ifndef __FDL_SyslogWriter_H
-#define __FDL_SyslogWriter_H
+#ifndef __PIPELINE_SyslogWriter_H
+#define __PIPELINE_SyslogWriter_H
 
 #include "logger/logwriter.h"
 
@@ -16,8 +16,7 @@ namespace boost {
 	class mutex;
 }
 
-namespace fdl {
-namespace logger {
+namespace pipeline {
 	
 class SyslogWriter : public LogWriter {
 	
@@ -34,7 +33,6 @@ private:
 	int _map_level( const Logger::LEVEL& level );
 };
 
-}	// namespace logger
-}	// namespace fdl
+}	// namespace pipeline
 
 #endif	// __FDL_SyslogWriter_H

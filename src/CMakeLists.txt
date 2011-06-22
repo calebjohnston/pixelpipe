@@ -39,19 +39,20 @@ set( pipeline_SRCS
   core/pipeline.cpp
   core/rasterizer.cpp
   core/texture.cpp
+  core/glutwindow.cpp
+  core/appwindow.cpp
   logger/logger.cpp
   logger/logwriter.cpp
   logger/stdiowriter.cpp
   logger/syslogwriter.cpp
   vertex/vert_color.cpp
-  # vertex/vert_frag_shaded.cpp
-  # vertex/vert_frag_shaded.cpp
-  # vertex/vert_frag_textured.cpp
-  # vertex/vert_shaded_processor.cpp
+  vertex/vert_frag_shaded.cpp
+  vertex/vert_frag_textured.cpp
+  vertex/vert_shaded_processor.cpp
   fragment/frag_color.cpp
-  # fragment/frag_phong.cpp
-  # fragment/frag_textured.cpp
-  # fragment/frag_zbuffer.cpp
+  fragment/frag_phong.cpp
+  fragment/frag_textured.cpp
+  fragment/frag_zbuffer.cpp
 )
 
 set(CG_LIBRARIES

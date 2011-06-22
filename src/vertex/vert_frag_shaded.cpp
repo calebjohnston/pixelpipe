@@ -2,92 +2,105 @@
 
 namespace pipeline {
 	
-FragmentShadedVP::FragmentShadedVP()
+using namespace cg::vecmath;
+	
+FragmentShadedVP::FragmentShadedVP() : VertexProcessor()
 {
-	size = 9 + 6*Pipeline.lights.size();
+	size = 9 + 6 * Pipeline::getInstance()->getLights().size();
 }
 
+FragmentShadedVP::~FragmentShadedVP()
+{
+}
 
 void FragmentShadedVP::updateTransforms(const Pipeline& pipe)
 {
 	// TODO
 	modelViewMatrix = pipe.modelviewMatrix;		
-	m.set(modelViewMatrix);
-	m.leftCompose(pipe.projectionMatrix);
-	m.leftCompose(pipe.viewportMatrix);
+	m = modelViewMatrix;
+	Matrix4f temp = modelViewMatrix;
+	m = temp * pipe.projectionMatrix;
+	temp = m;
+	m = temp * pipe.viewportMatrix;
 }
 
-void FragmentShadedVP::vertex(Vector3f v, Color3f c, Vector3f n, Vector2f t, Vertex output)
+void FragmentShadedVP::vertex(const Vector3f& v, const Color3f& c, const Vector3f& n, const Vector2f& t, Vertex& output)
 {
 	// TODO
 	output.setAttrs(nAttr());
 	
 	//output color
-    output.attrs[0] = c.x;
-    output.attrs[1] = c.y;
-	output.attrs[2] = c.z;
+    output.attributes[0] = c.x;
+    output.attributes[1] = c.y;
+	output.attributes[2] = c.z;
 	
 	//transform vertex
-	vertex.set(v.x,v.y,v.z,1.0f);
-	modelViewMatrix.rightMultiply(vertex);
-	transformedVertex.set(vertex.x,vertex.y,vertex.z);
+	vert.set(v.x,v.y,v.z,1.0f);
+	Vector4f temp = vert;
+	vert = modelViewMatrix * temp;
+	//modelViewMatrix.rightMultiply(vert);
+	
+	transformedVertex.set(vert.x, vert.y, vert.z);
 	
 	//transform normals
-	n.normalize();
-	normal.set(n.x,n.y,n.z,0.0f);
-	modelViewMatrix.rightMultiply(normal);	  
+	Vector3f temp3 = n;
+	temp3.normalize();
+	normal.set(temp3.x,temp3.y,temp3.z,0.0f);
+	temp = normal;
+	normal = modelViewMatrix * temp;	// modelViewMatrix.rightMultiply(normal);
 	transformedNormal.set(normal.x,normal.y,normal.z);
 	transformedNormal.normalize();
 	
 	//output the normal
-	output.attrs[3] = transformedNormal.x;
-	output.attrs[4] = transformedNormal.y;
-	output.attrs[5] = transformedNormal.z;
+	output.attributes[3] = transformedNormal.x;
+	output.attributes[4] = transformedNormal.y;
+	output.attributes[5] = transformedNormal.z;
 
 	//calculate view vector
-	viewVector.set(0.0f,0.0f,0.0f);
-	viewVector.sub(viewVector,transformedVertex);
+	viewVector = 0.0;
+	viewVector = viewVector - transformedVertex;
 	viewVector.normalize();	
 	
 	//output the view vector
-	output.attrs[6] = viewVector.x;
-	output.attrs[7] = viewVector.y;
-	output.attrs[8] = viewVector.z;
+	output.attributes[6] = viewVector.x;
+	output.attributes[7] = viewVector.y;
+	output.attributes[8] = viewVector.z;
 
 	//calculate light vectors
-	int len = Pipeline.lights.size();
+	int len = Pipeline::getInstance()->getLights().size();
 	for(int i=0; i<len; i++){
 		position = 6*i;
 		
-		lightVector.set(Pipeline.lights.get(i).getPosition());
-		lightVector.sub(lightVector,transformedVertex);
+		lightVector = Pipeline::getInstance()->getLights().at(i).getPosition();
+		lightVector = lightVector - transformedVertex;
 		lightVector.normalize();
 		
 		//output the light Vector
-		output.attrs[9 + position] = lightVector.x;
-		output.attrs[10 + position] = lightVector.y;
-		output.attrs[11 + position] = lightVector.z;
+		output.attributes[9 + position] = lightVector.x;
+		output.attributes[10 + position] = lightVector.y;
+		output.attributes[11 + position] = lightVector.z;
 
 		//calculate half vector
-		halfVector.set(0, 0, 0);
-		halfVector.set(viewVector);
-		halfVector.add(lightVector);
+		halfVector = 0.0;
+		halfVector = viewVector;
+		halfVector += lightVector;
 		halfVector.normalize();
 		
 		//output the half vector
-		output.attrs[12 + position] = halfVector.x;
-		output.attrs[13 + position] = halfVector.y;
-		output.attrs[14 + position] = halfVector.z;
+		output.attributes[12 + position] = halfVector.x;
+		output.attributes[13 + position] = halfVector.y;
+		output.attributes[14 + position] = halfVector.z;
 	}
 	
 	output.v.set(v.x, v.y, v.z, 1.0f);
-	m.rightMultiply(output.v);
+	temp = output.v;
+	output.v = m * temp;	// m.rightMultiply(output.v);
 }
 
-void FragmentShadedVP::triangle(Vector3f[] vs, Color3f[] cs, Vector3f[] ns, Vector2f[] ts, Vertex[] outputs)
+void FragmentShadedVP::triangle(const Vector3f* vs, const Color3f* cs, const Vector3f* ns, const Vector2f* ts, Vertex* output)
 {
 	for (int k = 0; k < 3; k++) {
-		vertex(vs[k], cs[k], ns[k], NULL, outputs[k]);
+		vertex(vs[k], cs[k], ns[k], NULL, output[k]);
 	}
 }
 

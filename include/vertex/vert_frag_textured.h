@@ -21,11 +21,19 @@ class TexturedFragmentShadedVP : public FragmentShadedVP {
 public:
 	TexturedFragmentShadedVP();
 	int nAttr() { return size; }
-	void vertex(Vector3f v, Color3f c, Vector3f n, Vector2f t, Vertex output);
-	void triangle(Vector3f[] vs, Color3f[] cs_ign, Vector3f[] ns, Vector2f[] ts, Vertex[] outputs);
+	void triangle(	const cg::vecmath::Vector3f* vs, 
+					const cg::vecmath::Color3f* cs, 
+					const cg::vecmath::Vector3f* ns_ign, 
+					const cg::vecmath::Vector2f* ts_ign, 
+					Vertex* output);
+	void vertex(const cg::vecmath::Vector3f& v, 
+				const cg::vecmath::Color3f& c, 
+				const cg::vecmath::Vector3f& n_ign, 
+				const cg::vecmath::Vector2f& t_ign, 
+				Vertex& output);
 	
 private:
-	static int size;
+	int size;
 
 };
 

@@ -25,14 +25,12 @@ namespace pipeline {
  */
 class Pipeline {
 public:
-	Pipeline(int nx, int ny, const std::vector<PointLight>& lights);
 	~Pipeline();
 	
 	cg::vecmath::Matrix4f modelviewMatrix;
 	cg::vecmath::Matrix4f projectionMatrix;
 	cg::vecmath::Matrix4f viewportMatrix;
 	
-	std::vector<PointLight> lights;
 	float ambientIntensity;
 	float specularExponent;
 	cg::vecmath::Color3f specularColor;	// THERE IS NO Color3f type. See vecmath/color.h
@@ -58,12 +56,18 @@ public:
 	void vertex(const cg::vecmath::Vector3f& v, const cg::vecmath::Color3f& c, const cg::vecmath::Vector3f& n, const cg::vecmath::Vector2f& t);
 	void end();
 	void renderTriangle(const cg::vecmath::Vector3f* v, const cg::vecmath::Color3f* c, const cg::vecmath::Vector3f* n, const cg::vecmath::Vector2f* t);
+	
+	std::vector<PointLight>& getLights() { return *lights; }
+	
+	static Pipeline* getInstance();
 
 protected:
+	Pipeline(int nx=800, int ny=600, std::vector<PointLight>* lights=NULL);
 	int vertexIndex;
 	int stripParity;
 	int mode;
 	void recomputeMatrix();
+	std::vector<PointLight>* lights;
 	
 private:
 	// Class[] EMPTY_CLASS_ARRAY;
@@ -85,6 +89,8 @@ private:
 	
 	void swap(Vertex* va, int i, int j) const;
 	void renderTriangle(const Vertex* vertices);
+	
+	static Pipeline* instance;
 	
 };	// class Pipeline
 

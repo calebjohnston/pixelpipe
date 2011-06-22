@@ -10,8 +10,7 @@
 #include "logger/logwriter.h"
 
 
-namespace fdl {
-namespace logger {
+namespace pipeline {
 	
 LogWriter::LogWriter( const std::string& type) {
 	_type = type;
@@ -24,5 +23,4 @@ const std::string LogWriter::type() {
 	return _type;
 }
 
-}	// namespace logger
-}	// namespace fdl
+}	// namespace pipeline
