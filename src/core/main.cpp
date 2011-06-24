@@ -37,7 +37,9 @@ namespace po = boost::program_options;
 #include <vector>
 #include <stdexcept>
 
+#include "core/pixelpipe.h"
 #include "logger/logger.h"
+#include "logger/stdiowriter.h"
 
 #ifndef TARGET_VERSION_MAJOR
 #define TARGET_VERSION_MAJOR 99
@@ -70,8 +72,13 @@ int main(int argc, char **argv)
 	std::cout << "The source code to FDL is covered by the GNU GPL." << std::endl;
 	std::cout << "See the LICENSE file for the conditions of the license." << std::endl;
 	
+
+	pipeline::LogWriter* logger = new pipeline::StdOutWriter();
+	pipeline::Logger::SetIdentity("PixelPipe");
+	pipeline::Logger::RegisterWriter(logger);
+	
+	int loggerLevel;
 	try {
-        int opt;
 		po::options_description desc("Allowed options");
 		desc.add_options()
 		    ("help,H", "produce help message")
@@ -79,11 +86,12 @@ int main(int argc, char **argv)
 		    ("output-format,O", po::value<std::string>(), "output file format")
 			("output-name,N", po::value<std::string>(), "output name with format")
 		    ("image-size,S", po::value< std::vector<double> >(), "[ XxY ] | [ X Y ]")
-			("verbose,V", po::value<int>(&opt)->default_value(1), "Verbose logging?")
+			("verbose,V", po::value<int>(&loggerLevel)->default_value(1), "Verbose logging?")
 		;
 
-        po::variables_map vm;        
-        po::store(po::parse_command_line(argc, argv, desc), vm);
+        po::variables_map vm;
+// ^ po::command_line_style::allow_short
+		po::store(po::parse_command_line(argc, argv, desc, po::command_line_style::unix_style), vm);
         po::notify(vm);
 
         if (vm.count("help")) {
@@ -104,13 +112,22 @@ int main(int argc, char **argv)
             std::cout << "Output format is: " << vm["output-format"].as<std::string>() << "\n";
         }
 
-        if (vm.count("verbose")) {
-            std::cout << "Verbosity enabled. Level is " << vm["verbose"].as<int>() << "\n";
-        }
-
-/* MUST ADD SOME MORE DECLARATIONS HERE!!! */
-
-		pipeline::Logger out;
+		std::string levelLabel = "";
+		if(loggerLevel >= 0){
+			levelLabel = pipeline::Logger::LoggerLevelAsString(pipeline::Logger::INFO);
+			pipeline::Logger::PushLevel(pipeline::Logger::INFO);
+		}
+		if(loggerLevel >= 1){
+			levelLabel = pipeline::Logger::LoggerLevelAsString(pipeline::Logger::DEV);
+			pipeline::Logger::PushLevel(pipeline::Logger::DEV);
+		}
+		if(loggerLevel >= 2){
+			levelLabel = pipeline::Logger::LoggerLevelAsString(pipeline::Logger::DEBUG);
+			pipeline::Logger::PushLevel(pipeline::Logger::DEBUG);
+		}
+		
+		std::cout << "Verbose logging enabled. Level is " << levelLabel << " (" << loggerLevel << ")" << std::endl;
+		
     }
     catch(std::exception& e) {
         std::cerr << " * error: " << e.what() << "\n";
@@ -121,6 +138,7 @@ int main(int argc, char **argv)
     }
 
 	// start it up!
-
-    return 0;
+	pipeline::PixelPipeWindow* app = new pipeline::PixelPipeWindow();
+	app->init();
+	return app->run();
 }

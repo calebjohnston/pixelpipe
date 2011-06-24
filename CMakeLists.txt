@@ -5,8 +5,16 @@
 cmake_minimum_required( VERSION 2.6 )
 project( Pipeline )
 set( CMAKE_BUILD_TYPE Debug)
-set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/${CMAKE_BUILD_TYPE}/bin)
-set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/${CMAKE_BUILD_TYPE}/lib)
+
+if("${CMAKE_GENERATOR}" STREQUAL "Xcode")
+  set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin/)
+  set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/lib/)
+else("${CMAKE_GENERATOR}" STREQUAL "XCode")
+  set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin/${CMAKE_BUILD_TYPE})
+  set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/lib/${CMAKE_BUILD_TYPE})
+endif("${CMAKE_GENERATOR}" STREQUAL "Xcode")
+
+set( CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake/modules/)
 
 
 # include( cmake/modules/FindOpenCL.cmake )
@@ -31,18 +39,3 @@ if(Pipeline_BUILD_DOCS)
   include( UseDoxygen )
 endif(Pipeline_BUILD_DOCS)
 # SET( DOXYFILE_SOURCE_DIR ${PROJECT_SOURCE_DIR}/src )
-
-#
-#  DOXYFILE_SOURCE_DIR - Path where the Doxygen input files are.
-#  	Defaults to the current source and binary directory.
-#  DOXYFILE_OUTPUT_DIR - Path where the Doxygen output is stored. Defaults to "doc".
-#
-#  DOXYFILE_LATEX - Set to "NO" if you do not want the LaTeX documentation
-#  	to be built.
-#  DOXYFILE_LATEX_DIR - Directory relative to DOXYFILE_OUTPUT_DIR where
-#  	the Doxygen LaTeX output is stored. Defaults to "latex".
-#
-#  DOXYFILE_HTML_DIR - Directory relative to DOXYFILE_OUTPUT_DIR where
-#  	the Doxygen html output is stored. Defaults to "html".
-#
-

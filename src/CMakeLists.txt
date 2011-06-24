@@ -3,9 +3,9 @@
 #================================================================================
 
 cmake_minimum_required(VERSION 2.6)
-set(CMAKE_BUILD_TYPE Debug)
-if("${CMAKE_BUILD_TYPE}" EQUAL "Debug")
-  set(CMAKE_VERBOSE_MAKEFILE TRUE) # this does not even work...
+# set(CMAKE_BUILD_TYPE Debug)
+if("${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
+  set(CMAKE_VERBOSE_MAKEFILE TRUE)
 endif()
 
 set(BOOST_LIBS thread date_time system program_options)
@@ -17,16 +17,10 @@ find_package(TIFF REQUIRED)
 find_package(GLUT REQUIRED)
 find_package(OpenGL REQUIRED)
 
-if(APPLE AND UNIX)
-  set(LIB_PATH "/usr/local/lib" ${PROJECT_SOURCE_DIR}/lib)
-  set(INC_PATH "/usr/local/include")
-elseif(UNIX AND NOT APPLE)
-  set(LIB_PATH "/usr/local/lib" ${PROJECT_SOURCE_DIR}/lib)
-  set(INC_PATH "/usr/local/include")
-elseif(WIN32)
-  set(LIB_PATH "C:/msys/1.0/local/lib" ${PROJECT_SOURCE_DIR}/lib)
-  set(INC_PATH "C:/msys/1.0/local/include")
-endif(APPLE AND UNIX)
+set(CG_LIBRARIES
+  ${PROJECT_SOURCE_DIR}/lib/libcg_image.dylib 
+  ${PROJECT_SOURCE_DIR}/lib/libcg_vecmath.dylib
+)
 
 #--------------------------------------------------------------------------------
 # This is the list of source files that need to be compiled
@@ -37,10 +31,11 @@ set( pipeline_SRCS
   core/clipper.cpp
   core/framebuffer.cpp
   core/pipeline.cpp
+  core/pixelpipe.cpp
   core/rasterizer.cpp
-  core/texture.cpp
   core/glutwindow.cpp
   core/appwindow.cpp
+  core/texture.cpp
   logger/logger.cpp
   logger/logwriter.cpp
   logger/stdiowriter.cpp
@@ -53,11 +48,6 @@ set( pipeline_SRCS
   fragment/frag_phong.cpp
   fragment/frag_textured.cpp
   fragment/frag_zbuffer.cpp
-)
-
-set(CG_LIBRARIES
-  ${PROJECT_SOURCE_DIR}/lib/libcg_image.dylib 
-  ${PROJECT_SOURCE_DIR}/lib/libcg_vecmath.dylib
 )
 
 #--------------------------------------------------------------------------------
@@ -86,10 +76,10 @@ add_executable( pipeline
 # Tell CMake which libraries we need to link our executable against.
 target_link_libraries ( pipeline
   ${Boost_LIBRARIES}
-  ${CG_LIBRARIES}
   ${PNG_LIBRARY}
   ${JPEG_LIBRARY}
   ${TIFF_LIBRARY}
   ${GLUT_LIBRARY}
   ${OPENGL_LIBRARY}
+  ${CG_LIBRARIES}
 )
