@@ -83,9 +83,7 @@ int main(int argc, char **argv)
 		desc.add_options()
 		    ("help,H", "produce help message")
 		    ("input-file,I", po::value<std::string>(), "input scene file")
-		    ("output-format,O", po::value<std::string>(), "output file format")
-			("output-name,N", po::value<std::string>(), "output name with format")
-		    ("image-size,S", po::value< std::vector<double> >(), "[ XxY ] | [ X Y ]")
+		    // ("image-size,S", po::value< std::vector<double> >(), "[ XxY ] | [ X Y ]")
 			("verbose,V", po::value<int>(&loggerLevel)->default_value(1), "Verbose logging?")
 		;
 
@@ -102,14 +100,6 @@ int main(int argc, char **argv)
 
         if (vm.count("input-file")) {
             std::cout << "Include paths are: " << vm["input-file"].as< std::vector<std::string> >() << "\n";
-        }
-
-        if (vm.count("output-name")) {
-            std::cout << "Output name is: " << vm["output-name"].as<std::string>() << "\n";
-        }
-
-        if (vm.count("output-format")) {
-            std::cout << "Output format is: " << vm["output-format"].as<std::string>() << "\n";
         }
 
 		std::string levelLabel = "";

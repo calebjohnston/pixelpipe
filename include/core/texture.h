@@ -45,9 +45,9 @@ public:
 	
 protected:
 	std::string filename;	// The name of the file from where the data was loaded.
-
-private:	
 	cg::image::ByteRaster* cBuf;	// The RGB data for each pixel.
+
+private:
 	// char[] cData;	// The RGB data for each pixel.
 
 };	// class Texture

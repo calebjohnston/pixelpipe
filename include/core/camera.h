@@ -24,6 +24,14 @@ public:
 	// void setup(Pipeline& pipe) const;
 	// void setup(GLAutoDrawable d);
 	
+	cg::vecmath::Vector3f getEye() const { return eye; }
+	cg::vecmath::Vector3f getTarget() const { return target; }
+	cg::vecmath::Vector3f getUp() const { return up; }
+	float getNear() const { return near; }
+	float getFar() const { return far; }
+	float getHt() const { return ht; }
+	float getAspectRatio() const { return aspect; }
+	
 protected:
 	// GLU myGLU;
 

@@ -40,8 +40,11 @@ public:
 	bool isFlatShaded();
 //	Class getTriangleClass();
 	void setTexture(const Texture& texture);
+	void setFragmentProcessor(const FragmentProcessor* fragProc) { fp = const_cast<FragmentProcessor*>(fragProc); }
+	void setVertexProcessor(const VertexProcessor* vertProc) { vp = const_cast<VertexProcessor*>(vertProc); };
 	void clearFrameBuffer();
 	const char* getFrameData();
+	FrameBuffer& getFrameBuffer() const { return *framebuffer; }
 	void loadIdentity();
 	
 	void rotate(float angle, const cg::vecmath::Vector3f& axis);

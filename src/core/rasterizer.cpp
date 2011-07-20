@@ -4,6 +4,7 @@
 #include <math.h>
 
 #include "core/pipeline.h"
+#include "core/common.h"
 
 namespace pipeline {
 	
@@ -40,7 +41,9 @@ Rasterizer::~Rasterizer()
 	free(pixData);
 }
 
-void Rasterizer::rasterize(const Vertex* vs, FragmentProcessor& fp, FrameBuffer& fb) {
+void Rasterizer::rasterize(const Vertex* vs, FragmentProcessor& fp, FrameBuffer& fb)
+{
+	DEV() << "Rasterizer::rasterize";
 	
 	// Assemble the vertex data.  Entries 0--2 are barycentric
 	// coordinates; entry 3 is the screen-space depth; entries

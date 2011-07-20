@@ -29,6 +29,9 @@ Pipeline::Pipeline(int nx, int ny, std::vector<PointLight>* lights)
 	specularColor.set(0.4, 0.4, 0.4);
 	specularExponent = 40.0;
 	
+	clipper = new Clipper(3);
+	rasterizer = new Rasterizer(3, nx, ny);
+	
 	//Pipeline::instance = this;
 	
 	// EMPTY_CLASS_ARRAY = new Class[0];
@@ -288,11 +291,12 @@ void Pipeline::begin(int primType)
 void Pipeline::vertex(const Vector3f& v, const Color3f& c, const Vector3f& n, const Vector2f& t)
 {
 	vp->vertex(v, c, n, t, vertexCache[vertexIndex]);
+	
 	switch (mode) {
 	case TRIANGLES:
 		if (vertexIndex == 2) {
 			renderTriangle(vertexCache);
-			vertexIndex =0;
+			vertexIndex = 0;
 		} else
 			vertexIndex++;
 		break;
@@ -362,6 +366,7 @@ void Pipeline::swap(Vertex* va, int i, int j) const
  */
 void Pipeline::renderTriangle(const Vector3f* v, const Color3f* c, const Vector3f* n, const Vector2f* t)
 {
+DEV() << "Pipeline::renderTriangle";
 	// Send to TP, get back attributes to interpolate
 	vp->triangle(v, c, n, t, vertexCache);
 	

@@ -72,8 +72,8 @@ void Camera::orbit(const Vector2f& mouseDelta)
 	double theta = std::asin(e.z / r);
 
 	// increment phi and theta by mouse motion
-	phi += -PI / 2 * mouseDelta.x;
-	theta += -PI / 2 * mouseDelta.y;
+	phi += -PI / 2 * mouseDelta.y;
+	theta += -PI / 2 * mouseDelta.x;
 	if (theta > THETA_LIMIT){
 		theta = THETA_LIMIT;
 	}

@@ -33,6 +33,7 @@ public:
 	void set(int ix, int iy, float r, float g, float b, float z);
 	void clear(float r, float g, float b, float z);
 	void write(std::string fname);
+	void draw(float x=0, float y=0) const { this->drawGLTexture(x,y); };
 
 protected:
 	int width;	// The width of the image in the frame buffer.

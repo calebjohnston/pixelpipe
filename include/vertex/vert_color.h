@@ -19,7 +19,7 @@ namespace pipeline {
  */
 class ConstColorVP : public VertexProcessor {
 public:	
-	int nAttr() { return 3; }
+	int nAttr() const { return 3; }
 	void updateTransforms(const Pipeline& pipe);
 	void triangle(	const cg::vecmath::Vector3f* vs, 
 					const cg::vecmath::Color3f* cs, 

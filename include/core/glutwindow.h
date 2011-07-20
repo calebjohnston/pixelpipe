@@ -120,6 +120,9 @@ protected:
 	/** The most recent mouse point recorded for a click. */
 	cg::vecmath::Point2* m_currMousePt;
 	
+	/** The difference between the last mouse click location and the new mouse click location.  */
+	cg::vecmath::Vector2* m_mouseDelta;
+	
 	virtual int render();
 	virtual int resize(int width, int height);
 	virtual int keyPressed(unsigned char key);

@@ -5,6 +5,10 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "core/glutwindow.h"
+#include "core/camera.h"
+#include "core/pipeline.h"
+#include "core/geometry.h"
+#include "core/scene.h"
 
 namespace pipeline {
 	
@@ -15,7 +19,11 @@ public:
 	virtual int run();
 	virtual void init();
 	
-protected:
+protected:	
+	SceneCube* m_scene;
+	Camera* m_camera;
+	Pipeline* m_pipeline;
+	
 	virtual int render();
 	virtual int resize(int width, int height);
 	virtual int keyPressed(unsigned char key);

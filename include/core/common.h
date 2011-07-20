@@ -1,6 +1,8 @@
 #ifndef __PIPELINE_COMMON_H
 #define __PIPELINE_COMMON_H
 
+#include "logger/logger.h"
+
 static const int TRIANGLES = 1;
 static const int TRIANGLE_STRIP = 2;
 static const int TRIANGLE_FAN = 3;

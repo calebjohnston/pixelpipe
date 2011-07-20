@@ -35,7 +35,7 @@ public:
 	 * 
 	 * @return The number of attributes this triangle processor will provide.
 	 */
-	virtual int nAttr() = 0;
+	virtual int nAttr() const = 0;
 	
 	/**
 	 * We can access everything we need to know about the pipeline state -- the
@@ -87,7 +87,7 @@ public:
 	 * @param t Texture coordinates for each vertex (null if unused).
 	 * @param output The processed vertex.
 	 */
-	virtual void vertex(const cg::vecmath::Vector3f v, const cg::vecmath::Color3f c, const cg::vecmath::Vector3f n, const cg::vecmath::Vector2f t, Vertex output) = 0;
+	virtual void vertex(const cg::vecmath::Vector3f& v, const cg::vecmath::Color3f& c, const cg::vecmath::Vector3f& n, const cg::vecmath::Vector2f& t, Vertex& output) = 0;
 };
 
 }

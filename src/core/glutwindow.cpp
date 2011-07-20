@@ -30,6 +30,7 @@ GlutWindow::GlutWindow(std::string title, int width, int height)
 	
 	m_lastMousePt = new Point2();
 	m_currMousePt = new Point2();
+	m_mouseDelta = new Vector2();
 
 	m_currentFrame = 0;
 	
@@ -221,8 +222,6 @@ void GlutWindow::init()
 	glShadeModel(GL_SMOOTH);
 	
 	m_initialized = true;
-	
-	std::cout << "GlutWindow::init" << std::endl;
 }
 
 }

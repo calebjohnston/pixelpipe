@@ -26,7 +26,7 @@ public:
 	// 	ReflectionMapFP.class
 	// 	};
 	
-	virtual int nAttr() = 0;
+	virtual int nAttr() const = 0;
 	virtual void fragment(Fragment& f, FrameBuffer& fb) = 0;
 	
 	/**
