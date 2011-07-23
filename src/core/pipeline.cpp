@@ -200,7 +200,7 @@ void Pipeline::scale(const Vector3f& scale)
 void Pipeline::recomputeMatrix()
 {
 	// TO-DO: compile time error for this? GCC says incompatible type form Pipline cast to int.
-	// vp->updateTransforms(this);
+	vp->updateTransforms(*this);
 }
 
 /**
@@ -366,7 +366,7 @@ void Pipeline::swap(Vertex* va, int i, int j) const
  */
 void Pipeline::renderTriangle(const Vector3f* v, const Color3f* c, const Vector3f* n, const Vector2f* t)
 {
-DEV() << "Pipeline::renderTriangle";
+	DEV() << "Pipeline::renderTriangle // v,c,n,t";
 	// Send to TP, get back attributes to interpolate
 	vp->triangle(v, c, n, t, vertexCache);
 	

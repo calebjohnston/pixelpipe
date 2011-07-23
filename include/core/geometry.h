@@ -107,6 +107,7 @@ public:
 	static void quad(Vector3f v0, Vector3f v1, Vector3f v2, Vector3f v3, Vector3f n, Color3f c, bool usePipeline=false)
 	{
 		if(usePipeline){
+			// DEV() << "Geometry::quad";
 			Pipeline::getInstance()->begin(TRIANGLES);
 			Pipeline::getInstance()->vertex(v0, c, n, t0);
 			Pipeline::getInstance()->vertex(v1, c, n, t1);

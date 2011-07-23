@@ -19,14 +19,14 @@ namespace pipeline {
  */
 class ConstColorVP : public VertexProcessor {
 public:	
-	int nAttr() const { return 3; }
-	void updateTransforms(const Pipeline& pipe);
-	void triangle(	const cg::vecmath::Vector3f* vs, 
+	virtual int nAttr() const { return 3; }
+	virtual void updateTransforms(const Pipeline& pipe);
+	virtual void triangle(	const cg::vecmath::Vector3f* vs, 
 					const cg::vecmath::Color3f* cs, 
 					const cg::vecmath::Vector3f* ns_ign, 
 					const cg::vecmath::Vector2f* ts_ign, 
 					Vertex* output);
-	void vertex(const cg::vecmath::Vector3f& v, 
+	virtual void vertex(const cg::vecmath::Vector3f& v, 
 				const cg::vecmath::Color3f& c, 
 				const cg::vecmath::Vector3f& n_ign, 
 				const cg::vecmath::Vector2f& t_ign, 

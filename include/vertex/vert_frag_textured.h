@@ -20,13 +20,13 @@ namespace pipeline {
 class TexturedFragmentShadedVP : public FragmentShadedVP {	
 public:
 	TexturedFragmentShadedVP();
-	int nAttr() { return size; }
-	void triangle(	const cg::vecmath::Vector3f* vs, 
+	virtual int nAttr() { return size; }
+	virtual void triangle(	const cg::vecmath::Vector3f* vs, 
 					const cg::vecmath::Color3f* cs, 
 					const cg::vecmath::Vector3f* ns_ign, 
 					const cg::vecmath::Vector2f* ts_ign, 
 					Vertex* output);
-	void vertex(const cg::vecmath::Vector3f& v, 
+	virtual void vertex(const cg::vecmath::Vector3f& v, 
 				const cg::vecmath::Color3f& c, 
 				const cg::vecmath::Vector3f& n_ign, 
 				const cg::vecmath::Vector2f& t_ign, 

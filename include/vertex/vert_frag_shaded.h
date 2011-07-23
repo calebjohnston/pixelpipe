@@ -24,14 +24,14 @@ class FragmentShadedVP : public VertexProcessor {
 public:	
 	FragmentShadedVP();
 	~FragmentShadedVP();
-	int nAttr() { return size; }
-	void updateTransforms(const Pipeline& pipe);
-	void triangle(	const cg::vecmath::Vector3f* vs, 
+	virtual int nAttr() { return size; }
+	virtual void updateTransforms(const Pipeline& pipe);
+	virtual void triangle(	const cg::vecmath::Vector3f* vs, 
 					const cg::vecmath::Color3f* cs, 
 					const cg::vecmath::Vector3f* ns, 
 					const cg::vecmath::Vector2f* ts, 
 					Vertex* output);
-	void vertex(const cg::vecmath::Vector3f& v, 
+	virtual void vertex(const cg::vecmath::Vector3f& v, 
 				const cg::vecmath::Color3f& c, 
 				const cg::vecmath::Vector3f& n, 
 				const cg::vecmath::Vector2f& t, 
