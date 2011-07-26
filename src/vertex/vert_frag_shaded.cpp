@@ -19,9 +19,9 @@ void FragmentShadedVP::updateTransforms(const Pipeline& pipe)
 	modelViewMatrix = pipe.modelviewMatrix;		
 	m = modelViewMatrix;
 	Matrix4f temp = modelViewMatrix;
-	m = temp * pipe.projectionMatrix;
+	m = pipe.projectionMatrix * temp;
 	temp = m;
-	m = temp * pipe.viewportMatrix;
+	m = pipe.viewportMatrix * temp;
 }
 
 void FragmentShadedVP::vertex(const Vector3f& v, const Color3f& c, const Vector3f& n, const Vector2f& t, Vertex& output)

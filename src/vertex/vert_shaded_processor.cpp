@@ -16,9 +16,9 @@ void SmoothShadedVP::updateTransforms(const Pipeline& pipe)
 	modelViewMatrix = pipe.modelviewMatrix;		
 	m = modelViewMatrix;
 	Matrix4f temp = modelViewMatrix;
-	m = temp * pipe.projectionMatrix;
+	m = pipe.projectionMatrix * temp;
 	temp = m;
-	m = temp * pipe.viewportMatrix;
+	m = pipe.viewportMatrix * temp;
 	
 }
 
