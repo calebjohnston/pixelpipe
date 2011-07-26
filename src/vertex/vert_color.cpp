@@ -8,9 +8,9 @@ void ConstColorVP::updateTransforms(const Pipeline& pipe)
 {
 	mvp = pipe.modelviewMatrix;
 	Matrix4f temp = mvp;
-	mvp = temp * pipe.projectionMatrix;
+	mvp = pipe.projectionMatrix * temp;
 	temp = mvp;
-	mvp = temp * pipe.viewportMatrix;
+	mvp = pipe.viewportMatrix * temp;
 }
 
 void ConstColorVP::triangle(const Vector3f* vs, const Color3f* cs, const Vector3f* ns_ign, const Vector2f* ts_ign, Vertex* output)

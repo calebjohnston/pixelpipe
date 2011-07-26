@@ -30,7 +30,6 @@ Pipeline::Pipeline(int nx, int ny, std::vector<PointLight>* lights)
 	specularExponent = 40.0;
 	
 	clipper = new Clipper(3);
-	rasterizer = new Rasterizer(3, nx, ny);
 	
 	//Pipeline::instance = this;
 	
@@ -47,6 +46,18 @@ Pipeline* Pipeline::getInstance() {
 		instance = new pipeline::Pipeline();
 	}
 	return instance;
+}
+
+
+void Pipeline::setFragmentProcessor(const FragmentProcessor* fragProc)
+{
+	fp = const_cast<FragmentProcessor*>(fragProc);
+	rasterizer = new Rasterizer(fp->nAttr(), framebuffer->getWidth(), framebuffer->getHeight());
+}
+
+void Pipeline::setVertexProcessor(const VertexProcessor* vertProc)
+{
+	vp = const_cast<VertexProcessor*>(vertProc);
 }
 
 
@@ -291,6 +302,7 @@ void Pipeline::begin(int primType)
 void Pipeline::vertex(const Vector3f& v, const Color3f& c, const Vector3f& n, const Vector2f& t)
 {
 	vp->vertex(v, c, n, t, vertexCache[vertexIndex]);
+	//DEV() << "Pipeline::vertex // 0=" << vertexCache[0].v << ", 1=" << vertexCache[1].v << ", 2=" << vertexCache[2].v;
 	
 	switch (mode) {
 	case TRIANGLES:

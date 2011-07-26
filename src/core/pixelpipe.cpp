@@ -114,7 +114,9 @@ int PixelPipeWindow::render()
 	m_pipeline->viewport(0, 0, m_width, m_height);
 	
 	m_pipeline->modelviewMatrix.identity();
-	gluLookAt(eye.x, eye.y, eye.z, target.x, target.y, target.z, up.x, up.y, up.z);
+	//gluLookAt(eye.x, eye.y, eye.z, target.x, target.y, target.z, up.x, up.y, up.z);
+	m_pipeline->lookAt(eye, target, up);
+	//DEV() << "eye=" << eye << ", target=" << target << ", up=" << up;
 	
 	m_pipeline->clearFrameBuffer();
 	m_scene->render(true);

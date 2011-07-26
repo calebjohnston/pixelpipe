@@ -16,6 +16,9 @@ endif("${CMAKE_GENERATOR}" STREQUAL "Xcode")
 
 set( CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake/modules/)
 
+include( CMakeForceCompiler )
+# cmake_force_cxx_compiler( g++ g++ )
+cmake_force_cxx_compiler( clang++ Clang++ )
 
 # include( cmake/modules/FindOpenCL.cmake )
 set( CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake/modules/)

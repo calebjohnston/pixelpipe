@@ -39,7 +39,7 @@ int Clipper::clip(const Vertex* f, Vertex* fOut1, Vertex* fOut2)
 	// screen space.
 	
 	int code = ((f[0].v.z > 0) ? 1 : 0) | ((f[1].v.z > 0) ? 2 : 0) | ((f[2].v.z > 0) ? 4 : 0);
-	std::cout << code << ":: 1 = " << f[0].v << ",  2 = " << f[1].v << ",  3 = " << f[2].v << std::endl;
+	//std::cout << code << ":: 1 = " << f[0].v << ",  2 = " << f[1].v << ",  3 = " << f[2].v << std::endl;
 	
 	// all three out
 	if (code == 0){

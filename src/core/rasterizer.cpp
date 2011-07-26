@@ -23,7 +23,7 @@ Rasterizer::Rasterizer(int newNa, int newNx, int newNy) {
 	
 	int n = 5 + na;
 	// vData is intended to be a multi-dimensional array of size [3][5+na]
-	vData = (float**) malloc(3*n*sizeof(float*));
+	vData = (float*) malloc(3*n*sizeof(float));	
 	xInc = (float*) malloc(n*sizeof(float));
 	yInc = (float*) malloc(n*sizeof(float));
 	rowData = (float*) malloc(n*sizeof(float));
@@ -43,7 +43,7 @@ Rasterizer::~Rasterizer()
 
 void Rasterizer::rasterize(const Vertex* vs, FragmentProcessor& fp, FrameBuffer& fb)
 {
-	DEV() << "Rasterizer::rasterize";
+	//DEV() << "Rasterizer::rasterize";
 	
 	// Assemble the vertex data.  Entries 0--2 are barycentric
 	// coordinates; entry 3 is the screen-space depth; entries
@@ -51,17 +51,18 @@ void Rasterizer::rasterize(const Vertex* vs, FragmentProcessor& fp, FrameBuffer&
 	// vertices; and entry 4 + na is the inverse w coordinate.
 	// The caller-provided attributes are all interpolated with
 	// perspective correction.
+	int n = 5 + na;
 	for (int iv=0; iv<3; iv++) {
 		float invW = 1.0f / vs[iv].v.w;
 		posn[iv] = vs[iv].v * invW;
 		for (int k=0; k<3; k++){
-			vData[iv][k] = (k == iv ? 1 : 0);
+			vData[iv*n + k] = (k == iv ? 1 : 0);
 		}
-		vData[iv][3] = posn[iv].z;
+		vData[iv*n + 3] = posn[iv].z;
 		for (int ia=0; ia<na; ia++){
-			vData[iv][4 + ia] = invW * vs[iv].attributes[ia];
+			vData[iv*n + (4 + ia)] = invW * vs[iv].attributes[ia];
 		}
-		vData[iv][4 + na] = invW;
+		vData[iv*n + (4 + na)] = invW;
 	}
 	
 	// Compute the bounding box of the triangle; bail out if it is empty.
@@ -85,11 +86,16 @@ void Rasterizer::rasterize(const Vertex* vs, FragmentProcessor& fp, FrameBuffer&
 	// Triangle setup: compute the initial values and the x and y increments
 	// for each attribute.
 	for (int k = 0; k < 5 + na; k++) {
-		float da1 = vData[1][k] - vData[0][k];
-		float da2 = vData[2][k] - vData[0][k];
+		// float da1 = vData[1][k] - vData[0][k];
+		// float da2 = vData[2][k] - vData[0][k];
+		// xInc[k] = (da1 * dy2 - da2 * dy1) / det;
+		// yInc[k] = (da2 * dx1 - da1 * dx2) / det;
+		// rowData[k] = vData[0][k] + (ixMin - posn[0].x) * xInc[k] + (iyMin - posn[0].y) * yInc[k];
+		float da1 = vData[1*n + k] - vData[0*n + k];
+		float da2 = vData[2*n + k] - vData[0*n + k];
 		xInc[k] = (da1 * dy2 - da2 * dy1) / det;
 		yInc[k] = (da2 * dx1 - da1 * dx2) / det;
-		rowData[k] = vData[0][k] + (ixMin - posn[0].x) * xInc[k] + (iyMin - posn[0].y) * yInc[k];
+		rowData[k] = vData[0*n + k] + (ixMin - posn[0].x) * xInc[k] + (iyMin - posn[0].y) * yInc[k];
 	}
 	
 	// Rasterize: loop over the bounding box, updating the attribute values.

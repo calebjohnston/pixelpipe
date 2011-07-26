@@ -28,7 +28,7 @@ protected:
 	int nx;
 	int ny;
 	
-	float** vData;
+	float* vData;
 	float* xInc;
 	float* yInc;
 	float* rowData;

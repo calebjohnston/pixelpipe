@@ -71,8 +71,7 @@ public:
 	 * @param c Colors associated with each of the vertices.
 	 * @param n A normal for each vertex.
 	 * @param t Texture coordinates for each vertex.
-	 * @param output The array of 3 vertices that serves as the output for this
-	 *          method.
+	 * @param output The array of 3 vertices that serves as the output for this method.
 	 */
 	virtual void triangle(const cg::vecmath::Vector3f* v, const cg::vecmath::Color3f* c, const cg::vecmath::Vector3f* n, const cg::vecmath::Vector2f* t, Vertex* output) = 0;
 	
