@@ -12,8 +12,9 @@
 
 namespace pipeline {
 
-/**
- * This FP does a texture lookup rather to determine the color of a fragment. It
+/*!
+ * \class TexturedFP "fragment/frag_textured.h"
+ * \brief This FP does a texture lookup rather to determine the color of a fragment. It
  * also uses the z-buffering technique to draw the correct fragment.
  * 
  */

@@ -11,7 +11,9 @@
 
 namespace pipeline {
 
-/**
+/*!
+ * \class PhongShadedFP "fragment/frag_phong.h"
+ * \brief Provides per-pixel lighting using the Phong model.
  * This is the fragment program which actually uses a shading model to compute
  * the color on a per fragment basis.
  * 

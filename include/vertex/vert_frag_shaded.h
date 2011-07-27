@@ -13,7 +13,10 @@
 
 namespace pipeline {
 
-/**
+/*!
+ * \class FragmentShadedVP "vertex/vert_frag_shaded.h"
+ * \brief Provides color values to the fragment shader for per-pixel shading.
+ * 
  * Passes the normals and the colors of each vertex on to be rasterized, and
  * later shaded during the fragment stage of the pipeline. This results in the
  * highest quality images, but results in costly computation.

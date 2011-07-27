@@ -11,7 +11,10 @@ namespace pipeline {
 	
 class Pipeline;
 	
-/**
+/*!
+ * \class VertexProcessor "vertex/vert_processor.h"
+ * \brief VertexProcessor is a base class for all vertex processors.
+ * 
  * This class is a wrapper for the code that does triangle processing -- or
  * vertex processing, in the more traditional pipeline terminology. Its mission
  * is to transform a triangle into screen space vertex coordinates for the

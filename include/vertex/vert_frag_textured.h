@@ -10,8 +10,11 @@
 
 namespace pipeline {
 
-/**
- * This is the same triangle processor as FragmentShadedTP, but it also
+/*!
+ * \class TexturedFragmentShadedVP "vertex/vert_frag_textured.h"
+ * \brief Provides UV values to the fragment processor for proper texture sampling.
+ * 
+ * This is the same vertex processor as FragmentShadedVP, but it also
  * interpolates texture coordinates, allowing for texturing to be done in the
  * fragment stage.
  * 

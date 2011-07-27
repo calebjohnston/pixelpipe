@@ -7,10 +7,13 @@
 
 namespace pipeline {
 
-/**
+/*!
+ * \class ZBufferFP "fragment/frag_zbuffer.h"
+ * \brief performs Z-buffer test before blitting fragment to framebuffer.
+ * 
  * This fragment processor will place the indicated color into the framebuffer
- * only if the fragment passes the z buffer test (ie - it isn't occluded by
- * another fragment).
+ * only if the fragment passes the z buffer test, meaning if it isn't occluded 
+ * by another fragment.
  * 
  */
 class ZBufferFP : public FragmentProcessor {

@@ -98,7 +98,6 @@ namespace pipeline {
 	static Vector3f v_00n(0.0f, 0.0f, -1.0f);
 
 class Geometry {
-
 public:
 	/*
 	* Sends a quadrilateral to the OpenGL pipeline. Mimics the other quad

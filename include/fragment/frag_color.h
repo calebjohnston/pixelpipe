@@ -7,9 +7,11 @@
 
 namespace pipeline {
 
-/**
+/*!
+ * \class ColorFP "fragment/frag_color.h"
+ * \brief Provides simple per-pixel color shading.
  * This fragment program will render the fragments color into the framebuffer
- * regardless of whether it is in front of an earlier fragment.
+ * regardless of whether it is in front of an earlier fragment (ie. No Z buffer test)
  * 
  */
 class ColorFP : public FragmentProcessor {

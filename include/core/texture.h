@@ -11,8 +11,7 @@ namespace pipeline {
 
 /*!
  * \class Texture "core/texture.h"
- *
- * This class holds all of the information necessary to describe texture data.
+ * \brief This class holds all of the information necessary to describe texture data.
  * 
  */
 class Texture {

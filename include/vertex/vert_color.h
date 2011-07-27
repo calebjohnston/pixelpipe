@@ -13,7 +13,7 @@ namespace pipeline {
 
 /*!
  * \class ConstColorVP "vertex/vert_color.h"
- * 
+ * \brief provides constant per-vertex color shading
  * The constant Color vertex processor sets each vertex up with a constant color, no 
  * matter what the viewing conditions.
  * 

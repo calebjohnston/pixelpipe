@@ -7,7 +7,9 @@
 
 namespace pipeline {
 
-/**
+/*!
+ * \class FragmentProcessor "fragment/frag_processor.h"
+ * \brief base class for all fragment processors.
  * A fragment processor describes what happens in order to render fragments of a
  * triangle on screen. Things that happen here include shading calculations, z
  * buffering, texturing, etc.

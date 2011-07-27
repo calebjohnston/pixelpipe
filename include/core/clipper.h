@@ -5,8 +5,12 @@
 
 namespace pipeline {
 
+/*!
+ * \class Clipper "core/clipper.h"
+ * \brief The Clipper class is responsible for performing view volume clipping.
+ * 
+ */
 class Clipper {
-	
 public:
 	/**
 	 * Default constructor.

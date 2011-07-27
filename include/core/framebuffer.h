@@ -18,6 +18,7 @@ namespace pipeline {
 
 /*!
  * \class FrameBuffer "core/framebuffer.h"
+ * \brief Simple class providing a render target interface for the Rasterizer.
  * 
  * This class holds all of the data for a frame. A frame is rendered (blit) off screen,  
  * then transferred onto the screen. The z buffer is also held in this frame buffer class.
