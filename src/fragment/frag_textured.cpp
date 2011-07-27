@@ -3,7 +3,7 @@
 
 namespace pipeline {
 
-void TexturedFP::fragment(const Fragment& f, FrameBuffer& fb)
+void TexturedFP::fragment(Fragment& f, FrameBuffer& fb)
 {
 	if(f.attributes[0] < fb.getZ(f.x, f.y)){
 		color = texture.sample(f.attributes[4], f.attributes[5]);

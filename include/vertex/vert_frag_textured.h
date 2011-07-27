@@ -19,7 +19,7 @@ namespace pipeline {
 class TexturedFragmentShadedVP : public FragmentShadedVP {	
 public:
 	TexturedFragmentShadedVP();
-	virtual int nAttr() { return size; }
+	virtual int nAttr() const { return size; }
 	virtual void triangle(	const cg::vecmath::Vector3f* vs, 
 					const cg::vecmath::Color3f* cs, 
 					const cg::vecmath::Vector3f* ns_ign, 

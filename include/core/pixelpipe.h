@@ -44,6 +44,7 @@ protected:
 	Scene* m_scene;			//!< the current scene instance
 	Camera* m_camera;		//!< the camera instance being used
 	Pipeline* m_pipeline;	//!< the pipeline instance
+	std::vector<Texture*> m_textures;	//!< the textures to be loaded from external files.
 	
 	virtual int render();
 	virtual int resize(int width, int height);

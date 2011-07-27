@@ -1,14 +1,13 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "core/common.h"
 #include "core/framebuffer.h"
 
 namespace pipeline {
 
 FrameBuffer::FrameBuffer(int newNx, int newNy) : width(newNx), height(newNy)
 {
-	// cData = new byte[width * height * 3];
-	// 	zData = new float[width * height];
 	size_t c_len = 3 * width * height * sizeof(char);
 	size_t z_len = width * height * sizeof(float);
 	cData = (char*) malloc(c_len);
@@ -59,6 +58,8 @@ void FrameBuffer::clear(float r, float g, float b, float z)
 
 void FrameBuffer::write(std::string filename)
 {
+	// IMG_PNG=1, IMG_TIFF=2, IMG_JPEG=3
+	// write_image(const char *filename, const ByteRaster&, int type=-1);
 	// try {
 	//   FileOutputStream stream = new FileOutputStream(filename);
 	//   String hdr = new String("P6 " + width + " " + height + " 255\n");

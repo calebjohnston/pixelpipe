@@ -53,6 +53,21 @@ public:
 //	Class getTriangleClass();
 	
 	/**
+	 * Erases the old list of lights and uses the new one.
+	 *
+	 * @param newLights the vector of new lights to use
+	 */
+	void setLights(std::vector<PointLight>* newLights)
+	{
+		if(lights!=NULL) {
+			delete lights;
+			lights = NULL;
+		}
+		
+		lights = newLights;
+	}
+	
+	/**
 	 * Compares the vertex and fragment processors to makes sure the information passed
 	 * between them is in the same in size. 
 	 *

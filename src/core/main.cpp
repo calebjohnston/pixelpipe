@@ -126,9 +126,24 @@ int main(int argc, char **argv)
     catch(...) {
         std::cerr << "Exception of unknown type!\n";
     }
+	
+	
+	//std::cout << "loading image: /Users/Caleb/Development/OpenSource/pixelpipe/resources/textures/carbonite.jpg ";
+	// std::string fname("/Users/Caleb/Development/OpenSource/pixelpipe/resources/textures/carbonite.jpg");
+	// cg::image::ByteRaster* img = cg::image::read_image(fname.c_str());
+	// if(img!=NULL){
+	// 	std::cout << "loaded image of size: ";
+	// 	std::cout << img->width() << "x" << img->height() << std::endl;
+	// 	return 0;
+	// }else{
+	// 	std::cout << "FAILED!" << std::endl;
+	// 	return 1;
+	// }
+	
 
 	// start it up!
 	pipeline::PixelPipeWindow* app = new pipeline::PixelPipeWindow();
 	app->init();
+	
 	return app->run();
 }

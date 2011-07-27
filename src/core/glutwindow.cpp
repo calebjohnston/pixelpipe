@@ -65,6 +65,8 @@ int GlutWindow::run()
 int GlutWindow::render()
 {
 	m_currentFrame++;
+
+	return 0;
 }
 
 int GlutWindow::resize(int width, int height)

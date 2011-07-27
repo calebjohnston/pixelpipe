@@ -9,7 +9,7 @@ PhongShadedFP::PhongShadedFP()
 	size = 9 + 6 * Pipeline::getInstance()->getLights().size();
 }
 
-void PhongShadedFP::fragment(const Fragment& f, FrameBuffer& fb)
+void PhongShadedFP::fragment(Fragment& f, FrameBuffer& fb)
 {
 	if(f.attributes[0] < fb.getZ(f.x, f.y)){
 		//get normal

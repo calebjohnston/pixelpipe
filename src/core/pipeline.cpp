@@ -19,7 +19,12 @@ Pipeline::Pipeline(int nx, int ny, std::vector<PointLight>* lights)
 {
 	framebuffer = new FrameBuffer(nx, ny);
 	// configure(TrivialColorFP.class, ConstColorVP.class);
-	this->lights = lights;
+	if(lights!=NULL){
+		this->lights = lights;
+	}
+	else{
+		this->lights = new std::vector<PointLight>();
+	}
 	
 	mode = PIPELINE_MODE_NONE;
 	modelviewMatrix.identity();
@@ -151,7 +156,6 @@ void Pipeline::scale(const Vector3f& scale)
 
 void Pipeline::recomputeMatrix()
 {
-	// TO-DO: compile time error for this? GCC says incompatible type form Pipline cast to int.
 	vp->updateTransforms(*this);
 }
 
@@ -167,7 +171,6 @@ void Pipeline::lookAt(Vector3f eye, Vector3f target, Vector3f up)
 	Vector3f v;
 	v = cross(w, u);
 	T = cameraToFrame(u, v, w, eye);
-	// modelviewMatrix.rightCompose(T);
 	Matrix4f mv(modelviewMatrix);
 	modelviewMatrix = mv * T;
 	recomputeMatrix();
@@ -211,7 +214,6 @@ void Pipeline::begin(int primType)
 void Pipeline::vertex(const Vector3f& v, const Color3f& c, const Vector3f& n, const Vector2f& t)
 {
 	vp->vertex(v, c, n, t, vertexCache[vertexIndex]);
-	//DEV() << "Pipeline::vertex // 0=" << vertexCache[0].v << ", 1=" << vertexCache[1].v << ", 2=" << vertexCache[2].v;
 	
 	switch (mode) {
 	case TRIANGLES:
@@ -279,7 +281,6 @@ void Pipeline::swap(Vertex* va, int i, int j) const
 
 void Pipeline::renderTriangle(const Vector3f* v, const Color3f* c, const Vector3f* n, const Vector2f* t)
 {
-	// Send to TP, get back attributes to interpolate
 	vp->triangle(v, c, n, t, vertexCache);
 	
 	renderTriangle(vertexCache);

@@ -33,8 +33,8 @@ private:
 public:
     Raster(int w, int h, int c)
     {
-	W=w; H=h; nchan=c;
-	data = new T[length()];
+		W=w; H=h; nchan=c;
+		data = new T[length()];
     }
     virtual ~Raster() { delete[] data; }
 
@@ -151,25 +151,25 @@ extern int infer_image_type(const char *filename);
 
 // Image I/O based on filename extensions
 extern bool write_image(const char *filename, const ByteRaster&, int type=-1);
-extern ByteRaster *read_image(const char *filename, int type=-1);
+extern ByteRaster* read_image(const char *filename, int type=-1);
 
 // PNM support provided by libcg (always available)
 extern bool will_write_raw_pnm;
 extern bool write_pnm_image(const char *filename, const ByteRaster&);
-extern ByteRaster *read_pnm_image(const char *filename);
+extern ByteRaster* read_pnm_image(const char *filename);
 
 // TIFF support provided through libtiff (if available).
 extern bool write_tiff_image(const char *filename, const ByteRaster&);
-extern ByteRaster *read_tiff_image(const char *filename);
+extern ByteRaster* read_tiff_image(const char *filename);
 
 // PNG support provided through libpng (if available).
 extern bool write_png_image(const char *filename, const ByteRaster&);
-extern ByteRaster *read_png_image(const char *filename);
+extern ByteRaster* read_png_image(const char *filename);
 
 // JPEG support provided through libjpeg (if available)
 extern int jpeg_output_quality;
 extern bool write_jpeg_image(const char *filename, const ByteRaster&);
-extern ByteRaster *read_jpeg_image(const char *filename);
+extern ByteRaster* read_jpeg_image(const char *filename);
 
 } // namespace image
 } // namespace cg

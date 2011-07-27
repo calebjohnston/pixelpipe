@@ -24,7 +24,7 @@ class FragmentShadedVP : public VertexProcessor {
 public:	
 	FragmentShadedVP();
 	~FragmentShadedVP();
-	virtual int nAttr() { return size; }
+	virtual int nAttr() const { return size; }
 	virtual void updateTransforms(const Pipeline& pipe);
 	virtual void triangle(	const cg::vecmath::Vector3f* vs, 
 					const cg::vecmath::Color3f* cs, 

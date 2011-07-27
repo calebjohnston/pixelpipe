@@ -1,7 +1,13 @@
 #include "core/pixelpipe.h"
 #include "core/common.h"
 #include "vertex/vert_color.h"
+#include "vertex/vert_frag_shaded.h"
+#include "vertex/vert_frag_textured.h"
+#include "vertex/vert_shaded_processor.h"
 #include "fragment/frag_color.h"
+#include "fragment/frag_phong.h"
+#include "fragment/frag_textured.h"
+#include "fragment/frag_zbuffer.h"
 
 using namespace cg::vecmath;
 
@@ -13,7 +19,6 @@ PixelPipeWindow::PixelPipeWindow(std::string title, int width, int height)
 	//m_scene = new SceneCube();
 	m_scene = new SceneSpheres();
 	
-	//cameraOrbit = new Camera(new Vector3f(3.0f, 4.0f, 5.0f), new Vector3f(0.0f, 0.0f, 0.0f), new Vector3f(0.0f, 1.0f, 0.0f), 1.0f, 10.0f, 0.6f);
 	Vector3f* eye = new Vector3f(3.0, 4.0, 5.0);
 	Vector3f* target = new Vector3f(0.0, 0.0, 0.0);
 	Vector3f* upVec = new Vector3f(0.0, 1.0, 0.0);
@@ -21,6 +26,11 @@ PixelPipeWindow::PixelPipeWindow(std::string title, int width, int height)
 	float far = 1000.0;
 	float ht = 0.6;
 	m_camera = new Camera(*eye, *target, *upVec, near, far, ht);
+	
+	Texture* tex1 = new Texture("../resources/textures/carbonite.jpg");
+	Texture* tex2 = new Texture("../resources/textures/silverblob.jpg");
+	m_textures.push_back(tex1);
+	m_textures.push_back(tex2);
 }
 
 PixelPipeWindow::~PixelPipeWindow()
@@ -44,13 +54,23 @@ void PixelPipeWindow::init()
 	glDisable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND);
 	
-	
+	// set the textures
 	m_pipeline = Pipeline::getInstance();
 	
-	ConstColorVP* colorVertProc = new ConstColorVP();
-	ColorFP* colorFragProc = new ColorFP();
-	m_pipeline->setFragmentProcessor(colorFragProc);
-	m_pipeline->setVertexProcessor(colorVertProc);
+	// set the lights
+	PointLight pl1(m_camera->getEye(), Color3f(1.0,1.0,1.0));
+	PointLight pl2(Vector3f(-3.0, 0.0, -5.0), Color3f(1.0,0.25,0.5));
+	m_pipeline->getLights().push_back(pl1);
+	m_pipeline->getLights().push_back(pl2);
+	
+	// set the shaders
+	ConstColorVP* vertProcessor = new ConstColorVP();
+	ColorFP* fragProcessor = new ColorFP();
+	// FragmentShadedVP* vertProcessor = new FragmentShadedVP();
+	// PhongShadedFP* fragProcessor = new PhongShadedFP();
+	m_pipeline->setVertexProcessor(vertProcessor);
+	m_pipeline->setFragmentProcessor(fragProcessor);
+	m_pipeline->setTexture(*m_textures.at(0));
 	
 	
 	/*
@@ -112,9 +132,7 @@ int PixelPipeWindow::render()
 	m_pipeline->viewport(0, 0, m_width, m_height);
 	
 	m_pipeline->modelviewMatrix.identity();
-	//gluLookAt(eye.x, eye.y, eye.z, target.x, target.y, target.z, up.x, up.y, up.z);
 	m_pipeline->lookAt(eye, target, up);
-	//DEV() << "eye=" << eye << ", target=" << target << ", up=" << up;
 	
 	m_pipeline->clearFrameBuffer();
 	m_scene->render(true);
@@ -184,6 +202,8 @@ int PixelPipeWindow::keyPressed(unsigned char key)
 		_draw_depth_buffers = !_draw_depth_buffers;
 	}
 	*/
+	
+	return 0;
 }
 
 int PixelPipeWindow::keyReleased(unsigned char key)

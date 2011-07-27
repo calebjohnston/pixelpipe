@@ -1,8 +1,12 @@
 #include <string>
 
+#include "core/common.h"
 #include "core/texture.h"
 
 namespace pipeline {
+	
+using namespace cg::vecmath;
+using namespace cg::image;
 
 Texture::Texture()
 {
@@ -10,8 +14,11 @@ Texture::Texture()
 
 Texture::Texture(std::string filename)
 {
-	cBuf = cg::image::read_image(filename.c_str());	// only supports TIFF, JPEG, and PNG
-	std::cout << "loaded " << cBuf->width() << " x " << cBuf->height() << " texture with " << cBuf->channels() << " channels." << std::endl;
+	//char nom[100];
+	///char* nom = (char*)'/Users/Caleb/Development/OpenSource/pixelpipe/resources/textures/carbonite.png';
+	cBuf = cg::image::read_image(filename.c_str(), cg::image::IMG_JPEG);	// only supports TIFF, JPEG, and PNG
+	//ByteRaster* img = read_png_image(filename.c_str());
+	//DEV() << "loaded " << cBuf->width() << " x " << cBuf->height() << " texture with " << cBuf->channels() << " channels.";
 }
 
 Texture::~Texture()
@@ -40,9 +47,9 @@ void Texture::setTextureData(const cg::image::ByteRaster& buffer)
 	*cBuf = buffer;
 }
 
-cg::vecmath::Color3f Texture::sample(const float s, const float t) const
+Color3f Texture::sample(const float s, const float t) const
 {
-	cg::vecmath::Color3f cOut;
+	Color3f cOut;
 	
 	// TO-DO: Check for null input in cOut parameter...
 	int nx = cBuf->width();
@@ -57,10 +64,10 @@ cg::vecmath::Color3f Texture::sample(const float s, const float t) const
 	float uWeighted = 1.0f - uRatio;
 	float vWeighted = 1.0f - vRatio;
 	
-	cg::vecmath::Color3f leftTop;
-	cg::vecmath::Color3f rightTop;
-	cg::vecmath::Color3f leftBottom;
-	cg::vecmath::Color3f rightBottom;
+	Color3f leftTop;
+	Color3f rightTop;
+	Color3f leftBottom;
+	Color3f rightBottom;
 	
 	unsigned char r,g,b;
 	

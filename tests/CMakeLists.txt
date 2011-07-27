@@ -16,6 +16,11 @@ elseif(WIN32)
   set(INC_PATH "C:/msys/1.0/local/include")
 endif(APPLE AND UNIX)
 
+set(CG_LIBRARIES
+  ${PROJECT_SOURCE_DIR}/lib/libcg_image.dylib 
+  ${PROJECT_SOURCE_DIR}/lib/libcg_vecmath.dylib
+)
+
 #--------------------------------------------------------------------------------
 # We need this to be able to include headers produced by uic in our code
 # CMAKE_BINARY_DIR holds a path to the build directory, while INCLUDE_DIRECTORIES()
@@ -23,6 +28,7 @@ endif(APPLE AND UNIX)
 include_directories (
   # Look in the cmake build directory (some generated headers could be there)
   ${INC_PATH}
+  ${PROJECT_SOURCE_DIR}/extern
   ${CMAKE_CURRENT_BINARY_DIR} 
 )
 
@@ -31,9 +37,6 @@ include_directories (
 # set( EXECUTABLE_OUTPUT_PATH ../bin/tests )
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/${CMAKE_BUILD_TYPE}/bin/tests)
 
-add_executable( xml_handling
-  xml_handling.cpp
-)
 
 add_executable( threads 
   threads.cpp
@@ -43,22 +46,19 @@ add_executable( windowing
   windowing.c
 )
 
+add_executable( image 
+  image.cpp
+)
 
 ## Link libraries
 set(BOOST_LIBS thread date_time system program_options)
 find_package(Boost COMPONENTS ${BOOST_LIBS} REQUIRED)
-target_link_libraries(xml_handling 
-  ${Boost_LIBRARIES}
-)
 
 target_link_libraries(threads 
   ${Boost_LIBRARIES}
 )
 
 find_package(Threads REQUIRED)
-target_link_libraries(xml_handling
-  ${CMAKE_THREAD_LIBS_INIT}
-)
 
 target_link_libraries(threads 
   ${CMAKE_THREAD_LIBS_INIT}
@@ -71,5 +71,8 @@ target_link_libraries(windowing
   ${OPENGL_LIBRARY}
 )
 
-# this doesn't work anymore? What happened to debug_settings.xml
-# file(COPY debug_settings.xml DESTINATION ${EXECUTABLE_OUTPUT_PATH})
+target_link_libraries(image 
+  ${GLUT_LIBRARY}
+  ${OPENGL_LIBRARY}
+  ${CG_LIBRARIES}
+)

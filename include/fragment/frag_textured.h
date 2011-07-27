@@ -21,7 +21,7 @@ class TexturedFP : public FragmentProcessor
 {
 public:
 	int nAttr() { return 5; }
-	void fragment(const Fragment& f, FrameBuffer& fb);
+	void fragment(Fragment& f, FrameBuffer& fb);
 	
 	/**
 	 * Output utility function for logging and debugging purposes.

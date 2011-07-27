@@ -19,8 +19,8 @@ namespace pipeline {
 class PhongShadedFP : public FragmentProcessor {
 public:
 	PhongShadedFP();
-	int nAttr() { return size; }
-	void fragment(const Fragment& f, FrameBuffer& fb);
+	virtual int nAttr() const { return size; }
+	virtual void fragment(Fragment& f, FrameBuffer& fb);
 	
 	/**
 	 * Output utility function for logging and debugging purposes.
