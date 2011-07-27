@@ -68,6 +68,7 @@ void FragmentShadedVP::vertex(const Vector3f& v, const Color3f& c, const Vector3
 
 	//calculate light vectors
 	int len = Pipeline::getInstance()->getLights().size();
+	int position;
 	for(int i=0; i<len; i++){
 		position = 6*i;
 		

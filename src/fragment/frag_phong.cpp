@@ -26,6 +26,7 @@ void PhongShadedFP::fragment(const Fragment& f, FrameBuffer& fb)
 				
 		//add lighting
 		outColor.set(0.0,0.0,0.0);
+		int position;
 		for(int i = 0; i < Pipeline::getInstance()->getLights().size(); i++)
 		{	
 			position = 6*i;

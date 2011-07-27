@@ -5,18 +5,28 @@
 #include "cg/vecmath/vec4.hpp"
 
 namespace pipeline {
-
+	
+/*!
+ * \class Vertex "core/vertex.h"
+ * \brief A simple object to store a vertex using a specified number of attributes.
+ * \see pipeline::Fragment
+ * 
+ */
 struct Vertex {
-public:
-	Vertex(){
-		length = 0;
-	}
-	
-	Vertex(int n) {
+public:	
+	/**
+	 * The constructor allocates the data required to store the per-vertex attribues.
+	 */
+	Vertex(int n=0) {
 		length = n;
-		attributes = (float*) malloc(length*sizeof(float));
+		if(length > 0){
+			attributes = (float*) malloc(length*sizeof(float));
+		}
 	}
 	
+	/**
+	 * De-allocates the data used to store the fragment attribues.
+	 */
 	~Vertex(){
 		free(attributes);
 	}
@@ -33,14 +43,17 @@ public:
 		attributes = (float*) malloc(length*sizeof(float));
 	}
 	
-	/** The 4D homogenous coordinate location. */
-	cg::vecmath::Vector4f v;
-
-	/** The attributes associated with this vertex. */
-	float* attributes;
+	/**
+	 * Output utility function for logging and debugging purposes.
+	 */
+	inline std::ostream& operator<<(std::ostream &out)
+	{
+		return out << "[ Vertex: position=(" << v.x << "," << v.y << "," << v.z << "," << v.w << ") ]";
+	}
 	
-	/** The total number of attributes associated with this vertex. */
-	int length;
+	cg::vecmath::Vector4f v;	//!< The 4D homogenous position coordinate.
+	float* attributes;			//!< The attributes associated with this vertex.
+	int length;					//!< The total number of attributes associated with this vertex. 
 };
 
 }

@@ -11,13 +11,20 @@ namespace pipeline {
  * This fragment program will render the fragments color into the framebuffer
  * regardless of whether it is in front of an earlier fragment.
  * 
- * @author ags
  */
 class ColorFP : public FragmentProcessor {
 public:	
 	virtual int nAttr() const { return 3; }
 	
-	virtual void fragment(Fragment& f, FrameBuffer& fb);	
+	virtual void fragment(Fragment& f, FrameBuffer& fb);
+	
+	/**
+	 * Output utility function for logging and debugging purposes.
+	 */
+	inline std::ostream& operator<<(std::ostream &out)
+	{
+		return out << "[ ColorFragmentProcessor ]";
+	}
 };
 
 }	// namespace pipeline

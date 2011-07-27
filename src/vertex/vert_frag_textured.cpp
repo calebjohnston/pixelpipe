@@ -20,7 +20,6 @@ void TexturedFragmentShadedVP::vertex(const Vector3f& v, const Color3f& c, const
 
 void TexturedFragmentShadedVP::triangle(const Vector3f* vs, const Color3f* cs, const Vector3f* ns, const Vector2f* ts, Vertex* output)
 {
-	
 	Color3f* color = new Color3f();
 	
 	for (int k = 0; k < 3; k++) {

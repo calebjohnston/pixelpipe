@@ -12,7 +12,6 @@ namespace pipeline {
  * triangle on screen. Things that happen here include shading calculations, z
  * buffering, texturing, etc.
  * 
- * @author ags
  */
 class FragmentProcessor {
 public:	
@@ -31,11 +30,13 @@ public:
 	
 	/**
 	 * This sets the texture that the fragment processor should use.
+	 * 
+	 * @param newTexture a reference to a new texture to use.
 	 */
 	void setTexture(const Texture& newTexture) { texture = newTexture; }
 	
 protected:
-	Texture texture;	// A reference to the currently loaded texture.
+	Texture texture;	//!< A reference to the currently loaded texture.
 	
 };	// class FragmentProcessor
 

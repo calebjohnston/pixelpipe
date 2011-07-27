@@ -8,30 +8,15 @@ using namespace cg::vecmath;
 
 namespace pipeline {
 
-/**
- * Constructs a new camera. Requires all
- * 
- * @param newEye
- * @param newTarget
- * @param newUp
- * @param newNear
- * @param newFar
- * @param ht
- */
 Camera::Camera(const Vector3f& newEye, const Vector3f& newTarget, const Vector3f& newUp, 
 	float newNear, float newFar, float newHt)
 {
-	// eye.set(newEye);
-	// target.set(newTarget);
-	// up.set(newUp);	// instead...
 	eye = newEye;
 	target = newTarget;
 	up = newUp;
 	near = newNear;
 	far = newFar;
 	ht = newHt;
-
-	// myGLU = new GLU();
 
 	near = 1.0f;
 	far = 10.0f;
@@ -144,49 +129,19 @@ void Camera::panDolly(const Vector2f& mouseDelta, bool dolly)
 
 void Camera::dolly(float d)
 {
-	//eye.scaleAdd(-d, eye, eye);
 	eye *= -d;
 }
-
-// void Camera::setProjection(Pipeline& pipe) const
-// {
-// 	pipe.frustum(-ht * aspect, ht * aspect, -ht, ht, near, far);
-// }
-
-// void Camera::setProjection(GLAutoDrawable d)
-// {
-// 	d.getGL().glMatrixMode(GL.GL_PROJECTION);
-// 	d.getGL().glLoadIdentity();
-// 	d.getGL().glFrustum(-ht * aspect, ht * aspect, -ht, ht, near, far);
-// }
 
 void Camera::setAspect(float d)
 {
 	aspect = d;
 }
 
-// void Camera::setup(Pipeline& pipe) const
-// {
-// 	pipe.lookAt(eye, target, up);
-// }
-
-// void Camera::setup(GLAutoDrawable d)
-// {
-// 	d.getGL().glMatrixMode(GL.GL_MODELVIEW);
-// 	d.getGL().glLoadIdentity();
-// 	myGLU.gluLookAt(eye.x, eye.y, eye.z, target.x, target.y, target.z, up.x, up.y, up.z);
-// }
-
-
-/*
- * Returns 0 if a is smallest, 1 if b is smallest, 2 if c is smallest.
- */
 int Camera::argmin(double a, double b, double c)
 {
 	return a < b ? (a < c ? 0 : 2) : (b < c ? 1 : 2);
 }
 
-/* Returns a vector that is not nearly parallel to v. */
 Vector3f Camera::nonParallelVector(Vector3f v)
 {
 	int i = argmin(std::abs(v.x), std::abs(v.y), std::abs(v.z));

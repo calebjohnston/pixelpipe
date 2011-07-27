@@ -8,7 +8,9 @@ namespace pipeline {
 class Clipper {
 	
 public:
-	
+	/**
+	 * Default constructor.
+	 */
 	Clipper();
 	
 	/**
@@ -17,16 +19,37 @@ public:
 	 * @param newNa The number of attributes.
 	 */
 	Clipper(int newNa);
+	
+	/**
+	 * Destructor.
+	 */
 	~Clipper();
 	
+	/**
+	 * The interface for the clipper. Each triangle will be clipped against the
+	 * near plane, resulting in either 0, 1, or 2 triangles. The number of
+	 * triangles will be returned, and the resulting vertices will be stored into
+	 * fOut1 if only one triangle results, or in both fOut1 and fOut2 if two triangles
+	 * result.
+	 * 
+	 * @param f The vertices of the triangle to be clipped.
+	 * @param fOut1 The vertices of the first resulting triangle, if any.
+	 * @param fOut2 The vertices of the second resulting triangle, if any.
+	 * @return The number of resulting triangles.
+	 */
 	int clip(const Vertex* f, Vertex* fOut1, Vertex* fOut2);
 	
-protected:
-	/** Number of user-supplied attributes */
-	int na;
+	/**
+	 * Output utility function for logging and debugging purposes.
+	 */
+	inline std::ostream& operator<<(std::ostream &out)
+	{
+		return out << "[ Clipper ]";
+	}
 	
-	/** Temporaries for clipping */
-	Vertex fClip[3];
+protected:
+	int na;				//!< Number of user-supplied attributes
+	Vertex fClip[3];	//!< Temporaries for clipping
 	
 private:
 	

@@ -21,17 +21,19 @@
 
 namespace pipeline {
 
-/**
+/*!
+ * \class Scene "core/scene.h"
+ * 
  * A Scene object represents a collection of geometry and texture data. A Scene
- * object should know how to render itself into both a GL context, as well as
- * the custom built context of this project framework.
+ * object should know how to render itself into both an OpenGL context and a 
+ * PixelPipe context.
  */
 class Scene {
 public:
 	Scene() {}
 	~Scene() {}
 	/**
-	* 
+	* Accessor method for the texture for this scene.
 	* 
 	* @param texFile The file to read the image from.
 	*/
@@ -41,7 +43,7 @@ public:
 	}
 	
 	/**
-	* 
+	* Returns a reference to the texture for this scene.
 	* 
 	* @return reference to the current texture unit
 	*/
@@ -51,15 +53,121 @@ public:
 	}
 
 	/**
+	* The primary function to render the scene.
 	* 
+	* @param usePipeline a flag to determine whether or not to use OpenGL rendering or the internal PixelPipe.
 	*/
 	virtual void render(bool usePipeline=true) = 0;
 
 protected:
-	/** The texture data for a scene. Might be null. */
-	Texture* m_texture;
+	Texture* m_texture;	//!< The texture data for a scene. Might be null.
 
 };	// class Scene
+
+/*
+public class SceneBalls extends Scene {
+
+  // The triangulation depth of the spheres
+  protected static final int DEPTH = 3;
+  
+  // The color of the first sphere.
+  protected Color3f colorA = new Color3f(0.4f, 0.5f, 0.8f);
+
+  // The color of the second sphere.
+  protected Color3f colorB = new Color3f(0.8f, 0.5f, 0.4f);
+
+  // The amount to translate the center of the first sphere.
+  protected Vector3f locationA = new Vector3f(1.2f, 0.0f, 0.0f);
+
+  //The amount to translate the center of the second sphere. 
+  protected Vector3f locationB = new Vector3f(-2.4f, 0.0f, 0.0f);
+
+  public void render(GLAutoDrawable d) {
+
+    GL gl = d.getGL();
+
+    gl.glTexImage2D(GL.GL_TEXTURE_2D, 0, GL.GL_RGB, texture.nx, texture.ny, 0, GL.GL_RGB, GL.GL_UNSIGNED_BYTE, texture.cBuf);
+    texture.cBuf.rewind();
+
+    gl.glTranslatef(1.2f, 0.0f, 0.0f);
+    Geometry.sphere(DEPTH, colorA, d);
+
+    gl.glTranslatef(-2.4f, 0.0f, 0.0f);
+    Geometry.sphere(DEPTH, colorB, d);
+  }
+
+  public void render(Pipeline pipe) {
+
+    pipe.setTexture(texture);
+
+    pipe.translate(locationA);
+    Geometry.sphere(DEPTH, colorA);
+
+    pipe.translate(locationB);
+    Geometry.sphere(DEPTH, colorB);
+  }
+
+}
+
+*/
+
+class SceneSpheres : public Scene {
+public:
+	SceneSpheres()
+	{
+		depth = 3;
+		
+		colorA = Color3f(0.4f, 0.5f, 0.8f);
+		colorB = Color3f(0.8f, 0.5f, 0.4f);
+
+		locationA = Vector3f(1.2f, 0.0f, 0.0f);
+		locationB = Vector3f(-2.4f, 0.0f, 0.0f);
+	}
+	
+	~SceneSpheres() {}
+	
+	virtual void render(bool usePipeline) 
+	{
+		if(usePipeline){			
+		    //Pipeline::getInstance()->setTexture(*m_texture);
+
+			Pipeline::getInstance()->translate(locationA);
+		    Geometry::sphere(depth, colorA, true);
+
+			Pipeline::getInstance()->translate(locationB);
+		    Geometry::sphere(depth, colorB, true);
+		}
+		else{
+			//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, m_texture->width(), m_texture->height(), 0, GL_RGB, GL_UNSIGNED_BYTE, m_texture->getTextureData());	// ERROR!
+			// texture.cBuf;
+			
+		    //glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, texture.nx, texture.ny, 0, GL_RGB, GL_UNSIGNED_BYTE, texture.cBuf);
+		    //texture.cBuf.rewind();
+
+		    glTranslatef(1.2f, 0.0f, 0.0f);
+		    Geometry::sphere(depth, colorA, false);
+
+		    glTranslatef(-2.4f, 0.0f, 0.0f);
+		    Geometry::sphere(depth, colorB, false);
+		}
+	}
+
+	/**
+	 * Output utility function for logging and debugging purposes.
+	 */
+	inline std::ostream& operator<<(std::ostream &out)
+	{
+		return out << "[ SceneSpheres ]";
+	}
+	
+protected:
+	int depth;			//!< The triangulation depth of the spheres
+	Color3f colorA;		//!< The color of the first sphere.
+	Color3f colorB;		//!< The color of the second sphere.
+	Vector3f locationA;	//!< The amount to translate the center of the first sphere.
+	Vector3f locationB;	//!< The amount to translate the center of the second sphere. 
+
+};	// class SceneSpheres
 
 
 class SceneCube : public Scene {
@@ -80,6 +188,9 @@ public:
 		}
 	}
 
+	/**
+	 * Output utility function for logging and debugging purposes.
+	 */
 	inline std::ostream& operator<<(std::ostream &out)
 	{
 		return out << "[ SceneCube ]";

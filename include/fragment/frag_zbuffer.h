@@ -12,13 +12,19 @@ namespace pipeline {
  * only if the fragment passes the z buffer test (ie - it isn't occluded by
  * another fragment).
  * 
- * @author ags
  */
 class ZBufferFP : public FragmentProcessor {
 public:
 	int nAttr() { return 3; }
 	void fragment(const Fragment& f, FrameBuffer& fb);
 	
+	/**
+	 * Output utility function for logging and debugging purposes.
+	 */
+	inline std::ostream& operator<<(std::ostream &out)
+	{
+		return out << "[ ZBufferedFragmentProcessor ]";
+	}
 };
 
 }

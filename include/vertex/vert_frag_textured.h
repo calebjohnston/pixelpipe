@@ -15,7 +15,6 @@ namespace pipeline {
  * interpolates texture coordinates, allowing for texturing to be done in the
  * fragment stage.
  * 
- * @author ags
  */
 class TexturedFragmentShadedVP : public FragmentShadedVP {	
 public:
@@ -31,10 +30,14 @@ public:
 				const cg::vecmath::Vector3f& n_ign, 
 				const cg::vecmath::Vector2f& t_ign, 
 				Vertex& output);
-	
-private:
-	int size;
 
+	/**
+	 * Output utility function for logging and debugging purposes.
+	 */
+	inline std::ostream& operator<<(std::ostream &out)
+	{
+		return out << "[ TexturedFragmentShadedVertexProcessor ]";
+	}
 };
 
 }

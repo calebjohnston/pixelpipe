@@ -1,7 +1,10 @@
 #ifndef __CG_VEC2_H  
 #define __CG_VEC2_H
 
-#include "cg/cg.h"
+#include <cstdlib>
+#include <cmath>
+#include <climits>
+#include <iostream>
 
 namespace cg {
 namespace vecmath {

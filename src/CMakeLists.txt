@@ -34,7 +34,6 @@ set( pipeline_SRCS
   core/pixelpipe.cpp
   core/rasterizer.cpp
   core/glutwindow.cpp
-  core/appwindow.cpp
   core/texture.cpp
   logger/logger.cpp
   logger/logwriter.cpp

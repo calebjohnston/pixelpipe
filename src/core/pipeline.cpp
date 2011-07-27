@@ -61,14 +61,6 @@ void Pipeline::setVertexProcessor(const VertexProcessor* vertProc)
 }
 
 
-/**
- * Configures the pipeline so that the triangle and fragment processors are
- * now up to date. Forces some reinitialization in order to set up things like
- * the clipper and the rasterizer.
- * 
- * @param fpClass The class of the new fragment shader.
- * @param vpClass The class of the new triangle shader.
- */
 /*
 void Pipeline::configure(Class fpClass, Class vpClass)
 {
@@ -92,23 +84,11 @@ void Pipeline::configure(Class fpClass, Class vpClass)
 }
 */
 
-/**
- * Returns true as long as the triangle and fragment processors expect the
- * same number of attributes.
- * 
- * @return True as long as the triangle and fragment processors expect the
- *         same number of attributes.
- */
 bool Pipeline::validConfiguration()
 {
 	return fp->nAttr() == vp->nAttr();
 }
 
-/**
- * Returns true whenever the TP is set to be a flat shaded TP.
- * 
- * @return True whenever the TP is set to be a flat shaded TP.
- */
 bool Pipeline::isFlatShaded()
 {
 	return false;
@@ -124,50 +104,27 @@ bool Pipeline::isFlatShaded()
 // 	
 // }
 
-/**
- * Sets the texture for the underlying FP.
- * 
- * @param texture The new texture to use.
- */
 void Pipeline::setTexture(const Texture& texture)
 {
 	fp->setTexture(texture);
 }
 
-/**
- * Clears the underlying framebuffer.
- */
 void Pipeline::clearFrameBuffer()
 {
 	framebuffer->clear(0, 0, 0, 1);
 }
 
-/**
- * Returns the data in the framebuffer.
- * 
- * @return The data in the framebuffer.
- */
 const char* Pipeline::getFrameData()
 {
 	return framebuffer->getData();
 }
 
-/**
- * Sets the modelview matrix to I, and notifies the TP of the change.
- */
 void Pipeline::loadIdentity()
 {
 	modelviewMatrix.identity();
 	recomputeMatrix();
 }
 
-/**
- * Right multiplies the model view matrix by a rotation for the given axis and
- * angle, and notifies the TP of the change.
- * 
- * @param angle The amount to rotate (in radians).
- * @param axis The axis about which to rotate.
- */
 void Pipeline::rotate(float angle, const Vector3f& axis)
 {
 	Matrix4f temp = rotationMatrix(angle, axis, false);
@@ -176,12 +133,6 @@ void Pipeline::rotate(float angle, const Vector3f& axis)
 	recomputeMatrix();
 }
 
-/**
- * Right multiplies the model view matrix by a translation for the given
- * values, and notifies the TP of the change.
- * 
- * @param v The translation amount.
- */
 void Pipeline::translate(const Vector3f& delta)
 {
 	Matrix4f temp = translationMatrix(delta);
@@ -190,12 +141,6 @@ void Pipeline::translate(const Vector3f& delta)
 	recomputeMatrix();
 }
 
-/**
- * Right multiplies the model view matrix by a scale for the given values, and
- * notifies the TP of the change.
- * 
- * @param v The amount to scale by.
- */
 void Pipeline::scale(const Vector3f& scale)
 {
 	Matrix4f temp = scalingMatrix(scale);
@@ -204,25 +149,12 @@ void Pipeline::scale(const Vector3f& scale)
 	recomputeMatrix();
 }
 
-/**
- * Notifies the TP of any changes to the modelview, projection, or viewing
- * matrices.
- */
 void Pipeline::recomputeMatrix()
 {
 	// TO-DO: compile time error for this? GCC says incompatible type form Pipline cast to int.
 	vp->updateTransforms(*this);
 }
 
-/**
- * Sets the modelview matrix to be equal to the indicated viewing matrix, and
- * notifies the TP of the change.
- * 
- * @param eye The location of the eye.
- * @param target The target at which the eye is looking.
- * @param up A vector that is not parallel to (target - eye) so as to indicate
- *          which direction is up.
- */
 void Pipeline::lookAt(Vector3f eye, Vector3f target, Vector3f up)
 {
 	Matrix4f T;
@@ -241,17 +173,6 @@ void Pipeline::lookAt(Vector3f eye, Vector3f target, Vector3f up)
 	recomputeMatrix();
 }
 
-/**
- * Sets the projection matrix to represent the indicated viewing volume, and
- * notifies the TP of the change.
- * 
- * @param l The left extent of the view volume.
- * @param r The right extent of the view volume.
- * @param b The bottom extent of the view volume.
- * @param t The top extent of the view volume.
- * @param n The near plane of the view volume.
- * @param f The far plane of the view volume.
- */
 void Pipeline::frustum(float l, float r, float b, float t, float n, float f)
 {
 	projectionMatrix.identity();
@@ -266,15 +187,6 @@ void Pipeline::frustum(float l, float r, float b, float t, float n, float f)
 	recomputeMatrix();
 }
 
-/**
- * Sets the viewport matrix to the indicated window on screen, and notifies
- * the TP of the change.
- * 
- * @param x The x location of the window.
- * @param y The y location of the window.
- * @param w The width of the window.
- * @param h The height of the window.
- */
 void Pipeline::viewport(int x, int y, int w, int h)
 {
 	float cx = x + 0.5 * w, cy = y + 0.5 * h;
@@ -289,9 +201,6 @@ void Pipeline::viewport(int x, int y, int w, int h)
 	
 }
 
-/**
- * Sets the pipeline mode to render a particular type of primitive.
- */
 void Pipeline::begin(int primType)
 {
 	mode = primType;
@@ -368,31 +277,14 @@ void Pipeline::swap(Vertex* va, int i, int j) const
 	va[j] = temp;
 }
 
-/**
- * Renders a triangle to the software pipeline.
- * 
- * @param v The 3 vertices of the triangle.
- * @param c The 3 colors of the triangle - one for each vertex.
- * @param n The 3 normals of the triangle - one for each vertex.
- * @param t The 3 texture coordinates of the triangle - one for each vertex.
- */
 void Pipeline::renderTriangle(const Vector3f* v, const Color3f* c, const Vector3f* n, const Vector2f* t)
 {
-	DEV() << "Pipeline::renderTriangle // v,c,n,t";
 	// Send to TP, get back attributes to interpolate
 	vp->triangle(v, c, n, t, vertexCache);
 	
 	renderTriangle(vertexCache);
 }
 
-/**
- * Renders a triangle from already-processed vertices.
- * 
- * @param v The 3 vertices of the triangle.
- * @param c The 3 colors of the triangle - one for each vertex.
- * @param n The 3 normals of the triangle - one for each vertex.
- * @param t The 3 texture coordinates of the triangle - one for each vertex.
- */
 void Pipeline::renderTriangle(const Vertex* vertices)
 {
 	// See how many "unclipped" triangles we have

@@ -11,11 +11,12 @@
 
 namespace pipeline {
 
-/**
- * Sets each vertex up with a constant color, no matter what the viewing
- * conditions.
+/*!
+ * \class ConstColorVP "vertex/vert_color.h"
  * 
- * @author ags
+ * The constant Color vertex processor sets each vertex up with a constant color, no 
+ * matter what the viewing conditions.
+ * 
  */
 class ConstColorVP : public VertexProcessor {
 public:	
@@ -32,9 +33,15 @@ public:
 				const cg::vecmath::Vector2f& t_ign, 
 				Vertex& output);
 	
+	/**
+	 * Output utility function for logging and debugging purposes.
+	 */
+	inline std::ostream& operator<<(std::ostream &out)
+	{
+		return out << "[ ConstantColorVertexProcessor ]";
+	}
 protected:
-	/** This is the composed modelling, viewing, projection, and viewport matrix. */
-	cg::vecmath::Matrix4f mvp;
+	cg::vecmath::Matrix4f mvp;	//!< this is the composed modelling, projection, and viewport matrix
 
 };
 

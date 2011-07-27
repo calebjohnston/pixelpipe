@@ -81,7 +81,7 @@ namespace pipeline {
                   
 	static Color3f fColor(0.4f, 0.8f, 0.4f);
 
-	static Vector3f nrml();
+	// static Vector3f nrml();
 
 	static Vector2f texs[3];
 
@@ -107,7 +107,6 @@ public:
 	static void quad(Vector3f v0, Vector3f v1, Vector3f v2, Vector3f v3, Vector3f n, Color3f c, bool usePipeline=false)
 	{
 		if(usePipeline){
-			// DEV() << "Geometry::quad";
 			Pipeline::getInstance()->begin(TRIANGLES);
 			Pipeline::getInstance()->vertex(v0, c, n, t0);
 			Pipeline::getInstance()->vertex(v1, c, n, t1);
@@ -174,19 +173,122 @@ public:
 	* Draws a sphere out of triangles, using the spheretri function. The sphere
 	* is rendered to the software pipeline.
 	*/
-/*
-	static void sphere(int n, Color3f c)
+	static void sphere(int n, Color3f c, bool usePipeline=false)
 	{
-		spheretri(n, v_p00, v_0p0, v_00p, c);
-		spheretri(n, v_00n, v_0p0, v_p00, c);
-		spheretri(n, v_n00, v_0p0, v_00n, c);
-		spheretri(n, v_00p, v_0p0, v_n00, c);
-		spheretri(n, v_00p, v_0n0, v_p00, c);
-		spheretri(n, v_p00, v_0n0, v_00n, c);
-		spheretri(n, v_00n, v_0n0, v_n00, c);
-		spheretri(n, v_n00, v_0n0, v_00p, c);
+		spheretri(n, v_p00, v_0p0, v_00p, c, usePipeline);
+		spheretri(n, v_00n, v_0p0, v_p00, c, usePipeline);
+		spheretri(n, v_n00, v_0p0, v_00n, c, usePipeline);
+		spheretri(n, v_00p, v_0p0, v_n00, c, usePipeline);
+		spheretri(n, v_00p, v_0n0, v_p00, c, usePipeline);
+		spheretri(n, v_p00, v_0n0, v_00n, c, usePipeline);
+		spheretri(n, v_00n, v_0n0, v_n00, c, usePipeline);
+		spheretri(n, v_n00, v_0n0, v_00p, c, usePipeline);
 	}
-*/
+	
+	
+	/*
+	* Recursively generates a sphere using triangles and puts the resulting
+	* polygons into the software pipeline.
+	*/
+	static void spheretri(int n, Vector3f v0, Vector3f v1, Vector3f v2, Color3f c, bool usePipeline=false)
+	{
+		Vector3f nrml;
+		if(usePipeline){
+			if (n == 0) {
+				vertices[0] = v0;
+				vertices[1] = v1;
+				vertices[2] = v2;
+				colors[0] = colors[1] = colors[2] = c;
+				if (Pipeline::getInstance()->isFlatShaded()) {
+					nrml = v0 + v1;
+					nrml += v2;
+					nrml.normalize();
+
+					normals[0] = normals[1] = normals[2] = nrml;
+					Pipeline::getInstance()->renderTriangle(vertices, colors, normals, NULL);
+				}
+				else {
+					xyTex(v0, texs[0]);
+					xyTex(v1, texs[1]);
+					xyTex(v2, texs[2]);
+					Pipeline::getInstance()->renderTriangle(vertices, colors, vertices, texs);
+				}
+			}
+			else {
+				Vector3f v01;
+				Vector3f v12;
+				Vector3f v20;
+
+				v01 = v0 + v1;
+				v01.normalize();
+				v12 = v1 + v2;
+				v12.normalize();
+				v20 = v2 + v0;
+				v20.normalize();
+
+				spheretri(n - 1, v01, v12, v20, c, usePipeline);
+				spheretri(n - 1, v0, v01, v20, c, usePipeline);
+				spheretri(n - 1, v1, v12, v01, c, usePipeline);
+				spheretri(n - 1, v2, v20, v12, c, usePipeline);
+			}
+		}else if (n == 0) {
+			if (Pipeline::getInstance()->isFlatShaded()) {
+				nrml = v0 + v1;
+				nrml += v2;
+				nrml.normalize();
+
+				glBegin(GL_TRIANGLES);
+
+				glColor3f(c.x, c.y, c.z);
+				glNormal3f(nrml.x, nrml.y, nrml.z);
+				glVertex3f(v0.x, v0.y, v0.z);
+				glVertex3f(v1.x, v1.y, v1.z);
+				glVertex3f(v2.x, v2.y, v2.z);
+
+				glEnd();
+			}
+			else {
+				glBegin(GL_TRIANGLES);
+
+				glColor3f(c.x, c.y, c.z);
+				xyTex(v0, texs[0]);
+				xyTex(v1, texs[1]);
+				xyTex(v2, texs[2]);
+
+				glNormal3f(v0.x, v0.y, v0.z);
+				glTexCoord2f(texs[0].x, texs[0].y);
+				glVertex3f(v0.x, v0.y, v0.z);
+
+				glNormal3f(v1.x, v1.y, v1.z);
+				glTexCoord2f(texs[1].x, texs[1].y);
+				glVertex3f(v1.x, v1.y, v1.z);
+
+				glNormal3f(v2.x, v2.y, v2.z);
+				glTexCoord2f(texs[2].x, texs[2].y);
+				glVertex3f(v2.x, v2.y, v2.z);
+
+				glEnd();
+			}
+		}
+		else {
+			Vector3f v01;
+			Vector3f v12;
+			Vector3f v20;
+
+			v01 = v0 + v1;
+			v01.normalize();
+			v12 = v1 + v2;
+			v12.normalize();
+			v20 = v2 + v0;
+			v20.normalize();
+
+			spheretri(n - 1, v01, v12, v20, c, usePipeline);
+			spheretri(n - 1, v0, v01, v20, c, usePipeline);
+			spheretri(n - 1, v1, v12, v01, c, usePipeline);
+			spheretri(n - 1, v2, v20, v12, c, usePipeline);
+		}
+	}
+	
 	/*
 	* Draws a sphere out of triangles, using the spheretri function. The sphere
 	* is rendered to the OpenGL pipeline. Mimics the other sphere function.
@@ -204,6 +306,15 @@ public:
 		spheretri(n, v_n00, v_0n0, v_00p, c, d);
 	}
 */
+
+	/**
+	 * Output utility function for logging and debugging purposes.
+	 */
+	inline std::ostream& operator<<(std::ostream &out)
+	{
+		return out << "[ Geometry ]";
+	}
+	
 protected:
 	
 private:
@@ -324,8 +435,8 @@ private:
         nrml.normalize();
 
         normals[0] = normals[1] = normals[2] = nrml;
-        // Pipeline::getInstance()->tp.triangle(vertices, colors, normals, null);
-        Pipeline::getInstance()->renderTriangle(vertices, colors, normals, null);
+        // Pipeline::getInstance()->tp.triangle(vertices, colors, normals, NULL);
+        Pipeline::getInstance()->renderTriangle(vertices, colors, normals, NULL);
       }
       else {
         xyTex(v0, texs[0]);

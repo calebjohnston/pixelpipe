@@ -8,46 +8,8 @@ Texture::Texture()
 {
 }
 
-/**
- * Reads in a texture from the given file and stores the data. The image file
- * given must be stored in a format recognizable by javax.imageio.ImageIO.
- * 
- * @param imageFile The file where the texture is stored.
- */
 Texture::Texture(std::string filename)
 {
-	// OLD...
-	// try {
-	// 	BufferedImage loadedImage = ImageIO.read(imageFile);
-	// 
-	// 	nx = loadedImage.getWidth();
-	// 	ny = loadedImage.getHeight();
-	// 	cData = new byte[nx * ny * 3];
-	// 
-	// 	System.out.print("loading " + nx + " x " + ny + " texture...");
-	// 	filename = imageFile.getName();
-	// 
-	// 	int offset = 0;
-	// 	for (int iy = 0; iy < ny; iy++) {
-	// 		for (int ix = 0; ix < nx; ix++) {
-	// 			int pixelValue = loadedImage.getRGB(ix, ny - 1 - iy);
-	// 
-	// 			cData[offset + 0] = (byte) (0xff & (pixelValue >> 16));
-	// 			cData[offset + 1] = (byte) (0xff & (pixelValue >> 8));
-	// 			cData[offset + 2] = (byte) (0xff & (pixelValue >> 0));
-	// 
-	// 			offset += 3;
-	// 		}
-	// 	}
-	// 	cBuf = ByteBuffer.wrap(cData);
-	// 
-	// 	System.out.println("done.");
-	// }
-	// catch (IOException e) {
-	// 	throw new RuntimeException(e);
-	// }
-	
-	// NEW..
 	cBuf = cg::image::read_image(filename.c_str());	// only supports TIFF, JPEG, and PNG
 	std::cout << "loaded " << cBuf->width() << " x " << cBuf->height() << " texture with " << cBuf->channels() << " channels." << std::endl;
 }
@@ -78,13 +40,6 @@ void Texture::setTextureData(const cg::image::ByteRaster& buffer)
 	*cBuf = buffer;
 }
 
-/**
- * Samples this texture for a given 2D location using linear interpolation. 
- * Places the result in the color parameter.
- * 
- * @param p The 2D texture coordinate.
- * @param cOut The result of sampling the texture.
- */
 cg::vecmath::Color3f Texture::sample(const float s, const float t) const
 {
 	cg::vecmath::Color3f cOut;

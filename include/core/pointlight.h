@@ -22,9 +22,17 @@ public:
 	void setPosition(cg::vecmath::Point3f pos) { *intensity = pos; }
 	void setIntensity(cg::vecmath::Color3f val) { *intensity = val; }
 	
+	/**
+	 * Output utility function for logging and debugging purposes.
+	 */
+	inline std::ostream& operator<<(std::ostream &out)
+	{
+		return out << "[ PointLight: position=(" << position->x << "," << position->y << "," << position->z << "), intensity=(" << intensity->x << "," << intensity->y << "," << intensity->z << ") ]";
+	}
+	
 protected:
-	cg::vecmath::Point3f* position;
-	cg::vecmath::Color3f* intensity;
+	cg::vecmath::Point3f* position;		//!< The position of the light.
+	cg::vecmath::Color3f* intensity;	//!< The color intesity of the light source.
 	
 };
 

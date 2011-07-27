@@ -13,8 +13,10 @@
  ************************************************************************/
 
 #include <vector>
-
-#include "cg/cg.h"
+#include <cstdlib>
+#include <cmath>
+#include <climits>
+#include <iostream>
 
 namespace cg {
 namespace image {

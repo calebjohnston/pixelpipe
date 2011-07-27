@@ -11,18 +11,39 @@
 #include "core/scene.h"
 
 namespace pipeline {
-	
+
+/*!
+ * \class PixelPipeWindow "core/pixelpipe.h"
+ * \brief This class provides the display window for the pipeline functionality.
+ * 
+ * This class also handles all GLUT features including keyboard/mouse input and OpenGL 
+ * context setup.
+ * 
+ */
 class PixelPipeWindow : public GlutWindow {
 public:
 	PixelPipeWindow(std::string title="PixelPipe", int width=800, int height=600);
 	~PixelPipeWindow();
 	virtual int run();
+	
+	/**
+	 * Prepares the pipeline for rendering. The vertex and fragment processors are setup.
+	 * The OpenGL context is initialized so that we can also draw the output.
+	 */
 	virtual void init();
 	
+	/**
+	 * Output utility function for logging and debugging purposes.
+	 */
+	inline std::ostream& operator<<(std::ostream &out)
+	{
+		return out << "[ PixelPipeWindow ]";
+	}
+	
 protected:	
-	SceneCube* m_scene;
-	Camera* m_camera;
-	Pipeline* m_pipeline;
+	Scene* m_scene;			//!< the current scene instance
+	Camera* m_camera;		//!< the camera instance being used
+	Pipeline* m_pipeline;	//!< the pipeline instance
 	
 	virtual int render();
 	virtual int resize(int width, int height);

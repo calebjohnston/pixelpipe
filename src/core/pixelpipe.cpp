@@ -10,7 +10,8 @@ namespace pipeline {
 PixelPipeWindow::PixelPipeWindow(std::string title, int width, int height)
 	: GlutWindow(title, width, height)
 {
-	m_scene = new SceneCube();
+	//m_scene = new SceneCube();
+	m_scene = new SceneSpheres();
 	
 	//cameraOrbit = new Camera(new Vector3f(3.0f, 4.0f, 5.0f), new Vector3f(0.0f, 0.0f, 0.0f), new Vector3f(0.0f, 1.0f, 0.0f), 1.0f, 10.0f, 0.6f);
 	Vector3f* eye = new Vector3f(3.0, 4.0, 5.0);
@@ -24,7 +25,6 @@ PixelPipeWindow::PixelPipeWindow(std::string title, int width, int height)
 
 PixelPipeWindow::~PixelPipeWindow()
 {
-	delete m_scene;
 	delete m_scene;
 	m_pipeline = NULL;
 }	
@@ -98,8 +98,6 @@ int PixelPipeWindow::render()
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	
-	
 	
 	m_pipeline->projectionMatrix.identity();
 	float ht = m_camera->getHt();
@@ -210,10 +208,8 @@ int PixelPipeWindow::mouseMoved(int x, int y)
 {
 	m_currMousePt->set(x, y);
 	m_currMousePt->set((2.0f * m_currMousePt->x - m_width) / m_height, (2.0f * (m_height - m_currMousePt->y - 1) - m_height) / m_height);
-	//DEV() << "m_currMousePt = (" << m_currMousePt->x << ", " << m_currMousePt->y << ")" << std::endl;
 	
 	m_mouseDelta->set(m_currMousePt->x - m_lastMousePt->x, m_currMousePt->y - m_lastMousePt->y);
-	//DEV() << "m_mouseDelta = (" << m_mouseDelta->x << ", " << m_mouseDelta->y << ")" << std::endl;
 
 	m_camera->orbit(*m_mouseDelta);
 	

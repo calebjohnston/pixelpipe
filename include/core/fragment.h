@@ -2,32 +2,46 @@
 #define __PIPELINE_FRAGMENT_H
 
 #include <stdlib.h>
+#include <iostream>
 
 namespace pipeline {
 
+/*!
+ * \class Fragment "core/fragment.h"
+ * \brief A simple object to store a fragment using a specified number of attributes.
+ * \see pipeline::Vertex
+ */
 struct Fragment {
-public:
-	Fragment(int n) {
+public:	
+	/**
+	 * The constructor allocates the data required to store the per-vertex attribues.
+	 */
+	Fragment(int n=0) {
 		length = n;
-		attributes = (float*) malloc(length*sizeof(float));
+		if(length > 0){
+			attributes = (float*) malloc(length*sizeof(float));
+		}
 	}
 	
+	/**
+	 * De-allocates the data used to store the fragment attribues.
+	 */
 	~Fragment(){
 		free(attributes);
 	}
+
+	/**
+	 * Output utility function for logging and debugging purposes.
+	 */
+	inline std::ostream& operator<<(std::ostream &out)
+	{
+		return out << "[ Fragment ]";
+	}
 	
-	/** The screen space x coordinate of this fragment. */
-	int x;
-
-	/** The screen space y coordinate of this fragment. */
-	int y;
-
-	/** The attributes associated with this fragment. */
-	float* attributes;
-
-	/** The number of attributes associated with this fragment */
-	int length;
-
+	int x;				//!< The screen space x coordinate of this fragment.
+	int y;				//!< TThe screen space y coordinate of this fragment.
+	float* attributes;	//!< TThe attributes associated with this fragment.
+	int length;			//!< TThe number of attributes associated with this fragment
 };
 
 }

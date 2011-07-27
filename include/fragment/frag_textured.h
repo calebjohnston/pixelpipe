@@ -16,7 +16,6 @@ namespace pipeline {
  * This FP does a texture lookup rather to determine the color of a fragment. It
  * also uses the z-buffering technique to draw the correct fragment.
  * 
- * @author ags
  */
 class TexturedFP : public FragmentProcessor
 {
@@ -24,8 +23,16 @@ public:
 	int nAttr() { return 5; }
 	void fragment(const Fragment& f, FrameBuffer& fb);
 	
+	/**
+	 * Output utility function for logging and debugging purposes.
+	 */
+	inline std::ostream& operator<<(std::ostream &out)
+	{
+		return out << "[ TexturedFragmentProcessor ]";
+	}
+	
 protected:
-	cg::vecmath::Color3f color;
+	cg::vecmath::Color3f color;	//!< local temporary color value sampled from the texture
 };
 
 }

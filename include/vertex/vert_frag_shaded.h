@@ -37,20 +37,26 @@ public:
 				const cg::vecmath::Vector2f& t, 
 				Vertex& output);
 	
-protected:
-	cg::vecmath::Matrix4f modelViewMatrix;
-	cg::vecmath::Matrix4f m;
-	cg::vecmath::Vector4f vert;
-	cg::vecmath::Vector4f normal;
-	cg::vecmath::Vector3f viewVector;
-	cg::vecmath::Vector3f lightVector;
-	cg::vecmath::Vector3f halfVector;
-	cg::vecmath::Vector3f transformedNormal;
-	cg::vecmath::Point3f transformedVertex;
-	int size;
+	/**
+	 * Output utility function for logging and debugging purposes.
+	 */
+	inline std::ostream& operator<<(std::ostream &out)
+	{
+		return out << "[ FragmentShadedVertexProcessor ]";
+	}
 	
-private:
-	int position;
+protected:
+	cg::vecmath::Matrix4f modelViewMatrix;		//!< the local model-view matrix
+	cg::vecmath::Matrix4f m;					//!< the local model-view matrix
+	cg::vecmath::Vector4f vert;					//!< temporary copy of the input vertex position
+	cg::vecmath::Vector4f normal;				//!< temporary copy of the input vertex normal
+	cg::vecmath::Vector3f viewVector;			//!< temporary copy of the viewing vector
+	cg::vecmath::Vector3f lightVector;			//!< temporary copy of the light vector
+	cg::vecmath::Vector3f halfVector;			//!< temporary copy of the half vector
+	cg::vecmath::Vector3f transformedNormal;	//!< temporary copy of the transformed normal vector
+	cg::vecmath::Point3f transformedVertex;		//!< temporary copy of the transformed vertex position
+	int size;	//!< the size of the parameters that must be sent to the rasterizer.
+	
 };
 
 }

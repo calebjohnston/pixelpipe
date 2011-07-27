@@ -15,7 +15,6 @@ namespace pipeline {
  * This is the fragment program which actually uses a shading model to compute
  * the color on a per fragment basis.
  * 
- * @author ags
  */
 class PhongShadedFP : public FragmentProcessor {
 public:
@@ -23,17 +22,24 @@ public:
 	int nAttr() { return size; }
 	void fragment(const Fragment& f, FrameBuffer& fb);
 	
+	/**
+	 * Output utility function for logging and debugging purposes.
+	 */
+	inline std::ostream& operator<<(std::ostream &out)
+	{
+		return out << "[ PhongShadedFragmentProcessor ]";
+	}
+	
 protected:	
-	int size;
-	int position;
-	float nDotL;
-	float nDotH;
-	float specularIntensity;
-	cg::vecmath::Color3f outColor;
-	cg::vecmath::Vector3f normal;
-	cg::vecmath::Vector3f viewVector;
-	cg::vecmath::Vector3f lightVector;
-	cg::vecmath::Vector3f halfVector;
+	int size;							//!< the size of the parameters that must be sent to the rasterizer.
+	float nDotH;						//!< used for storing the dot product of the normal vector with the half vector
+	float nDotL;                        //!< used for storing the dot product of the normal vector with the light vector
+	float specularIntensity;			//!< the specularly intensity of the light using the phong model
+	cg::vecmath::Color3f outColor;		//!< the local temporary used for computing the color
+	cg::vecmath::Vector3f normal;		//!< the local temporary for the normal at the fragment
+	cg::vecmath::Vector3f viewVector;	//!< the local temporary for the view vector at the fragment
+	cg::vecmath::Vector3f lightVector;	//!< the local temporary for the light vector at the fragment
+	cg::vecmath::Vector3f halfVector;	//!< the local temporary for the half vector at the fragment
 };
 
 }

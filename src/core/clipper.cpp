@@ -21,18 +21,6 @@ Clipper::~Clipper()
 {
 }
 
-/**
- * The interface for the clipper. Each triangle will be clipped against the
- * near plane, resulting in either 0, 1, or 2 triangles. The number of
- * triangles will be returned, and the resulting vertices will be stored into
- * fOut1 if only one triangle results, or in both fOut1 and fOut2 if two triangles
- * result.
- * 
- * @param f The vertices of the triangle to be clipped.
- * @param fOut1 The vertices of the first resulting triangle, if any.
- * @param fOut2 The vertices of the second resulting triangle, if any.
- * @return The number of resulting triangles.
- */
 int Clipper::clip(const Vertex* f, Vertex* fOut1, Vertex* fOut2)
 {	
 	// Clip the triangle against the near plane, which is z == 0 in homogeneous

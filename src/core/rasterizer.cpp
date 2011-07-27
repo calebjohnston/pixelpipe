@@ -7,14 +7,7 @@
 #include "core/common.h"
 
 namespace pipeline {
-	
-/**
- * The only constructor.
- * 
- * @param newNa The number of user defined attributes.
- * @param newNx The width of the image.
- * @param newNy The height of the image.
- */
+
 Rasterizer::Rasterizer(int newNa, int newNx, int newNy) {
 	
 	na = newNa;
@@ -51,6 +44,8 @@ void Rasterizer::rasterize(const Vertex* vs, FragmentProcessor& fp, FrameBuffer&
 	// vertices; and entry 4 + na is the inverse w coordinate.
 	// The caller-provided attributes are all interpolated with
 	// perspective correction.
+	
+	cg::vecmath::Vector4f posn[3];
 	int n = 5 + na;
 	for (int iv=0; iv<3; iv++) {
 		float invW = 1.0f / vs[iv].v.w;
