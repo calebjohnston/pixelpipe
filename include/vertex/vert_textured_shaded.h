@@ -6,7 +6,7 @@
 #include "cg/vecmath/color.h"
 #include "core/pipeline.h"
 #include "core/vertex.h"
-#include "vertex/vert_shaded_processor.h"
+#include "vertex/vert_shaded.h"
 
 namespace pipeline {
 

@@ -3,7 +3,7 @@
 #include "vertex/vert_color.h"
 #include "vertex/vert_frag_shaded.h"
 #include "vertex/vert_frag_textured.h"
-#include "vertex/vert_shaded_processor.h"
+#include "vertex/vert_shaded.h"
 #include "vertex/vert_textured_shaded.h"
 #include "fragment/frag_color.h"
 #include "fragment/frag_phong.h"
@@ -66,15 +66,16 @@ void PixelPipeWindow::init()
 	m_pipeline->getLights().push_back(pl2);
 	
 	// set the shaders
-	// ConstColorVP* vertProcessor = new ConstColorVP();
-	// ZBufferFP* fragProcessor = new ZBufferFP();
-	// ColorFP* fragProcessor = new ColorFP();
-	// FragmentShadedVP* vertProcessor = new FragmentShadedVP();
-	// TexturedFragmentShadedVP* vertProcessor = new TexturedFragmentShadedVP();
-	// PhongShadedFP* fragProcessor = new PhongShadedFP();
-	// SmoothShadedVP* vertProcessor = new SmoothShadedVP();
-	TexturedShadedVP* vertProcessor = new TexturedShadedVP();
-	TexturedFP* fragProcessor = new TexturedFP();
+	ConstColorVP* vertProcessor = new ConstColorVP();
+	ZBufferFP* fragProcessor = new ZBufferFP();
+	//ColorFP* fragProcessor = new ColorFP();
+	//FragmentShadedVP* vertProcessor = new FragmentShadedVP();
+	//TexturedFragmentShadedVP* vertProcessor = new TexturedFragmentShadedVP();
+	//PhongShadedFP* fragProcessor = new PhongShadedFP();
+	//SmoothShadedVP* vertProcessor = new SmoothShadedVP();
+	//TexturedShadedVP* vertProcessor = new TexturedShadedVP();
+	//TexturedFP* fragProcessor = new TexturedFP();
+	//TexturedPhongFP* fragProcessor = new TexturedPhongFP();
 	m_pipeline->setVertexProcessor(vertProcessor);
 	m_pipeline->setFragmentProcessor(fragProcessor);
 	m_pipeline->setTexture(*m_textures.at(0));

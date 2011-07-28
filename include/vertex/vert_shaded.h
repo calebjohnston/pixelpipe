@@ -14,7 +14,7 @@
 namespace pipeline {
 
 /*!
- * \class SmoothShadedVP "vertex/vert_shaded_processor.h"
+ * \class SmoothShadedVP "vertex/vert_shaded.h"
  * \brief This class performs a linear interpolation on the color parameter of the vertex.
  * 
  * This triangle processor smoothly interpolates the color across the face of

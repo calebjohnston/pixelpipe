@@ -8,6 +8,7 @@ void TexturedShadedVP::vertex(const Vector3f& v, const Color3f& c, const Vector3
 {
 	Color3f* color = new Color3f(0,0,0);
 	SmoothShadedVP::vertex(v, *color, n, t, output);
+	output.setAttrs(nAttr());
 	output.attributes[3] = t.x;
 	output.attributes[4] = t.y;
 }

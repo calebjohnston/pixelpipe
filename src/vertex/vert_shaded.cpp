@@ -1,5 +1,5 @@
 #include <math.h>
-#include "vertex/vert_shaded_processor.h"
+#include "vertex/vert_shaded.h"
 
 namespace pipeline {
 
