@@ -43,9 +43,11 @@ set( pipeline_SRCS
   vertex/vert_frag_shaded.cpp
   vertex/vert_frag_textured.cpp
   vertex/vert_shaded_processor.cpp
+  vertex/vert_textured_shaded.cpp
   fragment/frag_color.cpp
   fragment/frag_phong.cpp
   fragment/frag_textured.cpp
+  fragment/frag_textured_phong.cpp
   fragment/frag_zbuffer.cpp
 )
 

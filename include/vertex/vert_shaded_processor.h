@@ -25,7 +25,7 @@ namespace pipeline {
 class SmoothShadedVP : public VertexProcessor {
 public:
 	SmoothShadedVP();
-	virtual int nAttr() { return 3; }
+	virtual int nAttr() const { return 3; }
 	virtual void updateTransforms(const Pipeline& pipe);
 	virtual void triangle(	const cg::vecmath::Vector3f* vs, 
 					const cg::vecmath::Color3f* cs, 

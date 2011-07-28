@@ -5,7 +5,7 @@ namespace pipeline {
 
 using namespace cg::vecmath;
 
-SmoothShadedVP::SmoothShadedVP()
+SmoothShadedVP::SmoothShadedVP() : VertexProcessor()
 {
 	nDotH = 0;
 	nDotL = 0;
@@ -19,7 +19,6 @@ void SmoothShadedVP::updateTransforms(const Pipeline& pipe)
 	m = pipe.projectionMatrix * temp;
 	temp = m;
 	m = pipe.viewportMatrix * temp;
-	
 }
 
 void SmoothShadedVP::vertex(const Vector3f& v, const Color3f& c, const Vector3f& n, const Vector2f& t, Vertex& output)

@@ -4,9 +4,11 @@
 #include "vertex/vert_frag_shaded.h"
 #include "vertex/vert_frag_textured.h"
 #include "vertex/vert_shaded_processor.h"
+#include "vertex/vert_textured_shaded.h"
 #include "fragment/frag_color.h"
 #include "fragment/frag_phong.h"
 #include "fragment/frag_textured.h"
+#include "fragment/frag_textured_phong.h"
 #include "fragment/frag_zbuffer.h"
 
 using namespace cg::vecmath;
@@ -58,18 +60,20 @@ void PixelPipeWindow::init()
 	m_pipeline = Pipeline::getInstance();
 	
 	// set the lights
-	PointLight* pl1 = new PointLight(m_camera->getEye(), Color3f(1.0,1.0,1.0));
-	PointLight* pl2 = new PointLight(Vector3f(-3.0, 0.0, -5.0), Color3f(1.0,0.25,0.5));
-	m_pipeline->getLights().push_back(*pl1);
-	m_pipeline->getLights().push_back(*pl2);
-	// delete pl1;
-	// delete pl2;
+	PointLight pl1(m_camera->getEye(), Color3f(1.0,1.0,1.0));
+	PointLight pl2(Vector3f(-3.0, 0.0, -5.0), Color3f(1.0,0.25,0.5));
+	m_pipeline->getLights().push_back(pl1);
+	m_pipeline->getLights().push_back(pl2);
 	
 	// set the shaders
 	// ConstColorVP* vertProcessor = new ConstColorVP();
+	// ZBufferFP* fragProcessor = new ZBufferFP();
 	// ColorFP* fragProcessor = new ColorFP();
-	FragmentShadedVP* vertProcessor = new FragmentShadedVP();
-	//PhongShadedFP* fragProcessor = new PhongShadedFP();
+	// FragmentShadedVP* vertProcessor = new FragmentShadedVP();
+	// TexturedFragmentShadedVP* vertProcessor = new TexturedFragmentShadedVP();
+	// PhongShadedFP* fragProcessor = new PhongShadedFP();
+	// SmoothShadedVP* vertProcessor = new SmoothShadedVP();
+	TexturedShadedVP* vertProcessor = new TexturedShadedVP();
 	TexturedFP* fragProcessor = new TexturedFP();
 	m_pipeline->setVertexProcessor(vertProcessor);
 	m_pipeline->setFragmentProcessor(fragProcessor);

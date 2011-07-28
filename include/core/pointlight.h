@@ -19,9 +19,29 @@ public:
 	 * @param pos the 3D position of the light
 	 * @param intens the color of the light
 	 */
-	PointLight(cg::vecmath::Point3f pos, cg::vecmath::Color3f intens){
+	PointLight(cg::vecmath::Point3f pos, cg::vecmath::Color3f intens)
+	{
 		position = new cg::vecmath::Point3f(pos);
 		intensity = new cg::vecmath::Color3f(intens);
+	}
+	
+	/**
+	 * Copy constructor
+	 */
+	PointLight(const PointLight& light)
+	{
+		*this = light;
+	}
+
+	/**
+	 * Copy constructor
+	 */
+	PointLight& operator=(const PointLight& light)
+	{
+		position = new cg::vecmath::Point3f(light.getPosition());
+		intensity = new cg::vecmath::Color3f(light.getIntensity());
+		
+		return *this;
 	}
 	
 	/**

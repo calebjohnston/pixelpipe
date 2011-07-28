@@ -11,6 +11,10 @@ TexturedFragmentShadedVP::TexturedFragmentShadedVP()
 
 void TexturedFragmentShadedVP::vertex(const Vector3f& v, const Color3f& c, const Vector3f& n, const Vector2f& t, Vertex& output)
 {
+	// this whole thing doens't work. 
+	// We could get it to work much better if we were to separate out 
+	// more of the functionality in the FragmentShadedVP::vertex function.
+	// For instance, we need to only call Vertex::setAttrs once! Not twice!
 	Color3f* color = new Color3f(0,0,0);
 	FragmentShadedVP::vertex(v, *color, n, t, output);
 	output.setAttrs(size);
