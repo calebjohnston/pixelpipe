@@ -44,6 +44,17 @@ public:
 	int clip(const Vertex* f, Vertex* fOut1, Vertex* fOut2);
 	
 	/**
+	 * Accessor method for the number of attributes that are passed to each triangle 
+	 * vertex after the clipping stage.
+	 * 
+	 * @param count the new count
+	 */
+	void setAttributeCount(int count)
+	{
+		na = count;
+	}
+	
+	/**
 	 * Output utility function for logging and debugging purposes.
 	 */
 	inline std::ostream& operator<<(std::ostream &out)

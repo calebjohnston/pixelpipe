@@ -47,7 +47,7 @@ void FragmentShadedVP::vertex(const Vector3f& v, const Color3f& c, const Vector3
 	temp3.normalize();
 	normal.set(temp3.x,temp3.y,temp3.z,0.0f);
 	temp = normal;
-	normal = modelViewMatrix * temp;	// modelViewMatrix.rightMultiply(normal);
+	normal = modelViewMatrix * temp;
 	transformedNormal.set(normal.x,normal.y,normal.z);
 	transformedNormal.normalize();
 	

@@ -41,7 +41,10 @@ public:
 	 */
 	Texture& operator=(const Texture& tex)
 	{
-		*(this->cBuf) = tex.getTextureData();
+		//*(this->cBuf) = tex.getTextureData();
+		if(cBuf!=NULL) delete cBuf;
+		cBuf = new cg::image::ByteRaster(tex.getTextureData().width(), tex.getTextureData().height(), tex.getTextureData().channels());
+		*cBuf = tex.getTextureData();
 		
 		return *this;
 	}
@@ -68,7 +71,7 @@ public:
 	 * @param p The 2D texture coordinate.
 	 * @param cOut The result of sampling the texture.
 	 */
-	cg::vecmath::Color3f sample(const float s, const float t) const;
+	cg::vecmath::Color3f sample(const float u, const float v) const;
 	
 	/**
 	 * Accessor method for updating the texture buffer data.

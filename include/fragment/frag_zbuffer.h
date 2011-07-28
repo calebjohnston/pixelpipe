@@ -18,8 +18,8 @@ namespace pipeline {
  */
 class ZBufferFP : public FragmentProcessor {
 public:
-	int nAttr() { return 3; }
-	void fragment(Fragment& f, FrameBuffer& fb);
+	virtual int nAttr() const { return 3; }
+	virtual void fragment(Fragment& f, FrameBuffer& fb);
 	
 	/**
 	 * Output utility function for logging and debugging purposes.

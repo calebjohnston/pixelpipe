@@ -24,6 +24,7 @@ Pipeline::Pipeline(int nx, int ny, std::vector<PointLight>* lights)
 	}
 	else{
 		this->lights = new std::vector<PointLight>();
+		DEV() << "the lights: " << this->lights->size();
 	}
 	
 	mode = PIPELINE_MODE_NONE;
@@ -65,29 +66,29 @@ void Pipeline::setVertexProcessor(const VertexProcessor* vertProc)
 	vp = const_cast<VertexProcessor*>(vertProc);
 }
 
-
-/*
-void Pipeline::configure(Class fpClass, Class vpClass)
+//void Pipeline::configure(Class fpClass, Class vpClass)
+void Pipeline::configure()
 {
 	// try {
 		// TO-DO: MOST OF THIS STUFF WON'T WORK, FIX IT
-		Constructor c = fpClass.getConstructor(EMPTY_CLASS_ARRAY);
-		fp = (FragmentProcessor) c.newInstance(EMPTY_OBJECT_ARRAY);
-		rasterizer = new Rasterizer(fp->nAttr(), framebuffer->getWidth(), framebuffer->getHeight());
-		clipper = new Clipper(fp->nAttr());
-		c = vpClass.getConstructor(EMPTY_CLASS_ARRAY);
-		vp = (VertexProcessor) c.newInstance(EMPTY_OBJECT_ARRAY);
+		// Constructor c = fpClass.getConstructor(EMPTY_CLASS_ARRAY);
+		// fp = (FragmentProcessor) c.newInstance(EMPTY_OBJECT_ARRAY);
+		// rasterizer = new Rasterizer(fp->nAttr(), framebuffer->getWidth(), framebuffer->getHeight());
+		// clipper = new Clipper(fp->nAttr());
+		// c = vpClass.getConstructor(EMPTY_CLASS_ARRAY);
+		// vp = (VertexProcessor) c.newInstance(EMPTY_OBJECT_ARRAY);
 		
 //		fp->updateLightModel();
+	rasterizer->setAttributeCount(fp->nAttr());
+	clipper->setAttributeCount(fp->nAttr());
 		
-		vp->updateTransforms(this);
-		vp->updateLightModel(this);
+		vp->updateTransforms(*this);
+		vp->updateLightModel(*this);
 	// }
 	// catch (Exception e) {
 	// 	throw new RuntimeException(e);
 	// }
 }
-*/
 
 bool Pipeline::validConfiguration()
 {

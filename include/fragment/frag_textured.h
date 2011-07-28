@@ -21,8 +21,8 @@ namespace pipeline {
 class TexturedFP : public FragmentProcessor
 {
 public:
-	int nAttr() { return 5; }
-	void fragment(Fragment& f, FrameBuffer& fb);
+	virtual int nAttr() const { return 5; }
+	virtual void fragment(Fragment& f, FrameBuffer& fb);
 	
 	/**
 	 * Output utility function for logging and debugging purposes.

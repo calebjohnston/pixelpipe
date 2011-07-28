@@ -1,4 +1,5 @@
 #include <string>
+#include <math.h>
 
 #include "core/common.h"
 #include "core/texture.h"
@@ -10,13 +11,15 @@ using namespace cg::image;
 
 Texture::Texture()
 {
+	cBuf = NULL;
 }
 
 Texture::Texture(std::string filename)
 {
+	cBuf = NULL;
 	//char nom[100];
 	///char* nom = (char*)'/Users/Caleb/Development/OpenSource/pixelpipe/resources/textures/carbonite.png';
-	cBuf = cg::image::read_image(filename.c_str(), cg::image::IMG_JPEG);	// only supports TIFF, JPEG, and PNG
+	cBuf = cg::image::read_image(filename.c_str());	// only supports TIFF, JPEG, and PNG
 	//ByteRaster* img = read_png_image(filename.c_str());
 	//DEV() << "loaded " << cBuf->width() << " x " << cBuf->height() << " texture with " << cBuf->channels() << " channels.";
 }
@@ -47,9 +50,12 @@ void Texture::setTextureData(const cg::image::ByteRaster& buffer)
 	*cBuf = buffer;
 }
 
-Color3f Texture::sample(const float s, const float t) const
+Color3f Texture::sample(const float u, const float v) const
 {
 	Color3f cOut;
+	
+	float s = fabs(u);
+	float t = fabs(v);
 	
 	// TO-DO: Check for null input in cOut parameter...
 	int nx = cBuf->width();
@@ -63,6 +69,7 @@ Color3f Texture::sample(const float s, const float t) const
 	float vRatio = iY - y;
 	float uWeighted = 1.0f - uRatio;
 	float vWeighted = 1.0f - vRatio;
+	// DEV() << "test nx=" << x <<", ny=" << y << ", s=" << s << ", t=" << t;
 	
 	Color3f leftTop;
 	Color3f rightTop;
@@ -78,6 +85,7 @@ Color3f Texture::sample(const float s, const float t) const
 	b = cBuf->at(offset + 2);
 	leftTop.set((r & 0xff) / 255.0f, (g & 0xff) / 255.0f, (b & 0xff) / 255.0f);
 	leftTop *= uWeighted;
+	// DEV() << "test 1 offset=" << offset <<", length=" << cBuf->length();
 	
 	offset = 3 * (nx * y + x + 1);
 	if(offset >= cBuf->length()) offset = cBuf->length() - 3;
@@ -86,16 +94,19 @@ Color3f Texture::sample(const float s, const float t) const
 	
 	rightTop += leftTop;
 	rightTop *= vWeighted;
+	// DEV() << "test 2 offset=" << offset;
 	
 	offset = 3 * (nx * (y+1) + x);
 	if(offset >= cBuf->length()) offset = cBuf->length() - 3;
 	leftBottom.set((cBuf->at(offset + 0) & 0xff) / 255.0f, (cBuf->at(offset + 1) & 0xff) / 255.0f, (cBuf->at(offset + 2) & 0xff) / 255.0f);
 	leftBottom *= uWeighted;
+	// DEV() << "test 3 offset=" << offset;
 	
 	offset = 3 * (nx * (y+1) + x + 1);
 	if(offset >= cBuf->length()) offset = cBuf->length() - 3;
 	rightBottom.set((cBuf->at(offset + 0) & 0xff) / 255.0f, (cBuf->at(offset + 1) & 0xff) / 255.0f, (cBuf->at(offset + 2) & 0xff) / 255.0f);
 	rightBottom *= uRatio;
+	// DEV() << "test 4 offset=" << offset;
 	
 	rightBottom += leftBottom;
 	rightBottom *= vRatio;

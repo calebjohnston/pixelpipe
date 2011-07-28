@@ -36,6 +36,7 @@ public:
 	 * @param vpClass The class of the new triangle shader.
 	 */
 	// void configure(Class fpClass, Class vpClass);
+	void configure();
 	
 	/**
 	 * Compares the vertex and fragment processors to makes sure the information passed

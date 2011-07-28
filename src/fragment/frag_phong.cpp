@@ -42,7 +42,7 @@ void PhongShadedFP::fragment(Fragment& f, FrameBuffer& fb)
 			halfVector.z = f.attributes[15 + position];	
 			halfVector.normalize();
 			
-			//computer dot products
+			//compute dot products
 			nDotL = dot(normal, lightVector);
 			nDotH = dot(normal, halfVector);	
 			

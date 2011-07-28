@@ -34,6 +34,25 @@ Rasterizer::~Rasterizer()
 	free(pixData);
 }
 
+void Rasterizer::setAttributeCount(int count)
+{
+	free(vData);
+	free(xInc);
+	free(yInc);
+	free(rowData);
+	free(pixData);
+	
+	int n = 5 + count;
+	// vData is intended to be a multi-dimensional array of size [3][5+na]
+	vData = (float*) malloc(3*n*sizeof(float));	
+	xInc = (float*) malloc(n*sizeof(float));
+	yInc = (float*) malloc(n*sizeof(float));
+	rowData = (float*) malloc(n*sizeof(float));
+	pixData = (float*) malloc(n*sizeof(float));
+	
+	frag = new Fragment(1 + count);
+}
+
 void Rasterizer::rasterize(const Vertex* vs, FragmentProcessor& fp, FrameBuffer& fb)
 {
 	//DEV() << "Rasterizer::rasterize";

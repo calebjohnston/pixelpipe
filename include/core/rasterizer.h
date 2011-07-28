@@ -39,6 +39,13 @@ public:
 	 * @param fb A reference to the framebuffer to which the fragment will be written.
 	 */
 	void rasterize(const Vertex* vs, FragmentProcessor& fp, FrameBuffer& fb);
+
+	/**
+	 * Accessor method for the number of attributes that are given for each fragment.
+	 * 
+	 * @param count the new count
+	 */
+	void setAttributeCount(int count);
 	
 	/**
 	 * Output utility function for logging and debugging purposes.
