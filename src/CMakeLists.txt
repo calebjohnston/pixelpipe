@@ -1,5 +1,5 @@
 #================================================================================
-# Pipeline CMake file
+# PixelPipe CMake file
 #================================================================================
 
 cmake_minimum_required(VERSION 2.6)
@@ -68,14 +68,14 @@ set( TARGET_VERSION_MAJOR 0 )
 set( TARGET_VERSION_MINOR 2 )
 add_definitions( -DCMAKE_TARGET_VERSION=1 -DTARGET_VERSION_MAJOR=${TARGET_VERSION_MAJOR} -DTARGET_VERSION_MINOR=${TARGET_VERSION_MINOR})
 
-add_executable( pipeline
+add_executable( pixelpipe
   ${pipeline_SRCS}
 )
 
 
 #--------------------------------------------------------------------------------
 # Tell CMake which libraries we need to link our executable against.
-target_link_libraries ( pipeline
+target_link_libraries ( pixelpipe
   ${Boost_LIBRARIES}
   ${PNG_LIBRARY}
   ${JPEG_LIBRARY}

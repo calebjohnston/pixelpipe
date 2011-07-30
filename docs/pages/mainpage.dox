@@ -1,0 +1,52 @@
+/**
+	\mainpage PixelPipe Overview
+	
+	<p>PixelPipe is an open source, cross platform 3D graphics software pipeline written in C++.</p>
+	
+	<p>The software pipeline includes fragment and vertex shader stages.</p>
+	
+	<h2>Development</h2><hr/>
+
+		<p>Though the project is designed to be cross platform, the active development is happening on Linux and Mac OSX. </p>
+		
+	<h2>Software Dependencies</h2><hr/>
+		
+		<p>This software would have been much more difficult (and time consuming) without the help of the following libraries.</p>
+
+		<ul>
+			<li><a href="http://www.cmake.org">CMake</a></li>
+			<li><a href="http://www.boost.org">Boost</a> (Threads, Program Options, uBLAS, Date-Time, System)</li>
+			<li>OpenGL & GLUT</li>
+			<li><a href="http://www.grinninglizard.com/tinyxmldocs/index.html">TinyXML</a> (included in source tree)</li>
+			<li><a href="http://www.libpng.org/pub/png/libpng.html">libpng</a></li>
+			<li><a href="http://libjpeg.sourceforge.net/">libjpg</a></li>
+			<li><a href="http://www.libtiff.org/">libtiff</a></li>
+		</ul>
+	
+	<h2>Download</h2><hr/>
+	
+		<p>You can download the software directly using git. If you have git installed, use:</p>
+		<div class="frag">git clone http://calebjohnston.com/git/pixelpipe.git</div>
+
+	<h2>Open Source Software License</h2><hr/>
+
+<pre>
+PixelPipe - A 3D graphics software rendering pipeline
+Copyright (C) 2011 by Caleb Johnston
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+</pre>
+	
+*/
+

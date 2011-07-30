@@ -66,12 +66,12 @@ void PixelPipeWindow::init()
 	m_pipeline->getLights().push_back(pl2);
 	
 	// set the shaders
-	ConstColorVP* vertProcessor = new ConstColorVP();
-	ZBufferFP* fragProcessor = new ZBufferFP();
+	//ConstColorVP* vertProcessor = new ConstColorVP();
+	//ZBufferFP* fragProcessor = new ZBufferFP();
 	//ColorFP* fragProcessor = new ColorFP();
-	//FragmentShadedVP* vertProcessor = new FragmentShadedVP();
+	FragmentShadedVP* vertProcessor = new FragmentShadedVP();
 	//TexturedFragmentShadedVP* vertProcessor = new TexturedFragmentShadedVP();
-	//PhongShadedFP* fragProcessor = new PhongShadedFP();
+	PhongShadedFP* fragProcessor = new PhongShadedFP();
 	//SmoothShadedVP* vertProcessor = new SmoothShadedVP();
 	//TexturedShadedVP* vertProcessor = new TexturedShadedVP();
 	//TexturedFP* fragProcessor = new TexturedFP();

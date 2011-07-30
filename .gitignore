@@ -3,3 +3,4 @@
 build/*
 *.dylib
 lib/*.dylib
+docs/html

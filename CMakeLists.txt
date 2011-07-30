@@ -1,9 +1,9 @@
 #================================================================================
-# Pipeline CMake file
+# PixelPipe CMake file
 #================================================================================
 
 cmake_minimum_required( VERSION 2.6 )
-project( Pipeline )
+project( PixelPipe )
 set( CMAKE_BUILD_TYPE Debug)
 
 if("${CMAKE_GENERATOR}" STREQUAL "Xcode")
@@ -22,23 +22,25 @@ cmake_force_cxx_compiler( clang++ Clang++ )
 
 # include( cmake/modules/FindOpenCL.cmake )
 set( CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake/modules/)
-set( Pipeline_BUILD_TESTS OFF CACHE BOOL "Build tests")
-set( Pipeline_BUILD_DOCS ON CACHE BOOL "Build documentation")
+set( PixelPipe_BUILD_TESTS OFF CACHE BOOL "Build tests")
+set( PixelPipe_BUILD_DOCS ON CACHE BOOL "Build documentation")
 
 # add_subdirectory( lib )
 add_subdirectory( src )
-if(Pipeline_BUILD_TESTS)
+if(PixelPipe_BUILD_TESTS)
   add_subdirectory( tests )
   add_subdirectory( tests/openCL )
-endif(Pipeline_BUILD_TESTS)
+endif(PixelPipe_BUILD_TESTS)
 
 add_custom_target( tests DEPENDS xml_handling threads windowing ocl_test pcg_test io_logger )
-# add_custom_target( stuff DEPENDS Pipeline )
+# add_custom_target( stuff DEPENDS pixelpipe )
 
 # Add the Doxyfile.in and UseDoxygen.cmake files to the projects source directory.
-if(Pipeline_BUILD_DOCS)
+if(PixelPipe_BUILD_DOCS)
+  set( "DOXYFILE_SOURCE_DIR ${PROJECT_SOURCE_DIR}/src "
+       "DOXYFILE_SOURCE_DIR ${PROJECT_SOURCE_DIR}/include "
+       "DOXYFILE_SOURCE_DIR ${PROJECT_SOURCE_DIR}/docs/pages " )
   set( DOXYFILE_OUTPUT_DIR ${PROJECT_SOURCE_DIR}/docs )
   set( DOXYFILE_LATEX "NO" )
   include( UseDoxygen )
-endif(Pipeline_BUILD_DOCS)
-# SET( DOXYFILE_SOURCE_DIR ${PROJECT_SOURCE_DIR}/src )
+endif(PixelPipe_BUILD_DOCS)

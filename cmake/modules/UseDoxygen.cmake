@@ -52,7 +52,7 @@ endmacro()
 find_package(Doxygen)
 
 if(DOXYGEN_FOUND)
-	find_file(DOXYFILE_IN "Doxyfile.in"
+	find_file(DOXYFILE_IN "docs/Doxyfile.in"
 			PATHS "${CMAKE_CURRENT_SOURCE_DIR}" "${CMAKE_ROOT}/Modules/"
 			NO_DEFAULT_PATH)
 	set(DOXYFILE "${CMAKE_CURRENT_BINARY_DIR}/Doxyfile")
