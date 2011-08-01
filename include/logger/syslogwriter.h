@@ -35,4 +35,4 @@ private:
 
 }	// namespace pipeline
 
-#endif	// __FDL_SyslogWriter_H
+#endif	// __PIPELINE_SyslogWriter_H

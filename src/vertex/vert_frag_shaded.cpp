@@ -101,7 +101,7 @@ void FragmentShadedVP::vertex(const Vector3f& v, const Color3f& c, const Vector3
 void FragmentShadedVP::triangle(const Vector3f* vs, const Color3f* cs, const Vector3f* ns, const Vector2f* ts, Vertex* output)
 {
 	for (int k = 0; k < 3; k++) {
-		vertex(vs[k], cs[k], ns[k], NULL, output[k]);
+		vertex(vs[k], cs[k], ns[k], Vector2f(), output[k]);
 	}
 }
 

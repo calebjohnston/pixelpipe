@@ -67,12 +67,11 @@ std::ostream& operator<<(std::ostream& os, const std::vector<T>& v)
 int main(int argc, char **argv)
 {
 	// figure out how to automate this output...
-	std::cout << "FDL version " << TARGET_VERSION_MAJOR << "." << TARGET_VERSION_MINOR << " of " << __DATE__ << " at " << __TIME__ << std::endl;
+	std::cout << "PixelPipe version " << TARGET_VERSION_MAJOR << "." << TARGET_VERSION_MINOR << " of " << __DATE__ << " at " << __TIME__ << std::endl;
 	std::cout << "Copyright (c) 2011 Caleb Johnston" << std::endl;
-	std::cout << "The source code to FDL is covered by the GNU GPL." << std::endl;
+	std::cout << "The source code to PixelPipe is covered by the GNU GPL." << std::endl;
 	std::cout << "See the LICENSE file for the conditions of the license." << std::endl;
 	
-
 	pipeline::LogWriter* logger = new pipeline::StdOutWriter();
 	pipeline::Logger::SetIdentity("PixelPipe");
 	pipeline::Logger::RegisterWriter(logger);
@@ -88,7 +87,6 @@ int main(int argc, char **argv)
 		;
 
         po::variables_map vm;
-// ^ po::command_line_style::allow_short
 		po::store(po::parse_command_line(argc, argv, desc, po::command_line_style::unix_style), vm);
         po::notify(vm);
 
@@ -125,21 +123,7 @@ int main(int argc, char **argv)
     }
     catch(...) {
         std::cerr << "Exception of unknown type!\n";
-    }
-	
-	
-	//std::cout << "loading image: /Users/Caleb/Development/OpenSource/pixelpipe/resources/textures/carbonite.jpg ";
-	// std::string fname("/Users/Caleb/Development/OpenSource/pixelpipe/resources/textures/carbonite.jpg");
-	// cg::image::ByteRaster* img = cg::image::read_image(fname.c_str());
-	// if(img!=NULL){
-	// 	std::cout << "loaded image of size: ";
-	// 	std::cout << img->width() << "x" << img->height() << std::endl;
-	// 	return 0;
-	// }else{
-	// 	std::cout << "FAILED!" << std::endl;
-	// 	return 1;
-	// }
-	
+    }	
 
 	// start it up!
 	pipeline::PixelPipeWindow* app = new pipeline::PixelPipeWindow();

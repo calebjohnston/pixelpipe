@@ -18,10 +18,10 @@ namespace pipeline {
 PixelPipeWindow::PixelPipeWindow(std::string title, int width, int height)
 	: GlutWindow(title, width, height)
 {
-	//m_scene = new SceneCube();
-	m_scene = new SceneSpheres();
+	m_scene = new SceneCube();
+	//m_scene = new SceneSpheres();
 	
-	Vector3f* eye = new Vector3f(3.0, 4.0, 5.0);
+	Vector3f* eye = new Vector3f(1.0, 3.0, 3.0);
 	Vector3f* target = new Vector3f(0.0, 0.0, 0.0);
 	Vector3f* upVec = new Vector3f(0.0, 1.0, 0.0);
 	float near = 0.1;
@@ -65,17 +65,18 @@ void PixelPipeWindow::init()
 	m_pipeline->getLights().push_back(pl1);
 	m_pipeline->getLights().push_back(pl2);
 	
-	// set the shaders
-	//ConstColorVP* vertProcessor = new ConstColorVP();
-	//ZBufferFP* fragProcessor = new ZBufferFP();
-	//ColorFP* fragProcessor = new ColorFP();
-	FragmentShadedVP* vertProcessor = new FragmentShadedVP();
-	//TexturedFragmentShadedVP* vertProcessor = new TexturedFragmentShadedVP();
-	PhongShadedFP* fragProcessor = new PhongShadedFP();
-	//SmoothShadedVP* vertProcessor = new SmoothShadedVP();
-	//TexturedShadedVP* vertProcessor = new TexturedShadedVP();
-	//TexturedFP* fragProcessor = new TexturedFP();
-	//TexturedPhongFP* fragProcessor = new TexturedPhongFP();
+	// setup vertex shaders
+	//ConstColorVP* vertProcessor = new ConstColorVP();				// 3
+	SmoothShadedVP* vertProcessor = new SmoothShadedVP();			// 3
+	//TexturedShadedVP* vertProcessor = new TexturedShadedVP();		// 5
+	//FragmentShadedVP* vertProcessor = new FragmentShadedVP();		// 9 + 6 * lightCount
+	//TexturedFragmentShadedVP* vertProcessor = new TexturedFragmentShadedVP();	// 9 + 6 * lightCount
+	
+	//ZBufferFP* fragProcessor = new ZBufferFP();				// 3
+	ColorFP* fragProcessor = new ColorFP();					// 3
+	//TexturedFP* fragProcessor = new TexturedFP();				// 5
+	//PhongShadedFP* fragProcessor = new PhongShadedFP();		// 9 + 6 * lightCount
+	//TexturedPhongFP* fragProcessor = new TexturedPhongFP();	// 9 + 6 * lightCount
 	m_pipeline->setVertexProcessor(vertProcessor);
 	m_pipeline->setFragmentProcessor(fragProcessor);
 	m_pipeline->setTexture(*m_textures.at(0));
