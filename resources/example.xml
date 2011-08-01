@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FluidSolver>
+	<Grid x="32" y="32" z="32" dx="0.01" />
+  <maxiter_cg>100</maxiter_cg>
+  <tol_cg>0.0001</tol_cg>
+</FluidSolver>

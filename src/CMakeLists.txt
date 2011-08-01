@@ -66,8 +66,7 @@ include_directories (
 # how can I setup an automated versioning that can be reflected in source code?
 set( TARGET_VERSION_MAJOR 0 )
 set( TARGET_VERSION_MINOR 2 )
-add_definitions( -DCMAKE_TARGET_VERSION=1 -DTARGET_VERSION_MAJOR=${TARGET_VERSION_MAJOR} -DTARGET_VERSION_MINOR=${TARGET_VERSION_MINOR})
-
+add_definitions( -DTIXML_USE_STL -DCMAKE_TARGET_VERSION=1 -DTARGET_VERSION_MAJOR=${TARGET_VERSION_MAJOR} -DTARGET_VERSION_MINOR=${TARGET_VERSION_MINOR})
 add_executable( pixelpipe
   ${pipeline_SRCS}
 )
@@ -83,4 +82,5 @@ target_link_libraries ( pixelpipe
   ${GLUT_LIBRARY}
   ${OPENGL_LIBRARY}
   ${CG_LIBRARIES}
+  tinyxml
 )

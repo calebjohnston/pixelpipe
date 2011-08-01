@@ -41,6 +41,8 @@ namespace po = boost::program_options;
 #include "logger/logger.h"
 #include "logger/stdiowriter.h"
 
+#include "tinyxml.h"
+
 #ifndef TARGET_VERSION_MAJOR
 #define TARGET_VERSION_MAJOR 99
 #endif
@@ -123,7 +125,7 @@ int main(int argc, char **argv)
     }
     catch(...) {
         std::cerr << "Exception of unknown type!\n";
-    }	
+    }
 
 	// start it up!
 	pipeline::PixelPipeWindow* app = new pipeline::PixelPipeWindow();

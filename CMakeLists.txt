@@ -27,6 +27,7 @@ set( PixelPipe_BUILD_DOCS ON CACHE BOOL "Build documentation")
 
 # add_subdirectory( lib )
 add_subdirectory( src )
+add_subdirectory( src/tinyxml )
 if(PixelPipe_BUILD_TESTS)
   add_subdirectory( tests )
   add_subdirectory( tests/openCL )
