@@ -11,9 +11,9 @@ endif()
 set(BOOST_LIBS thread date_time system program_options)
 find_package(Boost COMPONENTS ${BOOST_LIBS} REQUIRED)
 
-find_package(PNG REQUIRED)
-find_package(JPEG REQUIRED)
-find_package(TIFF REQUIRED)
+# find_package(PNG REQUIRED)
+# find_package(JPEG REQUIRED)
+# find_package(TIFF REQUIRED)
 find_package(GLUT REQUIRED)
 find_package(OpenGL REQUIRED)
 
@@ -55,9 +55,9 @@ set( pipeline_SRCS
 include_directories (
   ${INC_PATH}
   ${CMAKE_CURRENT_BINARY_DIR}
-  ${PNG_INCLUDE_DIR}
-  ${JPEG_INCLUDE_DIR}
-  ${TIFF_INCLUDE_DIR}
+  # ${PNG_INCLUDE_DIR}
+  # ${JPEG_INCLUDE_DIR}
+  # ${TIFF_INCLUDE_DIR}
   ${Boost_INCLUDE_DIRS}
   ${PROJECT_SOURCE_DIR}/extern
   ${PROJECT_SOURCE_DIR}/include
@@ -76,9 +76,9 @@ add_executable( pixelpipe
 # Tell CMake which libraries we need to link our executable against.
 target_link_libraries ( pixelpipe
   ${Boost_LIBRARIES}
-  ${PNG_LIBRARY}
-  ${JPEG_LIBRARY}
-  ${TIFF_LIBRARY}
+  # ${PNG_LIBRARY}
+  # ${JPEG_LIBRARY}
+  # ${TIFF_LIBRARY}
   ${GLUT_LIBRARY}
   ${OPENGL_LIBRARY}
   ${CG_LIBRARIES}

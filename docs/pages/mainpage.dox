@@ -13,6 +13,7 @@
 		<ul>
 			<li>Interactive framerates &ndash;despite total lack of optimization</li>
 			<li>Programmable vertex and fragment stages</li>
+			<li>View frustum culling</li>
 			<li>Many drawing modes including: triangles, triangle strips, quads, quad strips. <em>(point and line rendering coming "soon")</em></li>
 			<li>Texture loading (supports JPGs, PNGs, and TIFFs)</li>
 			<li>Custom made linear algebra package</li>
