@@ -29,7 +29,8 @@ PixelPipeWindow::PixelPipeWindow(std::string title, int width, int height)
 	float ht = 0.6;
 	m_camera = new Camera(*eye, *target, *upVec, near, far, ht);
 	
-	Texture* tex1 = new Texture("../resources/textures/checker.png");	//carbonite.jpg
+	//Texture* tex1 = new Texture("../resources/textures/checker.png");
+	Texture* tex1 = new Texture("../resources/textures/carbonite.jpg");
 	Texture* tex2 = new Texture("../resources/textures/silverblob.jpg");
 	m_textures.push_back(tex1);
 	m_textures.push_back(tex2);
@@ -67,14 +68,14 @@ void PixelPipeWindow::init()
 	
 	// setup vertex shaders
 	//ConstColorVP* vertProcessor = new ConstColorVP();				// 3
-	SmoothShadedVP* vertProcessor = new SmoothShadedVP();			// 3
-	//TexturedShadedVP* vertProcessor = new TexturedShadedVP();		// 5
+	//SmoothShadedVP* vertProcessor = new SmoothShadedVP();			// 3
+	TexturedShadedVP* vertProcessor = new TexturedShadedVP();		// 5
 	//FragmentShadedVP* vertProcessor = new FragmentShadedVP();		// 9 + 6 * lightCount
 	//TexturedFragmentShadedVP* vertProcessor = new TexturedFragmentShadedVP();	// 9 + 6 * lightCount
 	
 	//ZBufferFP* fragProcessor = new ZBufferFP();				// 3
-	ColorFP* fragProcessor = new ColorFP();					// 3
-	//TexturedFP* fragProcessor = new TexturedFP();				// 5
+	//ColorFP* fragProcessor = new ColorFP();					// 3
+	TexturedFP* fragProcessor = new TexturedFP();				// 5
 	//PhongShadedFP* fragProcessor = new PhongShadedFP();		// 9 + 6 * lightCount
 	//TexturedPhongFP* fragProcessor = new TexturedPhongFP();	// 9 + 6 * lightCount
 	m_pipeline->setVertexProcessor(vertProcessor);

@@ -42,6 +42,8 @@ void Rasterizer::setAttributeCount(int count)
 	free(rowData);
 	free(pixData);
 	
+	na = count;
+	
 	int n = 5 + count;
 	// vData is intended to be a multi-dimensional array of size [3][5+na]
 	vData = (float*) malloc(3*n*sizeof(float));	

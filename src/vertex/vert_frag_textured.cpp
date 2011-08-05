@@ -1,3 +1,4 @@
+#include "core/common.h"
 #include "vertex/vert_frag_textured.h"
 
 namespace pipeline {
@@ -17,7 +18,7 @@ void TexturedFragmentShadedVP::vertex(const Vector3f& v, const Color3f& c, const
 	// For instance, we need to only call Vertex::setAttrs once! Not twice!
 	Color3f* color = new Color3f(0,0,0);
 	FragmentShadedVP::vertex(v, *color, n, t, output);
-	output.setAttrs(size);
+	//output.setAttrs(size);
 	output.attributes[0] = t.x;
 	output.attributes[1] = t.y;
 }

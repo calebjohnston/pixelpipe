@@ -1,5 +1,6 @@
 #include <math.h>
 #include "core/pipeline.h"
+#include "core/common.h"
 #include "fragment/frag_textured_phong.h"
 
 namespace pipeline {
@@ -23,7 +24,10 @@ void TexturedPhongFP::fragment(Fragment& f, FrameBuffer& fb)
 		viewVector.y = f.attributes[8];
 		viewVector.z = f.attributes[9];
 		viewVector.normalize();
-				
+
+		//sample the texture
+		texColor = texture.sample(f.attributes[1], f.attributes[2]);
+		
 		//add lighting
 		outColor.set(0.0,0.0,0.0);
 		int position;
@@ -46,8 +50,7 @@ void TexturedPhongFP::fragment(Fragment& f, FrameBuffer& fb)
 			nDotL = dot(normal, lightVector);
 			nDotH = dot(normal, halfVector);	
 			
-			//sample the texture
-			texColor = texture.sample(f.attributes[4], f.attributes[5]);
+			//DEV() << "T = " << f.attributes[0] << "x" << f.attributes[1];
 			
 	   		//add diffuse color
 	   		outColor.x += texColor.x * nDotL * Pipeline::getInstance()->getLights().at(i).getIntensity().x;

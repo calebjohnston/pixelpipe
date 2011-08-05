@@ -78,19 +78,27 @@ int main(int argc, char **argv)
 	pipeline::Logger::SetIdentity("PixelPipe");
 	pipeline::Logger::RegisterWriter(logger);
 	
+	std::vector<int> image_size;	// grid dimensions
+	image_size.push_back(640);
+	image_size.push_back(640);
+	std::string inputfile = "";
+	
 	int loggerLevel;
 	try {
 		po::options_description desc("Allowed options");
 		desc.add_options()
 		    ("help,H", "produce help message")
-		    ("input-file,I", po::value<std::string>(), "input scene file")
-		    // ("image-size,S", po::value< std::vector<double> >(), "[ XxY ] | [ X Y ]")
+			("input-file,I", po::value<std::string>(&inputfile), "input scene file")
+			("image-size,S", po::value< std::vector<int> >(&image_size)->multitoken(), "[ X Y ]")
 			("verbose,V", po::value<int>(&loggerLevel)->default_value(1), "Verbose logging?")
 		;
 
         po::variables_map vm;
-		po::store(po::parse_command_line(argc, argv, desc, po::command_line_style::unix_style), vm);
-        po::notify(vm);
+		po::store(po::command_line_parser(argc, argv).options(desc).style(po::command_line_style::default_style
+		        | po::command_line_style::allow_slash_for_short
+		        | po::command_line_style::allow_long_disguise).run(), vm);
+
+		po::notify(vm);
 
         if (vm.count("help")) {
             std::cout << "Usage: options_description [options]\n";
@@ -98,8 +106,8 @@ int main(int argc, char **argv)
             return 0;
         }
 
-        if (vm.count("input-file")) {
-            std::cout << "Include paths are: " << vm["input-file"].as< std::vector<std::string> >() << "\n";
+        if (inputfile!="") {
+            std::cout << "Loading file: " << inputfile << std::endl;
         }
 
 		std::string levelLabel = "";
@@ -117,6 +125,7 @@ int main(int argc, char **argv)
 		}
 		
 		std::cout << "Verbose logging enabled. Level is " << levelLabel << " (" << loggerLevel << ")" << std::endl;
+		std::cout << "Initializing framebuffer of size: " << image_size.at(0) << "x" << image_size.at(1) << std::endl;
 		
     }
     catch(std::exception& e) {
@@ -128,7 +137,7 @@ int main(int argc, char **argv)
     }
 
 	// start it up!
-	pipeline::PixelPipeWindow* app = new pipeline::PixelPipeWindow();
+	pipeline::PixelPipeWindow* app = new pipeline::PixelPipeWindow("PixelPipe", image_size.at(0), image_size.at(1));
 	app->init();
 	
 	return app->run();
