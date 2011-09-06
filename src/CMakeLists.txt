@@ -11,9 +11,6 @@ endif()
 set(BOOST_LIBS thread date_time system program_options)
 find_package(Boost COMPONENTS ${BOOST_LIBS} REQUIRED)
 
-# find_package(PNG REQUIRED)
-# find_package(JPEG REQUIRED)
-# find_package(TIFF REQUIRED)
 find_package(GLUT REQUIRED)
 find_package(OpenGL REQUIRED)
 
@@ -76,9 +73,6 @@ add_executable( pixelpipe
 # Tell CMake which libraries we need to link our executable against.
 target_link_libraries ( pixelpipe
   ${Boost_LIBRARIES}
-  # ${PNG_LIBRARY}
-  # ${JPEG_LIBRARY}
-  # ${TIFF_LIBRARY}
   ${GLUT_LIBRARY}
   ${OPENGL_LIBRARY}
   ${CG_LIBRARIES}

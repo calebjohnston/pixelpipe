@@ -17,11 +17,12 @@ Camera::Camera(const Vector3f& newEye, const Vector3f& newTarget, const Vector3f
 	near = newNear;
 	far = newFar;
 	ht = newHt;
+	aspect = 9.0/16.0;	// widescreen..
 
-	near = 1.0f;
-	far = 10.0f;
-	ht = 0.6f;
-	aspect = 1.0f;
+	// near = 0.1f;
+	// far = 100.0f;
+	// ht = 0.1f;
+	// aspect = 0.666f;
 }
 
 Camera::~Camera()
