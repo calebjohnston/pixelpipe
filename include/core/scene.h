@@ -19,7 +19,7 @@
 #include "core/texture.h"
 #include "core/common.h"
 
-namespace pipeline {
+namespace pixelpipe {
 
 /*!
  * \class Scene "core/scene.h"
@@ -151,6 +151,6 @@ public:
 
 };	// class SceneCube
 
-}	// namespace pipeline
+}	// namespace pixelpipe {
 
 #endif	// __PIPELINE_SCENE_H

@@ -1,7 +1,7 @@
 #include "core/texture.h"
 #include "fragment/frag_zbuffer.h"
 
-namespace pipeline {
+namespace pixelpipe {
 
 void ZBufferFP::fragment(Fragment& f, FrameBuffer& fb)
 {	

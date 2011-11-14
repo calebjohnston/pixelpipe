@@ -2,7 +2,7 @@
 
 using namespace cg::vecmath;
 
-namespace pipeline {
+namespace pixelpipe {
 	
 void ConstColorVP::updateTransforms(const Pipeline& pipe)
 {

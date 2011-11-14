@@ -5,7 +5,7 @@
 #include "core/framebuffer.h"
 #include "fragment/frag_processor.h"
 
-namespace pipeline {
+namespace pixelpipe {
 
 /*!
  * \class ColorFP "fragment/frag_color.h"
@@ -29,6 +29,6 @@ public:
 	}
 };
 
-}	// namespace pipeline
+}	// namespace pixelpipe {
 
 #endif	// #define __PIPELINE_COLOR_FRAG_H

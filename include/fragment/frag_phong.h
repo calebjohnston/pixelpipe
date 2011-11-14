@@ -9,7 +9,7 @@
 #include "core/pipeline.h"
 #include "fragment/frag_processor.h"
 
-namespace pipeline {
+namespace pixelpipe {
 
 /*!
  * \class PhongShadedFP "fragment/frag_phong.h"

@@ -14,7 +14,7 @@
 #include <stdarg.h>
 
 
-namespace pipeline {
+namespace pixelpipe {
 	
 boost::mutex SyslogWriter::_syslogOutMutex;
 
@@ -59,4 +59,4 @@ int SyslogWriter::_map_level( const Logger::LEVEL& level ) {
 	return LOG_DEBUG;
 }
 
-}	// namespace pipeline
+}	// namespace pixelpipe {

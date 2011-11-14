@@ -5,7 +5,7 @@
 #include "core/framebuffer.h"
 #include "core/texture.h"
 
-namespace pipeline {
+namespace pixelpipe {
 
 /*!
  * \class FragmentProcessor "fragment/frag_processor.h"
@@ -42,6 +42,6 @@ protected:
 	
 };	// class FragmentProcessor
 
-};	// namespace pipeline
+};	// namespace pixelpipe {
 
 #endif	// __PIPELINE_FRAGMENT_PROCESSOR_H

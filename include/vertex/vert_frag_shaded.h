@@ -11,7 +11,7 @@
 #include "core/vertex.h"
 #include "vertex/vert_processor.h"
 
-namespace pipeline {
+namespace pixelpipe {
 
 /*!
  * \class FragmentShadedVP "vertex/vert_frag_shaded.h"

@@ -21,7 +21,7 @@
 
 using namespace cg::vecmath;
 
-namespace pipeline {
+namespace pixelpipe {
 	
 	static Vector3f normals[3];
 

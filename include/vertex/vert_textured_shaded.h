@@ -8,7 +8,7 @@
 #include "core/vertex.h"
 #include "vertex/vert_shaded.h"
 
-namespace pipeline {
+namespace pixelpipe {
 
 /*!
  * \class TexturedShadedVP "vertex/vert_textured_shaded.h"

@@ -28,7 +28,7 @@
 #include <GL/glu.h>
 #endif
 
-namespace pipeline {
+namespace pixelpipe {
 
 /** the static GLUT handle for the window */	
 static int window;
@@ -216,6 +216,6 @@ private:
 
 };	// GlutWindow
 
-}	// namespace pipeline
+}	// namespace pixelpipe {
 
 #endif	// __PIPELINE_GLUTAPP_H

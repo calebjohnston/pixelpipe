@@ -4,7 +4,7 @@
 #include "core/common.h"
 #include "core/texture.h"
 
-namespace pipeline {
+namespace pixelpipe {
 	
 using namespace cg::vecmath;
 using namespace cg::image;
@@ -116,4 +116,4 @@ Color3f Texture::sample(const float u, const float v) const
 	return cOut;
 }
 
-}	// namespace pipeline
+}	// namespace pixelpipe {

@@ -14,7 +14,7 @@
 #include <GL/glu.h>
 #endif
 
-namespace pipeline {
+namespace pixelpipe {
 
 /*!
  * \class FrameBuffer "core/framebuffer.h"
@@ -120,6 +120,6 @@ protected:
 
 };	// class FrameBuffer
 
-}	// namespace pipeline
+}	// namespace pixelpipe {
 
 #endif	// __PIPELINE_FRAMEBUFFER_H

@@ -3,7 +3,7 @@
 
 #include "core/vertex.h"
 
-namespace pipeline {
+namespace pixelpipe {
 
 /*!
  * \class Clipper "core/clipper.h"
@@ -69,6 +69,6 @@ protected:
 private:
 	
 };	// class Clipper
-}	// namespace pipeline
+}	// namespace pixelpipe {
 
 #endif	// __PIPELINE_CLIPPER_H

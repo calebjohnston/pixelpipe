@@ -10,7 +10,7 @@
 #include "logger/logwriter.h"
 
 
-namespace pipeline {
+namespace pixelpipe {
 	
 LogWriter::LogWriter( const std::string& type) {
 	_type = type;
@@ -23,4 +23,4 @@ const std::string LogWriter::type() {
 	return _type;
 }
 
-}	// namespace pipeline
+}	// namespace pixelpipe {

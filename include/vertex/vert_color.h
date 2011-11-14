@@ -9,7 +9,7 @@
 #include "core/vertex.h"
 #include "vertex/vert_processor.h"
 
-namespace pipeline {
+namespace pixelpipe {
 
 /*!
  * \class ConstColorVP "vertex/vert_color.h"

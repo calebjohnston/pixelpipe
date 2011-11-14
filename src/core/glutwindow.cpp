@@ -14,7 +14,7 @@
 
 using namespace cg::vecmath;
 
-namespace pipeline {
+namespace pixelpipe {
 	
 static GlutWindow* self;
 

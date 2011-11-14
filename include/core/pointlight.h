@@ -4,7 +4,7 @@
 #include "cg/vecmath/color.h"
 #include "cg/vecmath/vec3.hpp"
 
-namespace pipeline {
+namespace pixelpipe {
 
 /*!
  * \class PointLight "core/pointlight.h"

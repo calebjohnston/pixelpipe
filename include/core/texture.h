@@ -7,7 +7,7 @@
 #include "cg/vecmath/vec3.hpp"
 #include "cg/vecmath/color.h"
 
-namespace pipeline {
+namespace pixelpipe {
 
 /*!
  * \class Texture "core/texture.h"
@@ -101,6 +101,6 @@ protected:
 
 };	// class Texture
 
-}	// namespace pipeline
+}	// namespace pixelpipe {
 
 #endif	// __PIPELINE_TEXTURE_H

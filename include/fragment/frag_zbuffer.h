@@ -5,7 +5,7 @@
 #include "core/framebuffer.h"
 #include "fragment/frag_processor.h"
 
-namespace pipeline {
+namespace pixelpipe {
 
 /*!
  * \class ZBufferFP "fragment/frag_zbuffer.h"

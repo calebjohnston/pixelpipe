@@ -1,6 +1,6 @@
 #include "vertex/vert_frag_shaded.h"
 
-namespace pipeline {
+namespace pixelpipe {
 	
 using namespace cg::vecmath;
 	

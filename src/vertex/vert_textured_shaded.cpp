@@ -1,6 +1,6 @@
 #include "vertex/vert_textured_shaded.h"
 
-namespace pipeline {
+namespace pixelpipe {
 
 using namespace cg::vecmath;
 

@@ -16,7 +16,7 @@ namespace boost {
 	class mutex;
 }
 
-namespace pipeline {
+namespace pixelpipe {
 	
 class SyslogWriter : public LogWriter {
 	
@@ -33,6 +33,6 @@ private:
 	int _map_level( const Logger::LEVEL& level );
 };
 
-}	// namespace pipeline
+}	// namespace pixelpipe {
 
 #endif	// __PIPELINE_SyslogWriter_H

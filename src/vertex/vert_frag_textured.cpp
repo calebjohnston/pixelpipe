@@ -1,7 +1,7 @@
 #include "core/common.h"
 #include "vertex/vert_frag_textured.h"
 
-namespace pipeline {
+namespace pixelpipe {
 
 using namespace cg::vecmath;
 	

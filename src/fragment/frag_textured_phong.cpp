@@ -3,7 +3,7 @@
 #include "core/common.h"
 #include "fragment/frag_textured_phong.h"
 
-namespace pipeline {
+namespace pixelpipe {
 
 TexturedPhongFP::TexturedPhongFP()
 {

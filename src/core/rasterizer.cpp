@@ -6,7 +6,7 @@
 #include "core/pipeline.h"
 #include "core/common.h"
 
-namespace pipeline {
+namespace pixelpipe {
 
 Rasterizer::Rasterizer(int newNa, int newNx, int newNy) {
 	

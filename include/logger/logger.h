@@ -11,29 +11,29 @@
 #define __PIPELINE_Logger_H
 
 #define LOG(level) \
-pipeline::Logger::CanLog(level) && pipeline::Logger().Log(level)
+pixelpipe::Logger::CanLog(level) && pixelpipe::Logger().Log(level)
 
 #define DEV() \
-pipeline::Logger::CanLog(pipeline::Logger::DEV) && pipeline::Logger().Log(pipeline::Logger::DEV)
+pixelpipe::Logger::CanLog(pixelpipe::Logger::DEV) && pixelpipe::Logger().Log(pixelpipe::Logger::DEV)
 
 #define DEBUG() \
-pipeline::Logger::CanLog(pipeline::Logger::DEBUG) && pipeline::Logger().Log(pipeline::Logger::DEBUG)
+pixelpipe::Logger::CanLog(pixelpipe::Logger::DEBUG) && pixelpipe::Logger().Log(pixelpipe::Logger::DEBUG)
 
 #define INFO() \
-pipeline::Logger::CanLog(pipeline::Logger::INFO) && pipeline::Logger().Log(pipeline::Logger::INFO)
+pixelpipe::Logger::CanLog(pixelpipe::Logger::INFO) && pixelpipe::Logger().Log(pixelpipe::Logger::INFO)
 
 #define ERROR() \
-pipeline::Logger::CanLog(pipeline::Logger::ERROR) && pipeline::Logger().Log(pipeline::Logger::ERROR)
+pixelpipe::Logger::CanLog(pixelpipe::Logger::ERROR) && pixelpipe::Logger().Log(pixelpipe::Logger::ERROR)
 
 #define LOGIdent(level, identity) \
-pipeline::Logger::CanLog(level) && pipeline::Logger().Log(level, identity)
+pixelpipe::Logger::CanLog(level) && pixelpipe::Logger().Log(level, identity)
 
 #include <sstream>
 #include <string>
 #include <list>
 #include <vector>
 
-namespace pipeline {
+namespace pixelpipe {
 	
 class LogWriter;
 
@@ -121,6 +121,6 @@ protected:
 	
 };
 
-}	// namespace pipeline
+}	// namespace pixelpipe {
 
 #endif	//__PIPELINE_Logger_H

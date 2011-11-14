@@ -13,20 +13,20 @@
 
 using namespace cg::vecmath;
 
-namespace pipeline {
+namespace pixelpipe {
 
 PixelPipeWindow::PixelPipeWindow(std::string title, int width, int height)
 	: GlutWindow(title, width, height)
 {
-	m_scene = new SceneCube();
-	//m_scene = new SceneSpheres();
+	//m_scene = new SceneCube();
+	m_scene = new SceneSpheres();
 	
 	Vector3f* eye = new Vector3f(1.0, 3.0, 3.0);
 	Vector3f* target = new Vector3f(0.0, 0.0, 0.0);
 	Vector3f* upVec = new Vector3f(0.0, 1.0, 0.0);
 	float near = 0.1;
 	float far = 1000.0;
-	float ht = 0.6;
+	float ht = 0.1;
 	m_camera = new Camera(*eye, *target, *upVec, near, far, ht);
 	
 	//Texture* tex1 = new Texture("../resources/textures/checker.png");
@@ -68,14 +68,14 @@ void PixelPipeWindow::init()
 	
 	// setup vertex shaders
 	//ConstColorVP* vertProcessor = new ConstColorVP();				// 3
-	//SmoothShadedVP* vertProcessor = new SmoothShadedVP();			// 3
-	TexturedShadedVP* vertProcessor = new TexturedShadedVP();		// 5
+	SmoothShadedVP* vertProcessor = new SmoothShadedVP();			// 3
+	//TexturedShadedVP* vertProcessor = new TexturedShadedVP();		// 5
 	//FragmentShadedVP* vertProcessor = new FragmentShadedVP();		// 9 + 6 * lightCount
 	//TexturedFragmentShadedVP* vertProcessor = new TexturedFragmentShadedVP();	// 9 + 6 * lightCount
 	
-	//ZBufferFP* fragProcessor = new ZBufferFP();				// 3
+	ZBufferFP* fragProcessor = new ZBufferFP();				// 3
 	//ColorFP* fragProcessor = new ColorFP();					// 3
-	TexturedFP* fragProcessor = new TexturedFP();				// 5
+	//TexturedFP* fragProcessor = new TexturedFP();				// 5
 	//PhongShadedFP* fragProcessor = new PhongShadedFP();		// 9 + 6 * lightCount
 	//TexturedPhongFP* fragProcessor = new TexturedPhongFP();	// 9 + 6 * lightCount
 	m_pipeline->setVertexProcessor(vertProcessor);
@@ -250,4 +250,4 @@ int PixelPipeWindow::mouseMoved(int x, int y)
 	return 0;
 }
 
-}	// namespace pipeline
+}	// namespace pixelpipe {

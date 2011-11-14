@@ -11,7 +11,7 @@
 #include "core/vertex.h"
 #include "vertex/vert_processor.h"
 
-namespace pipeline {
+namespace pixelpipe {
 
 /*!
  * \class SmoothShadedVP "vertex/vert_shaded.h"

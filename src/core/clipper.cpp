@@ -2,7 +2,7 @@
 #include "core/clipper.h"
 #include "core/common.h"
 
-namespace pipeline {
+namespace pixelpipe {
 
 Clipper::Clipper()
 {

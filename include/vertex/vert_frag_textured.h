@@ -8,7 +8,7 @@
 #include "core/vertex.h"
 #include "vertex/vert_frag_shaded.h"
 
-namespace pipeline {
+namespace pixelpipe {
 
 /*!
  * \class TexturedFragmentShadedVP "vertex/vert_frag_textured.h"

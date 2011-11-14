@@ -18,7 +18,7 @@
 #include <iostream>
 #include <locale>
 
-namespace pipeline {
+namespace pixelpipe {
 	
 int Logger::_level = Logger::DEFAULT_REPORTING_LEVEL;
 std::vector<int> Logger::_levelStack( 1, Logger::DEFAULT_REPORTING_LEVEL );
@@ -277,4 +277,4 @@ int Logger::LevelAndBelow( Logger::LEVEL level ) {
 	
 }
 
-}	// namespace pipeline
+}	// namespace pixelpipe {

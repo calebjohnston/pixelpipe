@@ -74,9 +74,9 @@ int main(int argc, char **argv)
 	std::cout << "The source code to PixelPipe is covered by the GNU GPL." << std::endl;
 	std::cout << "See the LICENSE file for the conditions of the license." << std::endl;
 	
-	pipeline::LogWriter* logger = new pipeline::StdOutWriter();
-	pipeline::Logger::SetIdentity("PixelPipe");
-	pipeline::Logger::RegisterWriter(logger);
+	pixelpipe::LogWriter* logger = new pixelpipe::StdOutWriter();
+	pixelpipe::Logger::SetIdentity("PixelPipe");
+	pixelpipe::Logger::RegisterWriter(logger);
 	
 	std::vector<int> image_size;	// grid dimensions
 	image_size.push_back(640);
@@ -112,16 +112,16 @@ int main(int argc, char **argv)
 
 		std::string levelLabel = "";
 		if(loggerLevel >= 0){
-			levelLabel = pipeline::Logger::LoggerLevelAsString(pipeline::Logger::INFO);
-			pipeline::Logger::PushLevel(pipeline::Logger::INFO);
+			levelLabel = pixelpipe::Logger::LoggerLevelAsString(pixelpipe::Logger::INFO);
+			pixelpipe::Logger::PushLevel(pixelpipe::Logger::INFO);
 		}
 		if(loggerLevel >= 1){
-			levelLabel = pipeline::Logger::LoggerLevelAsString(pipeline::Logger::DEV);
-			pipeline::Logger::PushLevel(pipeline::Logger::DEV);
+			levelLabel = pixelpipe::Logger::LoggerLevelAsString(pixelpipe::Logger::DEV);
+			pixelpipe::Logger::PushLevel(pixelpipe::Logger::DEV);
 		}
 		if(loggerLevel >= 2){
-			levelLabel = pipeline::Logger::LoggerLevelAsString(pipeline::Logger::DEBUG);
-			pipeline::Logger::PushLevel(pipeline::Logger::DEBUG);
+			levelLabel = pixelpipe::Logger::LoggerLevelAsString(pixelpipe::Logger::DEBUG);
+			pixelpipe::Logger::PushLevel(pixelpipe::Logger::DEBUG);
 		}
 		
 		std::cout << "Verbose logging enabled. Level is " << levelLabel << " (" << loggerLevel << ")" << std::endl;
@@ -137,7 +137,7 @@ int main(int argc, char **argv)
     }
 
 	// start it up!
-	pipeline::PixelPipeWindow* app = new pipeline::PixelPipeWindow("PixelPipe", image_size.at(0), image_size.at(1));
+	pixelpipe::PixelPipeWindow* app = new pixelpipe::PixelPipeWindow("PixelPipe", image_size.at(0), image_size.at(1));
 	app->init();
 	
 	return app->run();

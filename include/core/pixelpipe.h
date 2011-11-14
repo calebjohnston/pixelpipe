@@ -10,7 +10,7 @@
 #include "core/geometry.h"
 #include "core/scene.h"
 
-namespace pipeline {
+namespace pixelpipe {
 
 /*!
  * \class PixelPipeWindow "core/pixelpipe.h"

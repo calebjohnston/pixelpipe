@@ -4,7 +4,7 @@
 #include "core/common.h"
 #include "core/framebuffer.h"
 
-namespace pipeline {
+namespace pixelpipe {
 
 FrameBuffer::FrameBuffer(int newNx, int newNy) : width(newNx), height(newNy)
 {

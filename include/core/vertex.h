@@ -4,12 +4,12 @@
 #include <stdlib.h>
 #include "cg/vecmath/vec4.hpp"
 
-namespace pipeline {
+namespace pixelpipe {
 	
 /*!
  * \class Vertex "core/vertex.h"
  * \brief A simple object to store a vertex using a specified number of attributes.
- * \see pipeline::Fragment
+ * \see pixelpipe::Fragment
  * 
  */
 struct Vertex {

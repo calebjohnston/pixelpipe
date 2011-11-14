@@ -10,7 +10,7 @@
 #include "core/pipeline.h"
 #include "fragment/frag_processor.h"
 
-namespace pipeline {
+namespace pixelpipe {
 
 /*!
  * \class TexturedPhongFP "fragment/frag_textured_phong.h"

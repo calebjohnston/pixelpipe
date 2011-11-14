@@ -1,7 +1,7 @@
 #include <math.h>
 #include "vertex/vert_shaded.h"
 
-namespace pipeline {
+namespace pixelpipe {
 
 using namespace cg::vecmath;
 

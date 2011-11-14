@@ -4,7 +4,7 @@
 
 using namespace cg::vecmath;
 
-namespace pipeline {
+namespace pixelpipe {
 	
 Pipeline* Pipeline::instance = NULL;
 
@@ -49,7 +49,7 @@ Pipeline::~Pipeline()
 
 Pipeline* Pipeline::getInstance() {
 	if(instance==NULL){
-		instance = new pipeline::Pipeline();
+		instance = new pixelpipe::Pipeline();
 	}
 	return instance;
 }
@@ -307,4 +307,4 @@ void Pipeline::renderTriangle(const Vertex* vertices)
 	rasterizer->rasterize(triangle1, *fp, *framebuffer);
 }
 	
-}	// namespace pipeline
+}	// namespace pixelpipe {

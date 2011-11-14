@@ -4,12 +4,12 @@
 #include <stdlib.h>
 #include <iostream>
 
-namespace pipeline {
+namespace pixelpipe {
 
 /*!
  * \class Fragment "core/fragment.h"
  * \brief A simple object to store a fragment using a specified number of attributes.
- * \see pipeline::Vertex
+ * \see pixelpipe::Vertex
  */
 struct Fragment {
 public:	
@@ -18,6 +18,7 @@ public:
 	 */
 	Fragment(int n=0) {
 		length = n;
+		y = x = -1;
 		if(length > 0){
 			attributes = (float*) malloc(length*sizeof(float));
 		}

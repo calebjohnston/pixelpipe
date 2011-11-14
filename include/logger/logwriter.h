@@ -13,7 +13,7 @@
 #include <string>
 #include "logger/logger.h"
 
-namespace pipeline {
+namespace pixelpipe {
 
 class LogWriter {
 	
@@ -28,6 +28,6 @@ public:
 
 };
 
-}	// namespace pipeline
+}	// namespace pixelpipe {
 
 #endif	//__PIPELINE_LogWriter_H

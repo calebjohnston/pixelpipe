@@ -7,7 +7,7 @@
 #include "fragment/frag_processor.h"
 #include "cg/vecmath/vec4.hpp"
 
-namespace pipeline {
+namespace pixelpipe {
 
 /*!
  * \class Rasterizer "core/rasterizer.h"

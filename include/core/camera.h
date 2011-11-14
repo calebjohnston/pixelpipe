@@ -5,7 +5,7 @@
 #include "cg/vecmath/vec3.hpp"
 #include "core/common.h"
 
-namespace pipeline {
+namespace pixelpipe {
 	
 static const float THETA_LIMIT = (89.0 * PI / 180.0);	//!< a vertical limit for the camera's rotation about an object.
 

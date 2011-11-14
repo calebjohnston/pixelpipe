@@ -1,7 +1,7 @@
 #include "core/texture.h"
 #include "fragment/frag_textured.h"
 
-namespace pipeline {
+namespace pixelpipe {
 
 void TexturedFP::fragment(Fragment& f, FrameBuffer& fb)
 {

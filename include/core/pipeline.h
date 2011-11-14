@@ -15,7 +15,7 @@
 #include "cg/vecmath/vec4.hpp"
 #include "cg/vecmath/mat4.hpp"
 
-namespace pipeline {
+namespace pixelpipe {
 
 /*!
  * \class Pipeline "core/pipeline.h"
@@ -271,6 +271,6 @@ private:
 	
 };	// class Pipeline
 
-}	// namespace pipeline
+}	// namespace pixelpipe {
 
 #endif	// __PIPELINE_PIPELINE_H

@@ -7,7 +7,7 @@
 #include "core/pipeline.h"
 #include "core/vertex.h"
 
-namespace pipeline {
+namespace pixelpipe {
 	
 class Pipeline;
 	

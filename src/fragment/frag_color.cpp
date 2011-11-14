@@ -1,6 +1,6 @@
 #include "fragment/frag_color.h"
 
-namespace pipeline {
+namespace pixelpipe {
 	
 void ColorFP::fragment(Fragment& f, FrameBuffer& fb)
 {

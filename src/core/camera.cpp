@@ -6,7 +6,7 @@
 
 using namespace cg::vecmath;
 
-namespace pipeline {
+namespace pixelpipe {
 
 Camera::Camera(const Vector3f& newEye, const Vector3f& newTarget, const Vector3f& newUp, 
 	float newNear, float newFar, float newHt)

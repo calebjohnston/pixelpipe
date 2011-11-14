@@ -16,7 +16,7 @@ namespace boost {
 	class mutex;
 }
 
-namespace pipeline {
+namespace pixelpipe {
 	
 class StdOutWriter : public LogWriter {
 	
@@ -31,6 +31,6 @@ private:
 	
 };
 
-}	// namespace pipeline
+}	// namespace pixelpipe {
 
 #endif	//__PIPELINE_StdOutWriter_H

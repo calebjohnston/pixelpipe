@@ -2,7 +2,7 @@
 #include "core/pipeline.h"
 #include "fragment/frag_phong.h"
 
-namespace pipeline {
+namespace pixelpipe {
 
 PhongShadedFP::PhongShadedFP()
 {
