@@ -6,40 +6,40 @@
 
 namespace pixelpipe {
 
-FrameBuffer::FrameBuffer(int newNx, int newNy) : width(newNx), height(newNy)
+FrameBuffer::FrameBuffer(int newNx, int newNy) : m_width(newNx), m_height(newNy)
 {
-	size_t c_len = 3 * width * height * sizeof(char);
-	size_t z_len = width * height * sizeof(float);
-	cData = (char*) malloc(c_len);
-	zData = (float*) malloc(z_len);
-	memset(cData, 0, c_len);
-	memset(zData, 0, z_len);
+	size_t c_len = 3 * m_width * m_height * sizeof(char);
+	size_t z_len = m_width * m_height * sizeof(float);
+	m_cData = (char*) malloc(c_len);
+	m_zData = (float*) malloc(z_len);
+	memset(m_cData, 0, c_len);
+	memset(m_zData, 0, z_len);
 	
-	bAllocated = false;
+	m_bAllocated = false;
 	
 	allocateGLTexture();
 }
 
 FrameBuffer::~FrameBuffer()
 {
-	free(cData);
-	free(zData);
+	free(this->m_cData);
+	free(this->m_zData);
 }
 
 float FrameBuffer::getZ(const int x, const int y) const
 {
-	return zData[x + width * y];
+	return this->m_zData[x + this->m_width * y];
 }
 
 void FrameBuffer::set(int ix, int iy, float r, float g, float b, float z)
 {
-	int offset = 3 * (ix + width * iy);
+	int offset = 3 * (ix + this->m_width * iy);
 
-	cData[offset + 0] = (char) ((int) (255 * r) & 0xff);
-	cData[offset + 1] = (char) ((int) (255 * g) & 0xff);
-	cData[offset + 2] = (char) ((int) (255 * b) & 0xff);
+	this->m_cData[offset + 0] = (char) ((int) (255 * r) & 0xff);
+	this->m_cData[offset + 1] = (char) ((int) (255 * g) & 0xff);
+	this->m_cData[offset + 2] = (char) ((int) (255 * b) & 0xff);
 
-	zData[ix + width * iy] = z;
+	this->m_zData[ix + this->m_width * iy] = z;
 }
 
 void FrameBuffer::clear(float r, float g, float b, float z)
@@ -48,11 +48,11 @@ void FrameBuffer::clear(float r, float g, float b, float z)
 	char ig = (char) ((int) (255 * g) & 0xff);
 	char ib = (char) ((int) (255 * b) & 0xff);
 
-	for (int k = 0; k < width * height; k++) {
-		cData[3 * k + 0] = ir;
-		cData[3 * k + 1] = ig;
-		cData[3 * k + 2] = ib;
-		zData[k] = z;
+	for (int k = 0; k < this->m_width * this->m_height; k++) {
+		this->m_cData[3 * k + 0] = ir;
+		this->m_cData[3 * k + 1] = ig;
+		this->m_cData[3 * k + 2] = ib;
+		this->m_zData[k] = z;
 	}
 }
 
@@ -77,12 +77,12 @@ void FrameBuffer::write(std::string filename)
 
 void FrameBuffer::allocateGLTexture()
 {	
-	if(!bAllocated){
-		glGenTextures(1, &textureHandle);
-		glBindTexture(GL_TEXTURE_2D, textureHandle);
+	if(!this->m_bAllocated){
+		glGenTextures(1, &(this->m_textureHandle));
+		glBindTexture(GL_TEXTURE_2D, this->m_textureHandle);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		bAllocated = true;
+		this->m_bAllocated = true;
 	}
 }
 
@@ -101,15 +101,15 @@ void FrameBuffer::drawGLTexture(float x, float y) const
 
 	// Draw the texture using OpenGL
 	glEnable(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, textureHandle);//(const_cast<GLuint*>(&textureHandle)));
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB8, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, cData);
+	glBindTexture(GL_TEXTURE_2D, this->m_textureHandle);//(const_cast<GLuint*>(&textureHandle)));
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB8, this->m_width, this->m_height, 0, GL_RGB, GL_UNSIGNED_BYTE, this->m_cData);
 	
 	glBegin(GL_TRIANGLE_FAN);
 	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 	glTexCoord2f(0, 0); glVertex3f(x, y, 0);
-	glTexCoord2f(1, 0); glVertex3f(x + width, y, 0);
-	glTexCoord2f(1, 1); glVertex3f(x + width, y + height, 0);
-	glTexCoord2f(0, 1); glVertex3f(x, y + height, 0);
+	glTexCoord2f(1, 0); glVertex3f(x + this->m_width, y, 0);
+	glTexCoord2f(1, 1); glVertex3f(x + this->m_width, y + this->m_height, 0);
+	glTexCoord2f(0, 1); glVertex3f(x, y + this->m_height, 0);
 	glEnd();
 		
 	//glDisableClientState(GL_TEXTURE_COORD_ARRAY);

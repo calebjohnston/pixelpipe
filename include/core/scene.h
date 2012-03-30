@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <string>
+#include <vector>
 
 #ifdef __APPLE__
 #include <GLUT/glut.h>
@@ -30,16 +31,29 @@ namespace pixelpipe {
  */
 class Scene {
 public:
-	Scene() {}
-	~Scene() {}
+	Scene() {
+		m_texture = new std::vector<Texture*>();
+		m_texture->reserve(32);
+	}
+	
+	~Scene() {
+		m_texture->clear();
+		delete m_texture;
+	}
 	/**
 	* Accessor method for the texture for this scene.
 	* 
 	* @param texFile The file to read the image from.
 	*/
-	virtual void setTexture(const Texture& tex)
+	virtual void setTexture(const Texture* tex, int index)
 	{
-		*m_texture = tex;
+		// for now we will rely upon vector::at to throw the out of bounds exception
+		//if(m_texture->size() < index){
+			if(m_texture->at(index) != NULL){
+				delete m_texture->at(index);
+			}
+			(*m_texture)[index] = (Texture*)tex;
+		//}
 	}
 	
 	/**
@@ -47,9 +61,9 @@ public:
 	* 
 	* @return reference to the current texture unit
 	*/
-	virtual Texture& getTexture()
+	virtual Texture& getTexture(int index)
 	{
-		return *m_texture;
+		return *(m_texture->at(index));
 	}
 
 	/**
@@ -60,7 +74,7 @@ public:
 	virtual void render(bool usePipeline=true) = 0;
 
 protected:
-	Texture* m_texture;	//!< The texture data for a scene. Might be null.
+	std::vector<Texture*>* m_texture;	//!< The list of texture data for a scene. Might be empty.
 
 };	// class Scene
 

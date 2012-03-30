@@ -71,14 +71,14 @@ int GlutWindow::render()
 
 int GlutWindow::resize(int width, int height)
 {
-	m_width = width;
-	m_height = height;
+	// m_width = width;
+	// m_height = height;
 
 	glLoadIdentity();
 	glViewport(0,0,m_width,m_height);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	glOrtho(0, 1280, m_height, 0, -1.0f, 1.0f);
+	glOrtho(0, m_width, m_height, 0, -1.0f, 1.0f);
 	glMatrixMode(GL_MODELVIEW);
 	
 	return 0;
@@ -174,8 +174,8 @@ void GlutWindow::mouse_cb(int button, int state, int x, int y)
 void GlutWindow::motion_cb(int x, int y)
 {
 	if (self->m_button1Down) {
-		double dx = (x - self->m_lastX)/2.0f;
-		double dy = (y - self->m_lastY)/2.0f;
+		double dx = (x - self->m_lastX);
+		double dy = (y - self->m_lastY);
 		self->m_lastX = x;
 		self->m_lastY = y;
 		glutPostRedisplay();

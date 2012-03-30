@@ -69,10 +69,9 @@ public:
 	}
 	
 	/**
-	 * Compares the vertex and fragment processors to makes sure the information passed
-	 * between them is in the same in size. 
+	 * Sets the current texture
 	 *
-	 * @return a boolean flag representing the validity of the configuration.
+	 * @param a constant texture reference
 	 */
 	void setTexture(const Texture& texture);
 	

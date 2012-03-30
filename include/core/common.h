@@ -2,6 +2,10 @@
 #define __PIPELINE_COMMON_H
 
 #include "logger/logger.h"
+#include <boost/filesystem.hpp>
+
+// namespace fs = boost::filesystem;
+// namespace gil = boost::gil;
 
 static const int TRIANGLES = 1;
 static const int TRIANGLE_STRIP = 2;

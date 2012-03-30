@@ -18,16 +18,18 @@ namespace pixelpipe {
 PixelPipeWindow::PixelPipeWindow(std::string title, int width, int height)
 	: GlutWindow(title, width, height)
 {
-	//m_scene = new SceneCube();
-	m_scene = new SceneSpheres();
+	m_scene = new SceneCube();
+	// m_scene = new SceneSpheres();
 	
 	Vector3f* eye = new Vector3f(1.0, 3.0, 3.0);
 	Vector3f* target = new Vector3f(0.0, 0.0, 0.0);
 	Vector3f* upVec = new Vector3f(0.0, 1.0, 0.0);
-	float near = 0.1;
+	float near = 1.0;
 	float far = 1000.0;
-	float ht = 0.1;
+	float ht = 0.6;
 	m_camera = new Camera(*eye, *target, *upVec, near, far, ht);
+	float aspect = (float)m_width / (float)m_height;
+	m_camera->setAspect(aspect);
 	
 	//Texture* tex1 = new Texture("../resources/textures/checker.png");
 	Texture* tex1 = new Texture("../resources/textures/carbonite.jpg");
@@ -80,7 +82,7 @@ void PixelPipeWindow::init()
 	//TexturedPhongFP* fragProcessor = new TexturedPhongFP();	// 9 + 6 * lightCount
 	m_pipeline->setVertexProcessor(vertProcessor);
 	m_pipeline->setFragmentProcessor(fragProcessor);
-	m_pipeline->setTexture(*m_textures.at(0));
+	//m_pipeline->setTexture(*m_textures.at(0));
 	m_pipeline->configure();
 	
 	/*
@@ -126,39 +128,12 @@ int PixelPipeWindow::render()
 {
 	// DEV() << "PixelPipeWindow::render";
 	
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	
-	m_pipeline->projectionMatrix.identity();
-	float ht = m_camera->getHt();
-	float aspect = m_camera->getAspectRatio();
-	float near = m_camera->getNear();
-	float far = m_camera->getFar();
-	Vector3f eye = m_camera->getEye();
-	Vector3f target = m_camera->getTarget();
-	Vector3f up = m_camera->getUp();
-	m_pipeline->frustum(-ht * aspect, ht * aspect, -ht, ht, near, far);
-	
-	m_pipeline->viewport(0, 0, m_width, m_height);
-	
-	m_pipeline->modelviewMatrix.identity();
-	m_pipeline->lookAt(eye, target, up);
-	
-	m_pipeline->clearFrameBuffer();
-	m_scene->render(true);
-	m_pipeline->getFrameBuffer().draw();
-
-
-	// glEnable(GL_DEPTH_TEST);
-	// glDisable(GL_TEXTURE_2D);
-	// 
 	// glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	// glMatrixMode(GL_MODELVIEW);
+	// glLoadIdentity();
+	// // // glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	// 
-	// glMatrixMode(GL_PROJECTION);
-	//     glLoadIdentity();
+	// m_pipeline->projectionMatrix.identity();
 	// float ht = m_camera->getHt();
 	// float aspect = m_camera->getAspectRatio();
 	// float near = m_camera->getNear();
@@ -166,15 +141,42 @@ int PixelPipeWindow::render()
 	// Vector3f eye = m_camera->getEye();
 	// Vector3f target = m_camera->getTarget();
 	// Vector3f up = m_camera->getUp();
-	//     glFrustum(-ht * aspect, ht * aspect, -ht, ht, near, far);
+	// m_pipeline->frustum(-ht * aspect, ht * aspect, -ht, ht, near, far);
 	// 
-	// glViewport(0, 0, m_width, m_height);
+	// m_pipeline->viewport(0, 0, m_width, m_height);
 	// 
-	// glMatrixMode(GL_MODELVIEW);
-	// glLoadIdentity();
-	// gluLookAt(eye.x, eye.y, eye.z, target.x, target.y, target.z, up.x, up.y, up.z);
+	// m_pipeline->modelviewMatrix.identity();
+	// m_pipeline->lookAt(eye, target, up);
 	// 
-	// m_scene->render(false);
+	// m_pipeline->clearFrameBuffer();
+	// m_scene->render(true);
+	// m_pipeline->getFrameBuffer().draw();
+
+
+	glEnable(GL_DEPTH_TEST);
+	glDisable(GL_TEXTURE_2D);
+	
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glMatrixMode(GL_MODELVIEW);
+	
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	float ht = m_camera->getHt();
+	float aspect = m_camera->getAspectRatio();
+	float near = m_camera->getNear();
+	float far = m_camera->getFar();
+	Vector3f eye = m_camera->getEye();
+	Vector3f target = m_camera->getTarget();
+	Vector3f up = m_camera->getUp();
+	glFrustum(-ht * aspect, ht * aspect, -ht, ht, near, far);
+	
+	glViewport(0, 0, m_width, m_height);
+	
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	gluLookAt(eye.x, eye.y, eye.z, target.x, target.y, target.z, up.x, up.y, up.z);
+	
+	m_scene->render(false);
 	
 	// swap drawing buffers
 	glutSwapBuffers();
@@ -186,7 +188,7 @@ int PixelPipeWindow::resize(int width, int height)
 {
 	GlutWindow::resize(width, height);
 	
-	DEV() << "resize: " << width << ", " << height;
+	//DEV() << "resize: " << width << ", " << height;
 	
 	return 0;
 }
@@ -221,33 +223,52 @@ int PixelPipeWindow::keyPressed(unsigned char key)
 int PixelPipeWindow::keyReleased(unsigned char key)
 {
 	DEV() << "keyReleased: " << key;
+	
 	return 0;
 }
 
 int PixelPipeWindow::mousePressed(int button, int x, int y)
 {
 	DEV() << "mousePressed: " << x << ", " << y;
+
+	m_lastMousePt->set(x, y);
+	m_lastMousePt->set((2.0f * m_lastMousePt->x - m_width) / m_height, (2.0f * (m_height - m_lastMousePt->y - 1.0f) - m_height) / m_height);
+			
 	return 0;
 }
 
 int PixelPipeWindow::mouseReleased(int button, int x, int y)
 {
 	DEV() << "mouseReleased: " << x << ", " << y;
+	
 	return 0;
 }
 
 int PixelPipeWindow::mouseMoved(int x, int y)
 {
-	m_currMousePt->set(x, y);
-	m_currMousePt->set((2.0f * m_currMousePt->x - m_width) / m_height, (2.0f * (m_height - m_currMousePt->y - 1) - m_height) / m_height);
+	/*
+	mouseDelta.set(e.getX(), e.getY());
+	windowToViewport(mouseDelta);
+	mouseDelta.sub(lastMousePoint);
+	camera.orbit(mouseDelta);
+	lastMousePoint.set(e.getX(), e.getY());
+	windowToViewport(lastMousePoint);
+	*/
 	
-	m_mouseDelta->set(m_currMousePt->x - m_lastMousePt->x, m_currMousePt->y - m_lastMousePt->y);
-
+	m_mouseDelta->set(x,y);
+ 	m_mouseDelta->set((2.0f * m_mouseDelta->x - m_width) / m_height, (2.0f * (m_height - m_mouseDelta->y - 1.0) - m_height) / m_height);
+	(*m_mouseDelta) -= (*m_lastMousePt);
 	m_camera->orbit(*m_mouseDelta);
+	m_lastMousePt->set(x,y);
+	m_lastMousePt->set((2.0f * m_lastMousePt->x - m_width) / m_height, (2.0f * (m_height - m_lastMousePt->y - 1.0) - m_height) / m_height);
 	
-	*m_lastMousePt = *m_currMousePt;
+	// m_currMousePt->set(x, y);
+	// m_currMousePt->set((2.0f * m_currMousePt->x - m_width) / m_width, (2.0f * (m_height - m_currMousePt->y) - m_height) / m_height);
+	// m_mouseDelta->set(m_currMousePt->x - m_lastMousePt->x, m_currMousePt->y - m_lastMousePt->y);
+	// m_camera->orbit(*m_mouseDelta);
+	// *m_lastMousePt = *m_currMousePt;
 	
 	return 0;
 }
 
-}	// namespace pixelpipe {
+}	// namespace pixelpipe

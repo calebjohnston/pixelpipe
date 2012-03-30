@@ -32,9 +32,9 @@ public:
 	Camera(	const cg::vecmath::Vector3f& newEye, 
 			const cg::vecmath::Vector3f& newTarget, 
 			const cg::vecmath::Vector3f& newUp, 
-			float newNear, 
-			float newFar, 
-			float newHt);
+			float newNear = 0.1, 
+			float newFar = 100.0, 
+			float newHt = 0.1);
 			
 	~Camera();
 	
@@ -50,41 +50,41 @@ public:
 	/**
 	 * @param v the camera's position vector.
 	 */
-	cg::vecmath::Vector3f getEye() const { return eye; }
+	cg::vecmath::Vector3f getEye() const { return m_eye; }
 	
 	/**
 	 * @return a copy of the camera's target vector.
 	 */
-	cg::vecmath::Vector3f getTarget() const { return target; }
+	cg::vecmath::Vector3f getTarget() const { return m_target; }
 	
 	/**
 	 * @return a copy of the camera's up vector.
 	 */
-	cg::vecmath::Vector3f getUp() const { return up; }
+	cg::vecmath::Vector3f getUp() const { return m_up; }
 	
 	/**
 	 * @return a copy of the camera's near clipping plane.
 	 */
-	float getNear() const { return near; }
+	float getNear() const { return m_near; }
 	
 	/**
 	 * @return a copy of the camera's far clipping plane.
 	 */
-	float getFar() const { return far; }
+	float getFar() const { return m_far; }
 	
 	/**
 	 * Accessor method for the camera's height scaling factor.
 	 * 
 	 * @return a copy of the ht value
 	 */
-	float getHt() const { return ht; }
+	float getHt() const { return m_ht; }
 	
 	/**
 	 * Accessor method for the camera's aspect ratio.
 	 * 
 	 * @return a copy of the aspect ratio.
 	 */
-	float getAspectRatio() const { return aspect; }
+	float getAspectRatio() const { return m_aspect; }
 	
 	/**
 	 * Output utility function for logging and debugging purposes.
@@ -95,14 +95,14 @@ public:
 	}
 	
 protected:
-	float near;		//!< The depth of the near clipping plane
-	float far;		//!< The depth of the far clipping plane
-	float ht;		//!< The height scaling factor used on the viewport
-	float aspect;	//!< The aspect ratio of the viewport
+	float m_near;		//!< The depth of the near clipping plane
+	float m_far;		//!< The depth of the far clipping plane
+	float m_ht;			//!< The height scaling factor used on the viewport
+	float m_aspect;		//!< The aspect ratio of the viewport
 
-	cg::vecmath::Vector3f eye;		//!< The 3D position of the camera
-	cg::vecmath::Vector3f target;	//!< The direction in which the camera is pointed
-	cg::vecmath::Vector3f up;		//!< The "up" vector used to establish an orthonormal basis.
+	cg::vecmath::Vector3f m_eye;		//!< The 3D position of the camera
+	cg::vecmath::Vector3f m_target;	//!< The direction in which the camera is pointed
+	cg::vecmath::Vector3f m_up;		//!< The "up" vector used to establish an orthonormal basis.
 
 private:
 	

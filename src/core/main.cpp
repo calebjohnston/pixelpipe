@@ -79,8 +79,8 @@ int main(int argc, char **argv)
 	pixelpipe::Logger::RegisterWriter(logger);
 	
 	std::vector<int> image_size;	// grid dimensions
-	image_size.push_back(640);
-	image_size.push_back(640);
+	image_size.push_back(800);
+	image_size.push_back(600);
 	std::string inputfile = "";
 	
 	int loggerLevel;

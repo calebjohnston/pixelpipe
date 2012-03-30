@@ -8,21 +8,10 @@ using namespace cg::vecmath;
 
 namespace pixelpipe {
 
-Camera::Camera(const Vector3f& newEye, const Vector3f& newTarget, const Vector3f& newUp, 
-	float newNear, float newFar, float newHt)
+Camera::Camera(const Vector3f& newEye, const Vector3f& newTarget, const Vector3f& newUp, float newNear, float newFar, float newHt)
+ : m_eye(newEye), m_target(newTarget), m_up(newUp), m_near(newNear), m_far(newFar), m_ht(newHt)
 {
-	eye = newEye;
-	target = newTarget;
-	up = newUp;
-	near = newNear;
-	far = newFar;
-	ht = newHt;
-	aspect = 9.0/16.0;	// widescreen..
-
-	// near = 0.1f;
-	// far = 100.0f;
-	// ht = 0.1f;
-	// aspect = 0.666f;
+	m_aspect = 16.0/9.0;	// widescreen is the default
 }
 
 Camera::~Camera()
@@ -33,23 +22,22 @@ void Camera::orbit(const Vector2f& mouseDelta)
 {
 	// Build arbitrary frame at target point with w = up
 	Vector3f u,v,w;
-	w = up;
+	w = m_up;
 	w.normalize();
-	u = nonParallelVector(w);
+	u = this->nonParallelVector(w);
 	v = cross(w, u);
 	v.normalize();
 	u = cross(v, w);
 	Matrix3f basis;
-	basis[0] = u;
-	basis[1] = v;
-	basis[2] = w;
+	basis.setColumn(0,u);
+	basis.setColumn(1,v);
+	basis.setColumn(2,w);
 	Matrix3f basisInv;
 	invert(basisInv, basis);
 
 	// write eye in that frame
-	Vector3f e = eye;
-	e -= target;
-	// basisInv.transform(e);	// instead ...
+	Vector3f e = m_eye;
+	e -= m_target;
 	e = basisInv * e;
 
 	// write e in spherical coordinates
@@ -58,8 +46,8 @@ void Camera::orbit(const Vector2f& mouseDelta)
 	double theta = std::asin(e.z / r);
 
 	// increment phi and theta by mouse motion
-	phi += -PI / 2 * mouseDelta.y;
-	theta += -PI / 2 * mouseDelta.x;
+	phi += -PI / 2 * mouseDelta.x;
+	theta += -PI / 2 * mouseDelta.y;
 	if (theta > THETA_LIMIT){
 		theta = THETA_LIMIT;
 	}
@@ -69,8 +57,7 @@ void Camera::orbit(const Vector2f& mouseDelta)
 
 	// write e back in cartesian world coords
 	e.set((float) (r * std::cos(phi) * std::cos(theta)), (float) (r * std::sin(phi) * std::cos(theta)), (float) (r * std::sin(theta)));
-	// basis.transform(e, eye);	// instead ...
-	eye = basis * e;
+	m_eye = basis * e;
 }
 
 void Camera::panDolly(const Vector2f& mouseDelta, bool dolly)
@@ -78,30 +65,28 @@ void Camera::panDolly(const Vector2f& mouseDelta, bool dolly)
 	// Build frame at eye point with w up-ish and u toward target
 	Vector3f u,v,w;
 	
-	u = target;
-	u -= eye;
+	u = m_target;
+	u -= m_eye;
 	Vector3f t(u);
 	u.normalize();
-	w = up;
+	w = m_up;
 	w.normalize();
 	v = cross(w, u);
 	v.normalize();
 	w = cross(u, v);
 	Matrix3f basis;
-	basis[0] = u;
-	basis[1] = v;
-	basis[2] = w;
+	basis.setColumn(0,u);
+	basis.setColumn(1,v);
+	basis.setColumn(2,w);
 	Matrix3f basisInv;
 	invert(basisInv, basis);
 
 	// drive eye forward if dollying
 	if (dolly) {
-		//eye.scaleAdd(0.1f, u, eye);	// instead ...
-		eye += u * 0.1f;
+		m_eye += u * 0.1f;
 	}
 
 	// write target in that frame
-	//basisInv.transform(t);	// instead ...
 	t = basisInv * t;
 
 	// write t in spherical coordinates
@@ -121,21 +106,19 @@ void Camera::panDolly(const Vector2f& mouseDelta, bool dolly)
 
 	// write t back in cartesian world coords
 	t.set((float) (r * std::cos(phi) * std::cos(theta)), (float) (r * std::sin(phi) * std::cos(theta)), (float) (r * std::sin(theta)));
-	//basis.transform(t, target);	// instead ...
-	target = basis * t;
-	target.normalize();
-	// target.add(eye);	// instead ...
-	target += eye;
+	m_target = basis * t;
+	m_target.normalize();
+	m_target += m_eye;
 }
 
 void Camera::dolly(float d)
 {
-	eye *= -d;
+	m_eye *= -d;
 }
 
 void Camera::setAspect(float d)
 {
-	aspect = d;
+	m_aspect = d;
 }
 
 int Camera::argmin(double a, double b, double c)

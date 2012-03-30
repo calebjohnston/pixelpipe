@@ -20,6 +20,8 @@ Texture::Texture(std::string filename)
 	//char nom[100];
 	///char* nom = (char*)'/Users/Caleb/Development/OpenSource/pixelpipe/resources/textures/carbonite.png';
 	cBuf = cg::image::read_image(filename.c_str());	// only supports TIFF, JPEG, and PNG
+
+	//reinterpret_cast<const char*>( interleaved_view_get_raw_data(imageView) ) 
 	//ByteRaster* img = read_png_image(filename.c_str());
 	//DEV() << "loaded " << cBuf->width() << " x " << cBuf->height() << " texture with " << cBuf->channels() << " channels.";
 }

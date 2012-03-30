@@ -35,9 +35,9 @@ public:
 	 */
 	FrameBuffer(int newNx, int newNy);
 	~FrameBuffer();
-	char* getData() const { return cData; }
-	const int getWidth() const { return width; }
-	const int getHeight() const { return height; }
+	char* getData() const { return m_cData; }
+	const int getWidth() const { return m_width; }
+	const int getHeight() const { return m_height; }
 	
 	/**
 	 * Returns the z value of the currently stored fragment for the given (x, y)
@@ -97,12 +97,12 @@ public:
 	}
 
 protected:
-	int width;				//!< The width of the image in the frame buffer.
-	int height;				//!< The height of the image in the frame buffer.
-	char* cData;			//!< The rgb data that forms the image.
-	float* zData;			//!< The z buffer - holds the z value of the current fragment.
-	GLuint textureHandle;	//!< The OpenGL texture handle (used for drawing the framebuffer to the screen).
-	bool bAllocated;		//!< The flag used for indicating whether or not the OpenGL texture was allocated yet.
+	int m_width;				//!< The width of the image in the frame buffer.
+	int m_height;				//!< The height of the image in the frame buffer.
+	char* m_cData;				//!< The rgb data that forms the image.
+	float* m_zData;				//!< The z buffer - holds the z value of the current fragment.
+	GLuint m_textureHandle;		//!< The OpenGL texture handle (used for drawing the framebuffer to the screen).
+	bool m_bAllocated;			//!< The flag used for indicating whether or not the OpenGL texture was allocated yet.
 	
 	/**
 	 * Allocates the texture object using OpenGL. Sets the bAllocated and textureHandle 
