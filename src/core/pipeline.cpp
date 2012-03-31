@@ -183,7 +183,7 @@ void Pipeline::frustum(float l, float r, float b, float t, float n, float f)
 	projectionMatrix[0][0] = 2 * n / (r - l);
 	projectionMatrix[0][2] = (r + l) / (r - l);
 	projectionMatrix[1][1] = 2 * n / (t - b);
-	projectionMatrix[1][3] = (t + b) / (t - b);
+	projectionMatrix[1][2] = (t + b) / (t - b);
 	projectionMatrix[2][2] = -(f + n) / (f - n);
 	projectionMatrix[2][3] = -2 * f * n / (f - n);
 	projectionMatrix[3][2] = -1;
