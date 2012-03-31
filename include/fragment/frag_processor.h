@@ -4,7 +4,6 @@
 #include "core/fragment.h"
 #include "core/framebuffer.h"
 #include "core/texture.h"
-#include "core/pipeline_software.h"
 
 namespace pixelpipe {
 

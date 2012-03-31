@@ -44,12 +44,12 @@ void SmoothShadedVP::vertex(const Vector3f& v, const Color3f& c, const Vector3f&
 	viewVector.normalize();
 	
 	// we start with the ambient color.
-	outColor.set(((SoftwarePipeline*) Pipeline::getInstance())->ambientIntensity, ((SoftwarePipeline*) Pipeline::getInstance())->ambientIntensity, ((SoftwarePipeline*) Pipeline::getInstance())->ambientIntensity);
+	outColor.set(Pipeline::getInstance()->ambientIntensity, Pipeline::getInstance()->ambientIntensity, Pipeline::getInstance()->ambientIntensity);
 
 	//calculate light vectors
-	int len = ((SoftwarePipeline*) Pipeline::getInstance())->getLights().size();
+	int len = Pipeline::getInstance()->getLights().size();
 	for(int i=0; i<len; i++){
-		lightVector = ((SoftwarePipeline*) Pipeline::getInstance())->getLights().at(i).getPosition();
+		lightVector = Pipeline::getInstance()->getLights().at(i).getPosition();
 		lightVector = lightVector - transformedVertex;
 		lightVector.normalize();
 
@@ -57,9 +57,9 @@ void SmoothShadedVP::vertex(const Vector3f& v, const Color3f& c, const Vector3f&
 		nDotL = (float) dot(transformedNormal, lightVector);
 
 		//add diffuse color for light 1
-		outColor.x += c.x * nDotL * ((SoftwarePipeline*) Pipeline::getInstance())->getLights().at(i).getIntensity().x;
-		outColor.y += c.y * nDotL * ((SoftwarePipeline*) Pipeline::getInstance())->getLights().at(i).getIntensity().y;
-		outColor.z += c.z * nDotL * ((SoftwarePipeline*) Pipeline::getInstance())->getLights().at(i).getIntensity().z;
+		outColor.x += c.x * nDotL * Pipeline::getInstance()->getLights().at(i).getIntensity().x;
+		outColor.y += c.y * nDotL * Pipeline::getInstance()->getLights().at(i).getIntensity().y;
+		outColor.z += c.z * nDotL * Pipeline::getInstance()->getLights().at(i).getIntensity().z;
 
 		//calculate half vector
 		halfVector = 0.0;
@@ -70,7 +70,7 @@ void SmoothShadedVP::vertex(const Vector3f& v, const Color3f& c, const Vector3f&
 		nDotH = (float) dot(transformedNormal, halfVector);
 
 		//calculate specular intensity
-		float specularIntensity = std::pow(nDotH, ((SoftwarePipeline*) Pipeline::getInstance())->specularExponent);
+		float specularIntensity = std::pow(nDotH, Pipeline::getInstance()->specularExponent);
 		if(specularIntensity < 0.0f){
 			specularIntensity = 0.0f;
 		}
@@ -79,20 +79,20 @@ void SmoothShadedVP::vertex(const Vector3f& v, const Color3f& c, const Vector3f&
 		}
 
 		//add the specular color for light 1
-		outColor.x += (((SoftwarePipeline*) Pipeline::getInstance())->specularColor.x * specularIntensity);
-		outColor.y += (((SoftwarePipeline*) Pipeline::getInstance())->specularColor.y * specularIntensity);
-		outColor.z += (((SoftwarePipeline*) Pipeline::getInstance())->specularColor.z * specularIntensity);
+		outColor.x += (Pipeline::getInstance()->specularColor.x * specularIntensity);
+		outColor.y += (Pipeline::getInstance()->specularColor.y * specularIntensity);
+		outColor.z += (Pipeline::getInstance()->specularColor.z * specularIntensity);
 	}
 	
 	//clamp colors
 	if(outColor.x < 0.0f){
-		outColor.x = ((SoftwarePipeline*) Pipeline::getInstance())->ambientIntensity;
+		outColor.x = Pipeline::getInstance()->ambientIntensity;
 	}
 	if(outColor.y < 0.0f){
-		outColor.y = ((SoftwarePipeline*) Pipeline::getInstance())->ambientIntensity;
+		outColor.y = Pipeline::getInstance()->ambientIntensity;
 	}
 	if(outColor.z < 0.0f){
-		outColor.z = ((SoftwarePipeline*) Pipeline::getInstance())->ambientIntensity;
+		outColor.z = Pipeline::getInstance()->ambientIntensity;
 	}
 
 	//clamp colors

@@ -6,6 +6,7 @@
 #include "core/fragment.h"
 #include "core/framebuffer.h"
 #include "core/pointlight.h"
+#include "core/pipeline.h"
 #include "fragment/frag_processor.h"
 
 namespace pixelpipe {

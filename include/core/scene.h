@@ -15,7 +15,7 @@
 #include <GL/glu.h>
 #endif
 
-#include "core/pipeline_software.h"
+#include "core/pipeline.h"
 #include "core/geometry.h"
 #include "core/texture.h"
 #include "core/common.h"
