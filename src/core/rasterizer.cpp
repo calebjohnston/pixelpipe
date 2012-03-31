@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <math.h>
 
-#include "core/pipeline_software.h"
+#include "core/pipeline.h"
 #include "core/common.h"
 
 namespace pixelpipe {

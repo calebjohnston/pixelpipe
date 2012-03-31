@@ -8,8 +8,6 @@
 #include "cg/vecmath/vec4.hpp"
 
 namespace pixelpipe {
-	
-	class FragmentProcessor;
 
 /*!
  * \class Rasterizer "core/rasterizer.h"

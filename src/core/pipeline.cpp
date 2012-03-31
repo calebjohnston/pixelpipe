@@ -1,6 +1,6 @@
 
 #include "core/common.h"
-#include "core/pipeline_software.h"
+#include "core/pipeline.h"
 
 using namespace cg::vecmath;
 
@@ -202,6 +202,7 @@ void Pipeline::viewport(int x, int y, int w, int h)
 	viewportMatrix[2][2] = 0.5;
 	viewportMatrix[2][3] = 0.5;
 	recomputeMatrix();
+	
 }
 
 void Pipeline::begin(int primType)
@@ -270,6 +271,13 @@ void Pipeline::vertex(const Vector3f& v, const Color3f& c, const Vector3f& n, co
 void Pipeline::end()
 {
 	mode = PIPELINE_MODE_NONE;
+}
+
+void Pipeline::swap(Vertex* va, int i, int j) const
+{
+	Vertex temp = va[i];
+	va[i] = va[j];
+	va[j] = temp;
 }
 
 void Pipeline::renderTriangle(const Vector3f* v, const Color3f* c, const Vector3f* n, const Vector2f* t)
