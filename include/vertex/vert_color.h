@@ -5,7 +5,6 @@
 #include "cg/vecmath/vec3.hpp"
 #include "cg/vecmath/mat4.hpp"
 #include "cg/vecmath/color.h"
-#include "core/pipeline.h"
 #include "core/vertex.h"
 #include "vertex/vert_processor.h"
 

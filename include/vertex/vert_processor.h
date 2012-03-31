@@ -4,12 +4,12 @@
 #include "cg/vecmath/vec2.hpp"
 #include "cg/vecmath/vec3.hpp"
 #include "cg/vecmath/color.h"
-#include "core/pipeline.h"
+#include "core/pipeline_software.h"
 #include "core/vertex.h"
 
 namespace pixelpipe {
 	
-class Pipeline;
+	class SoftwarePipeline;
 	
 /*!
  * \class VertexProcessor "vertex/vert_processor.h"
@@ -50,7 +50,7 @@ public:
 	 * @param pipe The reference to the pipeline object. Can be used to determine
 	 *          the necessary matrices.
 	 */
-	virtual void updateTransforms(const Pipeline& pipe) = 0;
+	virtual void updateTransforms(const SoftwarePipeline& pipe) {};
 	
 	/**
 	 * We can access everything we need to know about the pipeline state -- the
@@ -62,7 +62,7 @@ public:
 	 * @param pipe The reference to the pipeline object. Cna be used to determine
 	 *          the viewing conditions.
 	 */
-	virtual void updateLightModel(const Pipeline& pipe) { }
+	virtual void updateLightModel(const SoftwarePipeline& pipe) { }
 	
 	/**
 	 * This is the main function of this class, which is called once for every

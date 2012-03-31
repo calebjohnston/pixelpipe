@@ -7,7 +7,7 @@ using namespace cg::vecmath;
 	
 TexturedFragmentShadedVP::TexturedFragmentShadedVP()
 {
-	size = 9 + 6 * Pipeline::getInstance()->getLights().size();
+	size = 9 + 6 * ((SoftwarePipeline*) Pipeline::getInstance())->getLights().size();
 }
 
 void TexturedFragmentShadedVP::vertex(const Vector3f& v, const Color3f& c, const Vector3f& n, const Vector2f& t, Vertex& output)

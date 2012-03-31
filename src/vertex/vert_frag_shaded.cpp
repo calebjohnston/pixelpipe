@@ -6,7 +6,8 @@ using namespace cg::vecmath;
 	
 FragmentShadedVP::FragmentShadedVP() : VertexProcessor()
 {
-	size = 9 + 6 * Pipeline::getInstance()->getLights().size();
+	int s = ((SoftwarePipeline*) Pipeline::getInstance())->getLights().size();
+	size = 9 + 6 * s;
 }
 
 FragmentShadedVP::~FragmentShadedVP()
@@ -67,12 +68,12 @@ void FragmentShadedVP::vertex(const Vector3f& v, const Color3f& c, const Vector3
 	output.attributes[8] = viewVector.z;
 
 	//calculate light vectors
-	int len = Pipeline::getInstance()->getLights().size();
+	int len = ((SoftwarePipeline*) Pipeline::getInstance())->getLights().size();
 	int position;
 	for(int i=0; i<len; i++){
 		position = 6*i;
 		
-		lightVector = Pipeline::getInstance()->getLights().at(i).getPosition();
+		lightVector = ((SoftwarePipeline*) Pipeline::getInstance())->getLights().at(i).getPosition();
 		lightVector = lightVector - transformedVertex;
 		lightVector.normalize();
 		

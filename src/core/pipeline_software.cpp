@@ -15,9 +15,10 @@ Pipeline* Pipeline::instance = NULL;
  * @param nx The width of the frame buffer.
  * @param ny The height of the frame buffer.
  */
-Pipeline::Pipeline(int nx, int ny, std::vector<PointLight>* lights)
+SoftwarePipeline::SoftwarePipeline(int nx, int ny, std::vector<PointLight>* lights)
+	: Pipeline(nx, ny)
 {
-	framebuffer = new FrameBuffer(nx, ny);
+	this->framebuffer = new FrameBuffer(nx, ny);
 	// configure(TrivialColorFP.class, ConstColorVP.class);
 	if(lights!=NULL){
 		this->lights = lights;
@@ -27,47 +28,45 @@ Pipeline::Pipeline(int nx, int ny, std::vector<PointLight>* lights)
 		DEV() << "the lights: " << this->lights->size();
 	}
 	
-	mode = PIPELINE_MODE_NONE;
-	modelviewMatrix.identity();
-	projectionMatrix.identity();
-	viewportMatrix.identity();
-	ambientIntensity = 0.1;
-	specularColor.set(0.4, 0.4, 0.4);
-	specularExponent = 40.0;
+	this->mode = PIPELINE_MODE_NONE;
+	this->modelviewMatrix.identity();
+	this->projectionMatrix.identity();
+	this->viewportMatrix.identity();
+	this->ambientIntensity = 0.1;
+	this->specularColor.set(0.4, 0.4, 0.4);
+	this->specularExponent = 40.0;
 	
-	clipper = new Clipper(3);
-	
-	//Pipeline::instance = this;
+	this->clipper = new Clipper(3);
 	
 	// EMPTY_CLASS_ARRAY = new Class[0];
 	// EMPTY_OBJECT_ARRAY = new Object[0];
 }
 
-Pipeline::~Pipeline()
+SoftwarePipeline::~SoftwarePipeline()
 {
 }
 
-Pipeline* Pipeline::getInstance() {
-	if(instance==NULL){
-		instance = new pixelpipe::Pipeline();
-	}
-	return instance;
-}
+// SoftwarePipeline* SoftwarePipeline::getInstance() {
+// 	if(instance==NULL){
+// 		instance = new pixelpipe::SoftwarePipeline();
+// 	}
+// 	return instance;
+// }
 
 
-void Pipeline::setFragmentProcessor(const FragmentProcessor* fragProc)
+void SoftwarePipeline::setFragmentProcessor(const FragmentProcessor* fragProc)
 {
 	fp = const_cast<FragmentProcessor*>(fragProc);
 	rasterizer = new Rasterizer(fp->nAttr(), framebuffer->getWidth(), framebuffer->getHeight());
 }
 
-void Pipeline::setVertexProcessor(const VertexProcessor* vertProc)
+void SoftwarePipeline::setVertexProcessor(const VertexProcessor* vertProc)
 {
 	vp = const_cast<VertexProcessor*>(vertProc);
 }
 
-//void Pipeline::configure(Class fpClass, Class vpClass)
-void Pipeline::configure()
+//void SoftwarePipeline::configure(Class fpClass, Class vpClass)
+void SoftwarePipeline::configure()
 {
 	// try {
 		// TO-DO: MOST OF THIS STUFF WON'T WORK, FIX IT
@@ -90,48 +89,38 @@ void Pipeline::configure()
 	// }
 }
 
-bool Pipeline::validConfiguration()
+bool SoftwarePipeline::validConfiguration()
 {
 	return fp->nAttr() == vp->nAttr();
 }
 
-bool Pipeline::isFlatShaded()
+bool SoftwarePipeline::isFlatShaded()
 {
 	return false;
 }
 
-/**
- * Returns the current fragment program class
- * @return the class of the triangle processor
- */
-// Class Pipeline::getTriangleClass()
-// {
-// 	return vp->getClass();
-// 	
-// }
-
-void Pipeline::setTexture(const Texture& texture)
+void SoftwarePipeline::setTexture(const Texture& texture)
 {
 	fp->setTexture(texture);
 }
 
-void Pipeline::clearFrameBuffer()
+void SoftwarePipeline::clearFrameBuffer()
 {
 	framebuffer->clear(0, 0, 0, 1);
 }
 
-const char* Pipeline::getFrameData()
+const char* SoftwarePipeline::getFrameData()
 {
 	return framebuffer->getData();
 }
 
-void Pipeline::loadIdentity()
+void SoftwarePipeline::loadIdentity()
 {
 	modelviewMatrix.identity();
 	recomputeMatrix();
 }
 
-void Pipeline::rotate(float angle, const Vector3f& axis)
+void SoftwarePipeline::rotate(float angle, const Vector3f& axis)
 {
 	Matrix4f temp = rotationMatrix(angle, axis, false);
 	Matrix4f mv(modelviewMatrix);
@@ -139,7 +128,7 @@ void Pipeline::rotate(float angle, const Vector3f& axis)
 	recomputeMatrix();
 }
 
-void Pipeline::translate(const Vector3f& delta)
+void SoftwarePipeline::translate(const Vector3f& delta)
 {
 	Matrix4f temp = translationMatrix(delta);
 	Matrix4f mv(modelviewMatrix);
@@ -147,7 +136,7 @@ void Pipeline::translate(const Vector3f& delta)
 	recomputeMatrix();
 }
 
-void Pipeline::scale(const Vector3f& scale)
+void SoftwarePipeline::scale(const Vector3f& scale)
 {
 	Matrix4f temp = scalingMatrix(scale);
 	Matrix4f mv(modelviewMatrix);
@@ -155,12 +144,12 @@ void Pipeline::scale(const Vector3f& scale)
 	recomputeMatrix();
 }
 
-void Pipeline::recomputeMatrix()
+void SoftwarePipeline::recomputeMatrix()
 {
 	vp->updateTransforms(*this);
 }
 
-void Pipeline::lookAt(Vector3f eye, Vector3f target, Vector3f up)
+void SoftwarePipeline::lookAt(Vector3f eye, Vector3f target, Vector3f up)
 {
 	Matrix4f T;
 	Vector3f w;
@@ -177,7 +166,7 @@ void Pipeline::lookAt(Vector3f eye, Vector3f target, Vector3f up)
 	recomputeMatrix();
 }
 
-void Pipeline::frustum(float l, float r, float b, float t, float n, float f)
+void SoftwarePipeline::frustum(float l, float r, float b, float t, float n, float f)
 {
 	projectionMatrix.identity();
 	projectionMatrix[0][0] = 2 * n / (r - l);
@@ -191,7 +180,7 @@ void Pipeline::frustum(float l, float r, float b, float t, float n, float f)
 	recomputeMatrix();
 }
 
-void Pipeline::viewport(int x, int y, int w, int h)
+void SoftwarePipeline::viewport(int x, int y, int w, int h)
 {
 	float cx = x + 0.5 * w, cy = y + 0.5 * h;
 	viewportMatrix.identity();
@@ -204,14 +193,14 @@ void Pipeline::viewport(int x, int y, int w, int h)
 	recomputeMatrix();
 }
 
-void Pipeline::begin(int primType)
+void SoftwarePipeline::begin(int primType)
 {
 	mode = primType;
 	vertexIndex = 0;
 	stripParity = 0;
 }
 
-void Pipeline::vertex(const Vector3f& v, const Color3f& c, const Vector3f& n, const Vector2f& t)
+void SoftwarePipeline::vertex(const Vector3f& v, const Color3f& c, const Vector3f& n, const Vector2f& t)
 {
 	vp->vertex(v, c, n, t, vertexCache[vertexIndex]);
 	
@@ -267,19 +256,19 @@ void Pipeline::vertex(const Vector3f& v, const Color3f& c, const Vector3f& n, co
 	}
 }
 
-void Pipeline::end()
+void SoftwarePipeline::end()
 {
 	mode = PIPELINE_MODE_NONE;
 }
 
-void Pipeline::renderTriangle(const Vector3f* v, const Color3f* c, const Vector3f* n, const Vector2f* t)
+void SoftwarePipeline::renderTriangle(const Vector3f* v, const Color3f* c, const Vector3f* n, const Vector2f* t)
 {
 	vp->triangle(v, c, n, t, vertexCache);
 	
 	renderTriangle(vertexCache);
 }
 
-void Pipeline::renderTriangle(const Vertex* vertices)
+void SoftwarePipeline::renderTriangle(const Vertex* vertices)
 {
 	// See how many "unclipped" triangles we have
 	int numberOfTriangles = clipper->clip(vertices, triangle1, triangle2);
@@ -299,4 +288,4 @@ void Pipeline::renderTriangle(const Vertex* vertices)
 	rasterizer->rasterize(triangle1, *fp, *framebuffer);
 }
 	
-}	// namespace pixelpipe {
+}	// namespace pixelpipe
