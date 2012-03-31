@@ -6,7 +6,6 @@
 #include <stdio.h>
 #include "core/glutwindow.h"
 #include "core/camera.h"
-#include "core/pipeline_software.h"
 #include "core/geometry.h"
 #include "core/scene.h"
 
@@ -28,7 +27,7 @@ enum render_mode {
  */
 class PixelPipeWindow : public GlutWindow {
 public:
-	PixelPipeWindow(std::string title="PixelPipe", int width=800, int height=600, render_mode mode=MODE_SOFTWARE);
+	PixelPipeWindow(std::string title="PixelPipe", int width=800, int height=600, render_mode mode=MODE_OPENGL);
 	~PixelPipeWindow();
 	virtual int run();
 	

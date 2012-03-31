@@ -24,77 +24,46 @@ using namespace cg::vecmath;
 namespace pixelpipe {
 	
 	static Vector3f normals[3];
-
 	static Color3f colors[3];
-
 	static Vector3f vertices[3];
-	
+	static Vector2f texs[3];
+
 	static Vector2f t0(0.0f, 0.0f);
-               
 	static Vector2f t1(1.0f, 0.0f);
-               
 	static Vector2f t2(1.0f, 1.0f);
-               
 	static Vector2f t3(0.0f, 1.0f);
 
 	static Vector2f textures1[] = { t0, t2, t3 };
-
 	static Vector2f textures2[] = { t2, t0, t1 };
 
 	static Vector3f nnn(-1.0f, -1.0f, -1.0f);
-                
 	static Vector3f nnp(-1.0f, -1.0f, +1.0f);
-                
 	static Vector3f npn(-1.0f, +1.0f, -1.0f);
-                
 	static Vector3f npp(-1.0f, +1.0f, +1.0f);
-                
 	static Vector3f pnn(+1.0f, -1.0f, -1.0f);
-                
 	static Vector3f pnp(+1.0f, -1.0f, +1.0f);
-                
 	static Vector3f ppn(+1.0f, +1.0f, -1.0f);
-                
 	static Vector3f ppp(+1.0f, +1.0f, +1.0f);
 
 	static Vector3f lNormal(-1, 0, 0);
-                    
 	static Vector3f rNormal(+1, 0, 0);
-                    
 	static Vector3f dNormal(0, -1, 0);
-                    
 	static Vector3f uNormal(0, +1, 0);
-                    
 	static Vector3f bNormal(0, 0, -1);
-                    
 	static Vector3f fNormal(0, 0, +1);
 
 	static Color3f lColor(0.4f, 0.4f, 0.8f);
-                  
 	static Color3f rColor(0.8f, 0.8f, 0.4f);
-                  
 	static Color3f dColor(0.8f, 0.4f, 0.4f);
-                  
 	static Color3f uColor(0.4f, 0.8f, 0.8f);
-                  
 	static Color3f bColor(0.8f, 0.4f, 0.8f);
-                  
 	static Color3f fColor(0.4f, 0.8f, 0.4f);
 
-	// static Vector3f nrml();
-
-	static Vector2f texs[3];
-
 	static Vector3f v_p00(+1.0f, 0.0f, 0.0f);
-                  
 	static Vector3f v_n00(-1.0f, 0.0f, 0.0f);
-	              
 	static Vector3f v_0p0(0.0f, +1.0f, 0.0f);
-	              
 	static Vector3f v_0n0(0.0f, -1.0f, 0.0f);
-	              
 	static Vector3f v_00p(0.0f, 0.0f, +1.0f);
-	              
 	static Vector3f v_00n(0.0f, 0.0f, -1.0f);
 
 class Geometry {

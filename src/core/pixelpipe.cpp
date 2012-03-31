@@ -1,3 +1,5 @@
+#include <algorithm>
+
 #include "core/pixelpipe.h"
 #include "core/common.h"
 #include "vertex/vert_color.h"
@@ -17,10 +19,7 @@ namespace pixelpipe {
 
 PixelPipeWindow::PixelPipeWindow(std::string title, int width, int height, render_mode mode)
 	: GlutWindow(title, width, height)
-{
-	m_scene = new SceneCube();
-	// m_scene = new SceneSpheres();
-	
+{	
 	Vector3f* eye = new Vector3f(1.0, 3.0, 3.0);
 	Vector3f* target = new Vector3f(0.0, 0.0, 0.0);
 	Vector3f* upVec = new Vector3f(0.0, 1.0, 0.0);
@@ -67,6 +66,9 @@ void PixelPipeWindow::init()
 			this->init_softwareMode();
 			break;
 	}
+	
+	m_scene = new SceneCube(*m_pipeline);
+	// m_scene = new SceneSpheres(*m_pipeline);
 }
 
 void PixelPipeWindow::init_softwareMode() 
@@ -83,9 +85,8 @@ void PixelPipeWindow::init_softwareMode()
 	// set the lights
 	PointLight pl1(m_camera->getEye(), Color3f(1.0,1.0,1.0));
 	PointLight pl2(Vector3f(-3.0, 0.0, -5.0), Color3f(1.0,0.25,0.5));
-	((SoftwarePipeline*)m_pipeline)->getLights().push_back(pl1);
-	// m_pipeline->getLights().push_back(pl1);	// temp!
-	// m_pipeline->getLights().push_back(pl2);	// temp!
+	m_pipeline->getLights().push_back(pl1);
+	m_pipeline->getLights().push_back(pl2);
 	
 	// setup vertex shaders
 	//ConstColorVP* vertProcessor = new ConstColorVP();				// 3
@@ -107,6 +108,16 @@ void PixelPipeWindow::init_softwareMode()
 
 void PixelPipeWindow::init_openGLMode()
 {
+	// set the textures
+	m_pipeline = Pipeline::getInstance();
+	
+	// set the lights
+	PointLight pl1(m_camera->getEye(), Color3f(1.0,1.0,1.0));
+	PointLight pl2(Vector3f(-3.0, 0.0, -5.0), Color3f(1.0,0.25,0.5));
+	m_pipeline->getLights().push_back(pl1);
+	m_pipeline->getLights().push_back(pl2);
+	
+	// configure pipe.	
 	glDepthFunc(GL_LESS);
 	glDisable(GL_DEPTH_TEST);
 	glCullFace(GL_BACK);
@@ -116,32 +127,42 @@ void PixelPipeWindow::init_openGLMode()
 	glPolygonMode(GL_FRONT, GL_FILL);
 	glShadeModel(GL_SMOOTH);
     
+	// Configure textures
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-    
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
 	// removed this, so the specular component is modulated with the texture - not added on top. 
-	//    gl.glLightModeli(GL_LIGHT_MODEL_COLOR_CONTROL, GL_SEPARATE_SPECULAR_COLOR);
+	// configure lighting
+	glLightModeli(GL_LIGHT_MODEL_COLOR_CONTROL, GL_SEPARATE_SPECULAR_COLOR);
 
 	float amb[3] = { 0.1, 0.1, 0.1 };
 	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, amb);
     
 	glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_TRUE);
     
-	//setupGlLights(gl);
+	const unsigned max_ogl_lights = 8;
+	int lights[max_ogl_lights] = { GL_LIGHT0, GL_LIGHT1, GL_LIGHT2, GL_LIGHT3, GL_LIGHT4, GL_LIGHT5, GL_LIGHT6, GL_LIGHT7 };
 
-	//glMateriali(GL_FRONT, GL_SHININESS, 40);
-	//glMaterialfv(GL_FRONT, GL_SPECULAR, new float[] { 0.4f, 0.4f, 0.4f },0);
+	for( int i = 0; i < std::min(max_ogl_lights, (unsigned) m_pipeline->getLights().size()); i++) {
+		Color3f d = m_pipeline->getLights().at(i).getIntensity();
+		Point3f p = m_pipeline->getLights().at(i).getPosition();
+		glEnable(lights[i]);
+		float diffuse[4] = { d.x, d.y, d.z, 1.0 };
+		float specular[4] = { 1.0, 1.0, 1.0, 1.0 };
+		float position[4] = { p.x, p.y, p.z, 1.0 };
+		glLightfv(lights[i], GL_DIFFUSE, diffuse);
+		glLightfv(lights[i], GL_SPECULAR, specular);
+		glLightfv(lights[i], GL_POSITION, position);
+	}
+
+	float mat[3] = { 0.4, 0.4, 0.4 };
+	glMateriali(GL_FRONT, GL_SHININESS, 40);
+	glMaterialfv(GL_FRONT, GL_SPECULAR, mat);
     
 	glClearColor(0, 0, 0, 1);
-    
-	glDisable(GL_LIGHTING);
-	glDisable(GL_COLOR_MATERIAL);
-	glDisable(GL_DEPTH_TEST);
-	glDisable(GL_TEXTURE_2D);
 }
 
 void PixelPipeWindow::init_CUDAMode() 
@@ -204,6 +225,11 @@ void PixelPipeWindow::render_openGLMode()
 	glEnable(GL_DEPTH_TEST);
 	glDisable(GL_TEXTURE_2D);
 	
+	glEnable(GL_LIGHTING);
+	glEnable(GL_COLOR_MATERIAL);
+	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_TEXTURE_2D);
+	
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glMatrixMode(GL_MODELVIEW);
 	
@@ -225,6 +251,11 @@ void PixelPipeWindow::render_openGLMode()
 	gluLookAt(eye.x, eye.y, eye.z, target.x, target.y, target.z, up.x, up.y, up.z);
 	
 	m_scene->render(false);
+	
+    glDisable(GL_LIGHTING);
+    glDisable(GL_COLOR_MATERIAL);
+    glDisable(GL_DEPTH_TEST);
+    glDisable(GL_TEXTURE_2D);
 	
 	// swap drawing buffers
 	glutSwapBuffers();

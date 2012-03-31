@@ -31,7 +31,7 @@ namespace pixelpipe {
  */
 class Scene {
 public:
-	Scene() {
+	Scene(Pipeline& pipe) : m_pipeline(pipe) {
 		m_texture = new std::vector<Texture*>();
 		m_texture->reserve(32);
 	}
@@ -75,12 +75,13 @@ public:
 
 protected:
 	std::vector<Texture*>* m_texture;	//!< The list of texture data for a scene. Might be empty.
+	Pipeline& m_pipeline;					//!< Reference to the pipeline for dispatching render calls
 
 };	// class Scene
 
 class SceneSpheres : public Scene {
 public:
-	SceneSpheres()
+	SceneSpheres(Pipeline& pipe) : Scene(pipe)
 	{
 		depth = 3;
 		
@@ -95,13 +96,13 @@ public:
 	
 	virtual void render(bool usePipeline) 
 	{
-		if(usePipeline){			
-		    //Pipeline::getInstance()->setTexture(*m_texture);
+		if(usePipeline){
+			if(!m_texture->empty()) m_pipeline.setTexture(*(m_texture->at(0)));
 
-			Pipeline::getInstance()->translate(locationA);
+			m_pipeline.translate(locationA);
 		    Geometry::sphere(depth, colorA, true);
 
-			Pipeline::getInstance()->translate(locationB);
+			m_pipeline.translate(locationB);
 		    Geometry::sphere(depth, colorB, true);
 		}
 		else{
@@ -140,12 +141,12 @@ protected:
 class SceneCube : public Scene {
 
 public:
-	SceneCube() {};
+	SceneCube(Pipeline& pipe) : Scene(pipe) {}
 	~SceneCube() {};
 	virtual void render(bool usePipeline) 
 	{
 		if(usePipeline){
-			//Pipeline::getInstance()->setTexture(*m_texture);
+			if(!m_texture->empty()) m_pipeline.setTexture(*(m_texture->at(0)));
 			Geometry::cube(true);
 		}
 		else{

@@ -100,16 +100,6 @@ bool Pipeline::isFlatShaded()
 	return false;
 }
 
-/**
- * Returns the current fragment program class
- * @return the class of the triangle processor
- */
-// Class Pipeline::getTriangleClass()
-// {
-// 	return vp->getClass();
-// 	
-// }
-
 void Pipeline::setTexture(const Texture& texture)
 {
 	fp->setTexture(texture);
