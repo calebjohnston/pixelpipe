@@ -13,7 +13,7 @@ FragmentShadedVP::~FragmentShadedVP()
 {
 }
 
-void FragmentShadedVP::updateTransforms(const Pipeline& pipe)
+void FragmentShadedVP::updateTransforms(const SoftwarePipeline& pipe)
 {
 	// TODO
 	modelViewMatrix = pipe.modelviewMatrix;		

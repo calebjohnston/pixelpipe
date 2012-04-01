@@ -1,5 +1,4 @@
 #include <math.h>
-#include "core/pipeline.h"
 #include "fragment/frag_phong.h"
 
 namespace pixelpipe {

@@ -1,5 +1,4 @@
 #include <math.h>
-#include "core/pipeline.h"
 #include "core/common.h"
 #include "fragment/frag_textured_phong.h"
 

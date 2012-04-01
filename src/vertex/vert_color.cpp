@@ -4,7 +4,7 @@ using namespace cg::vecmath;
 
 namespace pixelpipe {
 	
-void ConstColorVP::updateTransforms(const Pipeline& pipe)
+void ConstColorVP::updateTransforms(const SoftwarePipeline& pipe)
 {
 	mvp = pipe.modelviewMatrix;
 	Matrix4f temp = mvp;

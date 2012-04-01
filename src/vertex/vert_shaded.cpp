@@ -11,9 +11,9 @@ SmoothShadedVP::SmoothShadedVP() : VertexProcessor()
 	nDotL = 0;
 }
 
-void SmoothShadedVP::updateTransforms(const Pipeline& pipe)
+void SmoothShadedVP::updateTransforms(const SoftwarePipeline& pipe)
 {
-	modelViewMatrix = pipe.modelviewMatrix;		
+	modelViewMatrix = pipe.modelviewMatrix;
 	m = modelViewMatrix;
 	Matrix4f temp = modelViewMatrix;
 	m = pipe.projectionMatrix * temp;

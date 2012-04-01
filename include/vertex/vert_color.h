@@ -5,7 +5,6 @@
 #include "cg/vecmath/vec3.hpp"
 #include "cg/vecmath/mat4.hpp"
 #include "cg/vecmath/color.h"
-#include "core/pipeline.h"
 #include "core/vertex.h"
 #include "vertex/vert_processor.h"
 
@@ -21,7 +20,7 @@ namespace pixelpipe {
 class ConstColorVP : public VertexProcessor {
 public:	
 	virtual int nAttr() const { return 3; }
-	virtual void updateTransforms(const Pipeline& pipe);
+	virtual void updateTransforms(const SoftwarePipeline& pipe);
 	virtual void triangle(	const cg::vecmath::Vector3f* vs, 
 					const cg::vecmath::Color3f* cs, 
 					const cg::vecmath::Vector3f* ns_ign, 
@@ -41,7 +40,7 @@ public:
 		return out << "[ ConstantColorVertexProcessor ]";
 	}
 protected:
-	cg::vecmath::Matrix4f mvp;	//!< this is the composed modelling, projection, and viewport matrix
+	cg::vecmath::Matrix4f mvp;	//!< the modelview * projection * viewport matrix
 
 };
 
