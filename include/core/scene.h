@@ -100,10 +100,10 @@ public:
 			if(!m_texture->empty()) m_pipeline.setTexture(*(m_texture->at(0)));
 
 			m_pipeline.translate(locationA);
-		    Geometry::sphere(depth, colorA, true);
+		    Geometry::sphere(depth, colorA, m_pipeline);
 
 			m_pipeline.translate(locationB);
-		    Geometry::sphere(depth, colorB, true);
+		    Geometry::sphere(depth, colorB, m_pipeline);
 		}
 		else{
 			//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, m_texture->width(), m_texture->height(), 0, GL_RGB, GL_UNSIGNED_BYTE, m_texture->getTextureData());	// ERROR!
@@ -113,10 +113,10 @@ public:
 		    //texture.cBuf.rewind();
 
 		    glTranslatef(1.2f, 0.0f, 0.0f);
-		    Geometry::sphere(depth, colorA, false);
+		    Geometry::sphere(depth, colorA, m_pipeline);
 
 		    glTranslatef(-2.4f, 0.0f, 0.0f);
-		    Geometry::sphere(depth, colorB, false);
+		    Geometry::sphere(depth, colorB, m_pipeline);
 		}
 	}
 
@@ -147,12 +147,12 @@ public:
 	{
 		if(usePipeline){
 			if(!m_texture->empty()) m_pipeline.setTexture(*(m_texture->at(0)));
-			Geometry::cube(true);
+			Geometry::cube(m_pipeline);
 		}
 		else{
 			//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, m_texture->width(), m_texture->height(), 0, GL_RGB, GL_UNSIGNED_BYTE, m_texture->getTextureData());	// ERROR!
 			// texture.cBuf;
-			Geometry::cube(false);
+			Geometry::cube(m_pipeline);
 		}
 	}
 
