@@ -1,5 +1,4 @@
 
-#include "core/common.h"
 #include "core/pipeline.h"
 
 using namespace cg::vecmath;
@@ -16,31 +15,15 @@ Pipeline* Pipeline::instance = NULL;
  * @param ny The height of the frame buffer.
  */
 Pipeline::Pipeline(int nx, int ny, std::vector<PointLight>* lights)
-{
+{	
 	framebuffer = new FrameBuffer(nx, ny);
-	// configure(TrivialColorFP.class, ConstColorVP.class);
-	if(lights!=NULL){
-		this->lights = lights;
-	}
-	else{
-		this->lights = new std::vector<PointLight>();
-		DEV() << "the lights: " << this->lights->size();
-	}
 	
 	mode = PIPELINE_MODE_NONE;
 	modelviewMatrix.identity();
 	projectionMatrix.identity();
 	viewportMatrix.identity();
-	ambientIntensity = 0.1;
-	specularColor.set(0.4, 0.4, 0.4);
-	specularExponent = 40.0;
 	
 	clipper = new Clipper(3);
-	
-	//Pipeline::instance = this;
-	
-	// EMPTY_CLASS_ARRAY = new Class[0];
-	// EMPTY_OBJECT_ARRAY = new Object[0];
 }
 
 Pipeline::~Pipeline()
@@ -49,11 +32,18 @@ Pipeline::~Pipeline()
 
 Pipeline* Pipeline::getInstance() {
 	if(instance==NULL){
-		instance = new pixelpipe::Pipeline();
+		instance = new Pipeline();
 	}
 	return instance;
 }
 
+
+void Pipeline::init()
+{
+	framebuffer->init();
+	
+	// configure(TrivialColorFP.class, ConstColorVP.class);
+}
 
 void Pipeline::setFragmentProcessor(const FragmentProcessor* fragProc)
 {

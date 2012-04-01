@@ -6,7 +6,7 @@ namespace pixelpipe {
 
 PhongShadedFP::PhongShadedFP()
 {
-	size = 9 + 6 * Pipeline::getInstance()->getLights().size();
+	size = 9 + 6 * State::getInstance()->getLights().size();
 }
 
 void PhongShadedFP::fragment(Fragment& f, FrameBuffer& fb)
@@ -27,7 +27,7 @@ void PhongShadedFP::fragment(Fragment& f, FrameBuffer& fb)
 		//add lighting
 		outColor.set(0.0,0.0,0.0);
 		int position;
-		for(int i = 0; i < Pipeline::getInstance()->getLights().size(); i++)
+		for(int i = 0; i < State::getInstance()->getLights().size(); i++)
 		{	
 			position = 6*i;
 			//get lightVector
@@ -47,12 +47,12 @@ void PhongShadedFP::fragment(Fragment& f, FrameBuffer& fb)
 			nDotH = dot(normal, halfVector);	
 			
 	   		//add diffuse color
-	   		outColor.x += f.attributes[1] * nDotL * Pipeline::getInstance()->getLights().at(i).getIntensity().x;
-	   		outColor.y += f.attributes[2] * nDotL * Pipeline::getInstance()->getLights().at(i).getIntensity().y;
-	   		outColor.z += f.attributes[3] * nDotL * Pipeline::getInstance()->getLights().at(i).getIntensity().z;
+	   		outColor.x += f.attributes[1] * nDotL * State::getInstance()->getLights().at(i).getIntensity().x;
+	   		outColor.y += f.attributes[2] * nDotL * State::getInstance()->getLights().at(i).getIntensity().y;
+	   		outColor.z += f.attributes[3] * nDotL * State::getInstance()->getLights().at(i).getIntensity().z;
 	   
 	   		//calculate specular intensity
-			specularIntensity = std::pow(nDotH, Pipeline::getInstance()->specularExponent);
+			specularIntensity = std::pow(nDotH, State::getInstance()->getSpecularExponent());
 			if(specularIntensity < 0.0){
 				specularIntensity = 0.0;
 			}
@@ -61,9 +61,9 @@ void PhongShadedFP::fragment(Fragment& f, FrameBuffer& fb)
 			}
 	   
 			//add specular
-			outColor.x += (Pipeline::getInstance()->specularColor.x * specularIntensity);
-			outColor.y += (Pipeline::getInstance()->specularColor.y * specularIntensity);
-			outColor.z += (Pipeline::getInstance()->specularColor.z * specularIntensity);		   
+			outColor.x += (State::getInstance()->getSpecularColor().x * specularIntensity);
+			outColor.y += (State::getInstance()->getSpecularColor().y * specularIntensity);
+			outColor.z += (State::getInstance()->getSpecularColor().z * specularIntensity);		   
 		}	
 	
 		//clamp colors
@@ -78,9 +78,9 @@ void PhongShadedFP::fragment(Fragment& f, FrameBuffer& fb)
 		}
 	
 		//add ambient
-		outColor.x += Pipeline::getInstance()->ambientIntensity;
-		outColor.y += Pipeline::getInstance()->ambientIntensity;
-		outColor.z += Pipeline::getInstance()->ambientIntensity;
+		outColor.x += State::getInstance()->getAmbientIntensity();
+		outColor.y += State::getInstance()->getAmbientIntensity();
+		outColor.z += State::getInstance()->getAmbientIntensity();
 	
 		//clamp colors
 		if(outColor.x > 1.0f){

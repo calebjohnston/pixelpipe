@@ -8,6 +8,17 @@ namespace pixelpipe {
 
 FrameBuffer::FrameBuffer(int newNx, int newNy) : m_width(newNx), m_height(newNy)
 {
+	m_bAllocated = false;
+}
+
+FrameBuffer::~FrameBuffer()
+{
+	free(this->m_cData);
+	free(this->m_zData);
+}
+
+void FrameBuffer::init()
+{
 	size_t c_len = 3 * m_width * m_height * sizeof(char);
 	size_t z_len = m_width * m_height * sizeof(float);
 	m_cData = (char*) malloc(c_len);
@@ -15,15 +26,7 @@ FrameBuffer::FrameBuffer(int newNx, int newNy) : m_width(newNx), m_height(newNy)
 	memset(m_cData, 0, c_len);
 	memset(m_zData, 0, z_len);
 	
-	m_bAllocated = false;
-	
 	allocateGLTexture();
-}
-
-FrameBuffer::~FrameBuffer()
-{
-	free(this->m_cData);
-	free(this->m_zData);
 }
 
 float FrameBuffer::getZ(const int x, const int y) const

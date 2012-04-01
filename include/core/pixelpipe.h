@@ -27,7 +27,7 @@ enum render_mode {
  */
 class PixelPipeWindow : public GlutWindow {
 public:
-	PixelPipeWindow(std::string title="PixelPipe", int width=800, int height=600, render_mode mode=MODE_OPENGL);
+	PixelPipeWindow(std::string title="PixelPipe", int width=800, int height=600, render_mode mode=MODE_SOFTWARE);
 	~PixelPipeWindow();
 	virtual int run();
 	
@@ -50,6 +50,7 @@ protected:
 	Scene* m_scene;			//!< the current scene instance
 	Camera* m_camera;		//!< the camera instance being used
 	Pipeline* m_pipeline;	//!< the pipeline instance
+	State* m_state;			//!< the global renderer state
 	std::vector<Texture*> m_textures;	//!< the textures to be loaded from external files. 
 	
 	virtual int render();

@@ -7,7 +7,7 @@ namespace pixelpipe {
 
 TexturedPhongFP::TexturedPhongFP()
 {
-	size = 9 + 6 * Pipeline::getInstance()->getLights().size();
+	size = 9 + 6 * State::getInstance()->getLights().size();
 }
 
 void TexturedPhongFP::fragment(Fragment& f, FrameBuffer& fb)
@@ -31,7 +31,7 @@ void TexturedPhongFP::fragment(Fragment& f, FrameBuffer& fb)
 		//add lighting
 		outColor.set(0.0,0.0,0.0);
 		int position;
-		for(int i = 0; i < Pipeline::getInstance()->getLights().size(); i++)
+		for(int i = 0; i < State::getInstance()->getLights().size(); i++)
 		{	
 			position = 6*i;
 			//get lightVector
@@ -53,12 +53,12 @@ void TexturedPhongFP::fragment(Fragment& f, FrameBuffer& fb)
 			//DEV() << "T = " << f.attributes[0] << "x" << f.attributes[1];
 			
 	   		//add diffuse color
-	   		outColor.x += texColor.x * nDotL * Pipeline::getInstance()->getLights().at(i).getIntensity().x;
-	   		outColor.y += texColor.y * nDotL * Pipeline::getInstance()->getLights().at(i).getIntensity().y;
-	   		outColor.z += texColor.z * nDotL * Pipeline::getInstance()->getLights().at(i).getIntensity().z;
+	   		outColor.x += texColor.x * nDotL * State::getInstance()->getLights().at(i).getIntensity().x;
+	   		outColor.y += texColor.y * nDotL * State::getInstance()->getLights().at(i).getIntensity().y;
+	   		outColor.z += texColor.z * nDotL * State::getInstance()->getLights().at(i).getIntensity().z;
 	   
 	   		//calculate specular intensity
-			specularIntensity = std::pow(nDotH, Pipeline::getInstance()->specularExponent);
+			specularIntensity = std::pow(nDotH, State::getInstance()->getSpecularExponent());
 			if(specularIntensity < 0.0){
 				specularIntensity = 0.0;
 			}
@@ -67,9 +67,9 @@ void TexturedPhongFP::fragment(Fragment& f, FrameBuffer& fb)
 			}
 	   
 			//add specular
-			outColor.x += (Pipeline::getInstance()->specularColor.x * specularIntensity);
-			outColor.y += (Pipeline::getInstance()->specularColor.y * specularIntensity);
-			outColor.z += (Pipeline::getInstance()->specularColor.z * specularIntensity);		   
+			outColor.x += (State::getInstance()->getSpecularColor().x * specularIntensity);
+			outColor.y += (State::getInstance()->getSpecularColor().y * specularIntensity);
+			outColor.z += (State::getInstance()->getSpecularColor().z * specularIntensity);		   
 		}	
 	
 		//clamp colors
@@ -84,9 +84,9 @@ void TexturedPhongFP::fragment(Fragment& f, FrameBuffer& fb)
 		}
 	
 		//add ambient
-		outColor.x += Pipeline::getInstance()->ambientIntensity * texColor.x;
-		outColor.y += Pipeline::getInstance()->ambientIntensity * texColor.y;
-		outColor.z += Pipeline::getInstance()->ambientIntensity * texColor.z;
+		outColor.x += State::getInstance()->getAmbientIntensity() * texColor.x;
+		outColor.y += State::getInstance()->getAmbientIntensity() * texColor.y;
+		outColor.z += State::getInstance()->getAmbientIntensity() * texColor.z;
 	
 		//clamp colors
 		if(outColor.x > 1.0f){

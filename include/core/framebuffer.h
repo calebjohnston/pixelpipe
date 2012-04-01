@@ -35,9 +35,16 @@ public:
 	 */
 	FrameBuffer(int newNx, int newNy);
 	~FrameBuffer();
+	
 	char* getData() const { return m_cData; }
 	const int getWidth() const { return m_width; }
 	const int getHeight() const { return m_height; }
+	
+	/**
+	 * Allocates resources for rendering including the GL framebuffer for
+	 * drawing the pipeline output to the window.
+	 */
+	void init();
 	
 	/**
 	 * Returns the z value of the currently stored fragment for the given (x, y)

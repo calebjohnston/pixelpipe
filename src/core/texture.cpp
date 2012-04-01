@@ -118,4 +118,4 @@ Color3f Texture::sample(const float u, const float v) const
 	return cOut;
 }
 
-}	// namespace pixelpipe {
+}	// namespace pixelpipe

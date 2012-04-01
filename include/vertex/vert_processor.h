@@ -9,7 +9,7 @@
 
 namespace pixelpipe {
 	
-class Pipeline;
+	class Pipeline;
 	
 /*!
  * \class VertexProcessor "vertex/vert_processor.h"

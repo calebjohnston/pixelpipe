@@ -3,11 +3,13 @@
 
 #include <vector>
 
+#include "core/common.h"
 #include "core/fragment.h"
 #include "core/framebuffer.h"
 #include "core/vertex.h"
 #include "core/pointlight.h"
 #include "core/clipper.h"
+#include "core/state.h"
 #include "core/rasterizer.h"
 #include "fragment/frag_processor.h"
 #include "vertex/vert_processor.h"
@@ -35,8 +37,13 @@ public:
 	 * @param fpClass The class of the new fragment shader.
 	 * @param vpClass The class of the new triangle shader.
 	 */
-	// void configure(Class fpClass, Class vpClass);
 	void configure();
+
+	/**
+	 * Initializes OpenGL state variables for displaying the framebuffer 
+	 * to the window.
+	 */
+	void init();
 	
 	/**
 	 * Compares the vertex and fragment processors to makes sure the information passed
@@ -50,23 +57,6 @@ public:
 	 * @return a boolean flag representing the current shading model
 	 */
 	bool isFlatShaded();
-	
-//	Class getTriangleClass();
-	
-	/**
-	 * Erases the old list of lights and uses the new one.
-	 *
-	 * @param newLights the vector of new lights to use
-	 */
-	void setLights(std::vector<PointLight>* newLights)
-	{
-		if(lights!=NULL) {
-			delete lights;
-			lights = NULL;
-		}
-		
-		lights = newLights;
-	}
 	
 	/**
 	 * Sets the current texture
@@ -206,8 +196,6 @@ public:
 	 */
 	void renderTriangle(const cg::vecmath::Vector3f* v, const cg::vecmath::Color3f* c, const cg::vecmath::Vector3f* n, const cg::vecmath::Vector2f* t);
 	
-	std::vector<PointLight>& getLights() { return *lights; }
-	
 	static Pipeline* getInstance();
 	
 	/**
@@ -221,16 +209,11 @@ public:
 	cg::vecmath::Matrix4f modelviewMatrix;	//!< The model-view matrix.
 	cg::vecmath::Matrix4f projectionMatrix;	//!< The projection matrix.
 	cg::vecmath::Matrix4f viewportMatrix;	//!< The viewport matrix.
-	
-	float ambientIntensity;	//!< The global ambient lighting intensity.
-	float specularExponent;	//!< The global specular component of the lighting model.
-	cg::vecmath::Color3f specularColor;	//!< The global specular color of the global environment light.
 
 protected:
 	int vertexIndex;	//!< The index of the vertex as determined by the drawing mode.
 	int stripParity;	//!< The flag for triangle strip management
 	int mode;			//!< The drawing mode (TRIANGLES, TRIANGLE_STRIP, TRIANGLE_FAN, QUAD, QUAD_STRIP)
-	std::vector<PointLight>* lights;	//!< The list of lights used for shading.
 	
 	/**
 	 * Notifies the TP of any changes to the modelview, projection, or viewing

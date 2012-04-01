@@ -36,13 +36,26 @@ PixelPipeWindow::PixelPipeWindow(std::string title, int width, int height, rende
 	m_textures.push_back(tex1);
 	m_textures.push_back(tex2);
 	
+	// set the textures
+	m_pipeline = Pipeline::getInstance();
+	
+	// set the textures
+	m_state = State::getInstance();
+	
+	// set the lights
+	PointLight pl1(m_camera->getEye(), Color3f(1.0,1.0,1.0));
+	PointLight pl2(Vector3f(-3.0, 0.0, -5.0), Color3f(1.0,0.25,0.5));
+	m_state->getLights().push_back(pl1);
+	m_state->getLights().push_back(pl2);
+	
 	m_mode = mode;
 }
 
 PixelPipeWindow::~PixelPipeWindow()
 {
 	delete m_scene;
-	m_pipeline = NULL;
+	delete m_pipeline;
+	delete m_state;
 }	
 
 int PixelPipeWindow::run()
@@ -53,6 +66,8 @@ int PixelPipeWindow::run()
 void PixelPipeWindow::init()
 {	
 	GlutWindow::init();
+	
+	m_pipeline->init();
 	
 	switch(m_mode){
 		case MODE_OPENGL:
@@ -79,15 +94,6 @@ void PixelPipeWindow::init_softwareMode()
 	glDisable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND);
 	
-	// set the textures
-	m_pipeline = Pipeline::getInstance();
-	
-	// set the lights
-	PointLight pl1(m_camera->getEye(), Color3f(1.0,1.0,1.0));
-	PointLight pl2(Vector3f(-3.0, 0.0, -5.0), Color3f(1.0,0.25,0.5));
-	m_pipeline->getLights().push_back(pl1);
-	m_pipeline->getLights().push_back(pl2);
-	
 	// setup vertex shaders
 	//ConstColorVP* vertProcessor = new ConstColorVP();				// 3
 	SmoothShadedVP* vertProcessor = new SmoothShadedVP();			// 3
@@ -109,13 +115,13 @@ void PixelPipeWindow::init_softwareMode()
 void PixelPipeWindow::init_openGLMode()
 {
 	// set the textures
-	m_pipeline = Pipeline::getInstance();
+	// m_pipeline = Pipeline::getInstance();
 	
 	// set the lights
-	PointLight pl1(m_camera->getEye(), Color3f(1.0,1.0,1.0));
-	PointLight pl2(Vector3f(-3.0, 0.0, -5.0), Color3f(1.0,0.25,0.5));
-	m_pipeline->getLights().push_back(pl1);
-	m_pipeline->getLights().push_back(pl2);
+	// PointLight pl1(m_camera->getEye(), Color3f(1.0,1.0,1.0));
+	// PointLight pl2(Vector3f(-3.0, 0.0, -5.0), Color3f(1.0,0.25,0.5));
+	// m_pipeline->getLights().push_back(pl1);
+	// m_pipeline->getLights().push_back(pl2);
 	
 	// configure pipe.	
 	glDepthFunc(GL_LESS);
@@ -146,9 +152,9 @@ void PixelPipeWindow::init_openGLMode()
 	const unsigned max_ogl_lights = 8;
 	int lights[max_ogl_lights] = { GL_LIGHT0, GL_LIGHT1, GL_LIGHT2, GL_LIGHT3, GL_LIGHT4, GL_LIGHT5, GL_LIGHT6, GL_LIGHT7 };
 
-	for( int i = 0; i < std::min(max_ogl_lights, (unsigned) m_pipeline->getLights().size()); i++) {
-		Color3f d = m_pipeline->getLights().at(i).getIntensity();
-		Point3f p = m_pipeline->getLights().at(i).getPosition();
+	for( int i = 0; i < std::min(max_ogl_lights, (unsigned) m_state->getLights().size()); i++) {
+		Color3f d = m_state->getLights().at(i).getIntensity();
+		Point3f p = m_state->getLights().at(i).getPosition();
 		glEnable(lights[i]);
 		float diffuse[4] = { d.x, d.y, d.z, 1.0 };
 		float specular[4] = { 1.0, 1.0, 1.0, 1.0 };

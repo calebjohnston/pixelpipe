@@ -32,6 +32,7 @@ set( pipeline_SRCS
   core/rasterizer.cpp
   core/glutwindow.cpp
   core/texture.cpp
+  core/state.cpp
   logger/logger.cpp
   logger/logwriter.cpp
   logger/stdiowriter.cpp
