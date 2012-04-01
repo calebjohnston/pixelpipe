@@ -15,4 +15,23 @@ static const int QUAD_STRIP = 5;
 static const int PIPELINE_MODE_NONE = 1;
 static const double PI = 3.141592653589793;
 
+
+namespace pixelpipe {
+	
+enum render_mode {
+	RENDER_OPENGL,
+	RENDER_SOFTWARE,
+	RENDER_CUDA
+};
+
+enum matrix_mode {
+	MATRIX_MODELVIEW,
+	MATRIX_PROJECTION,
+	MATRIX_VIEWPORT,
+	MATRIX_TEXTURE,
+	MATRIX_COLOR
+};
+
+}
+
 #endif	// __PIPELINE_COMMON_H
