@@ -72,17 +72,27 @@ public:
 	* Sends a quadrilateral to the OpenGL pipeline. Mimics the other quad
 	* function.
 	*/
-	static void quad(Vector3f v0, Vector3f v1, Vector3f v2, Vector3f v3, Vector3f n, Color3f c, bool usePipeline=false)
+	static void quad(Vector3f v0, Vector3f v1, Vector3f v2, Vector3f v3, Vector3f n, Color3f c, Pipeline& pipe)
 	{
+		((SoftwarePipeline&) pipe).begin(TRIANGLES);
+		((SoftwarePipeline&) pipe).vertex(v0, c, n, t0);
+		((SoftwarePipeline&) pipe).vertex(v1, c, n, t1);
+		((SoftwarePipeline&) pipe).vertex(v2, c, n, t2);
+		((SoftwarePipeline&) pipe).vertex(v0, c, n, t0);
+		((SoftwarePipeline&) pipe).vertex(v2, c, n, t2);
+		((SoftwarePipeline&) pipe).vertex(v3, c, n, t3);
+		((SoftwarePipeline&) pipe).end();
+		
+		/*
 		if(usePipeline){
-			Pipeline::getInstance()->begin(TRIANGLES);
-			Pipeline::getInstance()->vertex(v0, c, n, t0);
-			Pipeline::getInstance()->vertex(v1, c, n, t1);
-			Pipeline::getInstance()->vertex(v2, c, n, t2);
-			Pipeline::getInstance()->vertex(v0, c, n, t0);
-			Pipeline::getInstance()->vertex(v2, c, n, t2);
-			Pipeline::getInstance()->vertex(v3, c, n, t3);
-			Pipeline::getInstance()->end();
+			pipe.begin(TRIANGLES);
+			pipe.vertex(v0, c, n, t0);
+			pipe.vertex(v1, c, n, t1);
+			pipe.vertex(v2, c, n, t2);
+			pipe.vertex(v0, c, n, t0);
+			pipe.vertex(v2, c, n, t2);
+			pipe.vertex(v3, c, n, t3);
+			pipe.end();
 		}
 		else{
 			glBegin(GL_QUADS);
@@ -104,6 +114,7 @@ public:
 
 			glEnd();
 		}
+		*/
 	}
 
 	/*
@@ -111,13 +122,13 @@ public:
 	* pipeline. Both quads will occupy the same location, but will be back to
 	* back, giving the effect of a 2 sided polygon.
 	*/
-	static void quadPair(Vector3f v0, Vector3f v1, Vector3f v2, Vector3f v3, Vector3f n, Color3f c1, Color3f c2, bool usePipeline=true)
+	static void quadPair(Vector3f v0, Vector3f v1, Vector3f v2, Vector3f v3, Vector3f n, Color3f c1, Color3f c2, Pipeline& pipe)
 	{
-		quad(v0, v1, v2, v3, n, c1, usePipeline);
+		quad(v0, v1, v2, v3, n, c1, pipe);
 		//n.negate();
 		n *= -1.0;
 
-		quad(v3, v2, v1, v0, n, c2, usePipeline);
+		quad(v3, v2, v1, v0, n, c2, pipe);
 		//n.negate();
 		n *= -1.0;
 	}
@@ -126,14 +137,14 @@ public:
 	* Draws a unit cube (2x2x2) at the origin using the software pipeline. The
 	* colors are fixed above.
 	*/
-	static void cube(bool usePipeline=false)
+	static void cube(Pipeline& pipe)
 	{
-		quad(nnn, nnp, npp, npn, lNormal, lColor, usePipeline);
-		quad(pnn, ppn, ppp, pnp, rNormal, rColor, usePipeline);
-		quad(nnn, pnn, pnp, nnp, dNormal, dColor, usePipeline);
-		quad(npn, npp, ppp, ppn, uNormal, uColor, usePipeline);
-		quad(nnn, npn, ppn, pnn, bNormal, bColor, usePipeline);
-		quad(nnp, pnp, ppp, npp, fNormal, fColor, usePipeline);
+		quad(nnn, nnp, npp, npn, lNormal, lColor, pipe);
+		quad(pnn, ppn, ppp, pnp, rNormal, rColor, pipe);
+		quad(nnn, pnn, pnp, nnp, dNormal, dColor, pipe);
+		quad(npn, npp, ppp, ppn, uNormal, uColor, pipe);
+		quad(nnn, npn, ppn, pnn, bNormal, bColor, pipe);
+		quad(nnp, pnp, ppp, npp, fNormal, fColor, pipe);
 	}
 	
 
@@ -141,16 +152,16 @@ public:
 	* Draws a sphere out of triangles, using the spheretri function. The sphere
 	* is rendered to the software pipeline.
 	*/
-	static void sphere(int n, Color3f c, bool usePipeline=false)
+	static void sphere(int n, Color3f c, Pipeline& pipe)
 	{
-		spheretri(n, v_p00, v_0p0, v_00p, c, usePipeline);
-		spheretri(n, v_00n, v_0p0, v_p00, c, usePipeline);
-		spheretri(n, v_n00, v_0p0, v_00n, c, usePipeline);
-		spheretri(n, v_00p, v_0p0, v_n00, c, usePipeline);
-		spheretri(n, v_00p, v_0n0, v_p00, c, usePipeline);
-		spheretri(n, v_p00, v_0n0, v_00n, c, usePipeline);
-		spheretri(n, v_00n, v_0n0, v_n00, c, usePipeline);
-		spheretri(n, v_n00, v_0n0, v_00p, c, usePipeline);
+		spheretri(n, v_p00, v_0p0, v_00p, c, pipe);
+		spheretri(n, v_00n, v_0p0, v_p00, c, pipe);
+		spheretri(n, v_n00, v_0p0, v_00n, c, pipe);
+		spheretri(n, v_00p, v_0p0, v_n00, c, pipe);
+		spheretri(n, v_00p, v_0n0, v_p00, c, pipe);
+		spheretri(n, v_p00, v_0n0, v_00n, c, pipe);
+		spheretri(n, v_00n, v_0n0, v_n00, c, pipe);
+		spheretri(n, v_n00, v_0n0, v_00p, c, pipe);
 	}
 	
 	
@@ -158,28 +169,28 @@ public:
 	* Recursively generates a sphere using triangles and puts the resulting
 	* polygons into the software pipeline.
 	*/
-	static void spheretri(int n, Vector3f v0, Vector3f v1, Vector3f v2, Color3f c, bool usePipeline=false)
+	static void spheretri(int n, Vector3f v0, Vector3f v1, Vector3f v2, Color3f c, Pipeline& pipe)
 	{
 		Vector3f nrml;
-		if(usePipeline){
+		// if(usePipeline){	// no more use pipeline boolean!
 			if (n == 0) {
 				vertices[0] = v0;
 				vertices[1] = v1;
 				vertices[2] = v2;
 				colors[0] = colors[1] = colors[2] = c;
-				if (Pipeline::getInstance()->isFlatShaded()) {
+				if (((SoftwarePipeline&) pipe).isFlatShaded()) {
 					nrml = v0 + v1;
 					nrml += v2;
 					nrml.normalize();
 
 					normals[0] = normals[1] = normals[2] = nrml;
-					Pipeline::getInstance()->renderTriangle(vertices, colors, normals, NULL);
+					((SoftwarePipeline&) pipe).renderTriangle(vertices, colors, normals, NULL);
 				}
 				else {
 					xyTex(v0, texs[0]);
 					xyTex(v1, texs[1]);
 					xyTex(v2, texs[2]);
-					Pipeline::getInstance()->renderTriangle(vertices, colors, vertices, texs);
+					((SoftwarePipeline&) pipe).renderTriangle(vertices, colors, vertices, texs);
 				}
 			}
 			else {
@@ -194,13 +205,14 @@ public:
 				v20 = v2 + v0;
 				v20.normalize();
 
-				spheretri(n - 1, v01, v12, v20, c, usePipeline);
-				spheretri(n - 1, v0, v01, v20, c, usePipeline);
-				spheretri(n - 1, v1, v12, v01, c, usePipeline);
-				spheretri(n - 1, v2, v20, v12, c, usePipeline);
+				spheretri(n - 1, v01, v12, v20, c, pipe);
+				spheretri(n - 1, v0, v01, v20, c, pipe);
+				spheretri(n - 1, v1, v12, v01, c, pipe);
+				spheretri(n - 1, v2, v20, v12, c, pipe);
 			}
+		/*
 		}else if (n == 0) {
-			if (Pipeline::getInstance()->isFlatShaded()) {
+			if (pipe.isFlatShaded()) {
 				nrml = v0 + v1;
 				nrml += v2;
 				nrml.normalize();
@@ -250,11 +262,12 @@ public:
 			v20 = v2 + v0;
 			v20.normalize();
 
-			spheretri(n - 1, v01, v12, v20, c, usePipeline);
-			spheretri(n - 1, v0, v01, v20, c, usePipeline);
-			spheretri(n - 1, v1, v12, v01, c, usePipeline);
-			spheretri(n - 1, v2, v20, v12, c, usePipeline);
+			spheretri(n - 1, v01, v12, v20, c, pipe);
+			spheretri(n - 1, v0, v01, v20, c, pipe);
+			spheretri(n - 1, v1, v12, v01, c, pipe);
+			spheretri(n - 1, v2, v20, v12, c, pipe);
 		}
+		*/
 	}
 	
 	/*
@@ -397,21 +410,21 @@ private:
       vertices[1] = v1;
       vertices[2] = v2;
       colors[0] = colors[1] = colors[2] = c;
-      if (Pipeline::getInstance()->isFlatShaded()) {
+      if (pipe.isFlatShaded()) {
         nrml.add(v0, v1);
         nrml.add(v2);
         nrml.normalize();
 
         normals[0] = normals[1] = normals[2] = nrml;
-        // Pipeline::getInstance()->tp.triangle(vertices, colors, normals, NULL);
-        Pipeline::getInstance()->renderTriangle(vertices, colors, normals, NULL);
+        // pipe.tp.triangle(vertices, colors, normals, NULL);
+        pipe.renderTriangle(vertices, colors, normals, NULL);
       }
       else {
         xyTex(v0, texs[0]);
         xyTex(v1, texs[1]);
         xyTex(v2, texs[2]);
-        // Pipeline::getInstance()->tp.triangle(vertices, colors, vertices, texs);
-        Pipeline::getInstance()->renderTriangle(vertices, colors, vertices, texs);
+        // pipe.tp.triangle(vertices, colors, vertices, texs);
+        pipe.renderTriangle(vertices, colors, vertices, texs);
       }
     }
     else {
@@ -443,7 +456,7 @@ private:
     GL gl = d.getGL();
 
     if (n == 0) {
-      if (Pipeline::getInstance()->isFlatShaded()) {
+      if (pipe.isFlatShaded()) {
         nrml.add(v0, v1);
         nrml.add(v2);
         nrml.normalize();
