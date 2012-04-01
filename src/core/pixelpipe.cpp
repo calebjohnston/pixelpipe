@@ -37,7 +37,7 @@ PixelPipeWindow::PixelPipeWindow(std::string title, int width, int height, rende
 	m_textures.push_back(tex2);
 	
 	// set the textures
-	m_pipeline = Pipeline::getInstance();
+	m_pipeline = new SoftwarePipeline();
 	
 	// set the textures
 	m_state = State::getInstance();
@@ -70,14 +70,14 @@ void PixelPipeWindow::init()
 	m_pipeline->init();
 	
 	switch(m_mode){
-		case MODE_OPENGL:
+		case RENDER_OPENGL:
 			this->init_openGLMode();
 			break;
-		case MODE_CUDA:
+		case RENDER_CUDA:
 			this->init_CUDAMode();
 			break;
 		default:
-		case MODE_SOFTWARE:
+		case RENDER_SOFTWARE:
 			this->init_softwareMode();
 			break;
 	}
@@ -106,8 +106,8 @@ void PixelPipeWindow::init_softwareMode()
 	//TexturedFP* fragProcessor = new TexturedFP();				// 5
 	//PhongShadedFP* fragProcessor = new PhongShadedFP();		// 9 + 6 * lightCount
 	//TexturedPhongFP* fragProcessor = new TexturedPhongFP();	// 9 + 6 * lightCount
-	m_pipeline->setVertexProcessor(vertProcessor);
-	m_pipeline->setFragmentProcessor(fragProcessor);
+	((SoftwarePipeline*) m_pipeline)->setVertexProcessor(vertProcessor);
+	((SoftwarePipeline*) m_pipeline)->setFragmentProcessor(fragProcessor);
 	//m_pipeline->setTexture(*m_textures.at(0));
 	m_pipeline->configure();
 }
@@ -181,14 +181,14 @@ int PixelPipeWindow::render()
 	// DEV() << "PixelPipeWindow::render";
 	
 	switch(m_mode){
-		case MODE_OPENGL:
+		case RENDER_OPENGL:
 			this->render_openGLMode();
 			break;
-		case MODE_CUDA:
+		case RENDER_CUDA:
 			this->render_CUDAMode();
 			break;
 		default:
-		case MODE_SOFTWARE:
+		case RENDER_SOFTWARE:
 			this->render_softwareMode();
 			break;
 	}
@@ -203,7 +203,10 @@ void PixelPipeWindow::render_softwareMode()
 	glLoadIdentity();
 	// // glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	
-	m_pipeline->projectionMatrix.identity();	// temp!
+	// m_pipeline->projectionMatrix.identity();	// temp!
+	m_pipeline->setMatrixMode(MATRIX_PROJECTION);
+	m_pipeline->loadIdentity();
+	
 	float ht = m_camera->getHt();
 	float aspect = m_camera->getAspectRatio();
 	float near = m_camera->getNear();
@@ -215,12 +218,15 @@ void PixelPipeWindow::render_softwareMode()
 	
 	m_pipeline->viewport(0, 0, m_width, m_height);
 	
-	m_pipeline->modelviewMatrix.identity();	// temp!
+	// m_pipeline->modelviewMatrix.identity();	// temp!
+	m_pipeline->setMatrixMode(MATRIX_MODELVIEW);
+	m_pipeline->loadIdentity();
+	
 	m_pipeline->lookAt(eye, target, up);
 	
-	m_pipeline->clearFrameBuffer();
+	((SoftwarePipeline*) m_pipeline)->clearFrameBuffer();
 	m_scene->render(true);
-	m_pipeline->getFrameBuffer().draw();
+	((SoftwarePipeline*) m_pipeline)->getFrameBuffer().draw();
 	
 	// swap drawing buffers
 	glutSwapBuffers();
@@ -301,10 +307,10 @@ int PixelPipeWindow::keyPressed(unsigned char key)
 	*/
 	
 	switch(key){
-		case '1': this->m_mode = MODE_OPENGL;
+		case '1': this->m_mode = RENDER_OPENGL;
 			break;
 	
-		case '2': this->m_mode = MODE_SOFTWARE;
+		case '2': this->m_mode = RENDER_SOFTWARE;
 			break;
 	}
 	

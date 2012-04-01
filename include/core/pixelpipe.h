@@ -4,18 +4,14 @@
 #include <string>
 #include <stdlib.h>
 #include <stdio.h>
+#include "core/common.h"
 #include "core/glutwindow.h"
+#include "core/pipeline_software.h"
 #include "core/camera.h"
 #include "core/geometry.h"
 #include "core/scene.h"
 
 namespace pixelpipe {
-	
-enum render_mode {
-	MODE_OPENGL,
-	MODE_SOFTWARE,
-	MODE_CUDA
-};
 
 /*!
  * \class PixelPipeWindow "core/pixelpipe.h"
@@ -27,7 +23,7 @@ enum render_mode {
  */
 class PixelPipeWindow : public GlutWindow {
 public:
-	PixelPipeWindow(std::string title="PixelPipe", int width=800, int height=600, render_mode mode=MODE_SOFTWARE);
+	PixelPipeWindow(std::string title="PixelPipe", int width=800, int height=600, render_mode mode=RENDER_SOFTWARE);
 	~PixelPipeWindow();
 	virtual int run();
 	
