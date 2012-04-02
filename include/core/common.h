@@ -4,19 +4,19 @@
 #include "logger/logger.h"
 #include <boost/filesystem.hpp>
 
-// namespace fs = boost::filesystem;
-// namespace gil = boost::gil;
-
-static const int TRIANGLES = 1;
-static const int TRIANGLE_STRIP = 2;
-static const int TRIANGLE_FAN = 3;
-static const int QUADS = 4;
-static const int QUAD_STRIP = 5;
-static const int PIPELINE_MODE_NONE = 1;
 static const double PI = 3.141592653589793;
 
 
 namespace pixelpipe {
+
+enum drawing_mode {
+	TRIANGLES,
+	TRIANGLE_STRIP,
+	TRIANGLE_FAN,
+	QUADS,
+	QUAD_STRIP,
+	PIPELINE_MODE_NONE
+};
 	
 enum render_mode {
 	RENDER_OPENGL,

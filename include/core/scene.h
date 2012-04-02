@@ -71,7 +71,7 @@ public:
 	* 
 	* @param usePipeline a flag to determine whether or not to use OpenGL rendering or the internal PixelPipe.
 	*/
-	virtual void render(bool usePipeline=true) = 0;
+	virtual void render() = 0;
 
 protected:
 	std::vector<Texture*>* m_texture;	//!< The list of texture data for a scene. Might be empty.
@@ -94,9 +94,9 @@ public:
 	
 	~SceneSpheres() {}
 	
-	virtual void render(bool usePipeline) 
+	virtual void render() 
 	{
-		if(usePipeline){
+		//if(usePipeline){
 			if(!m_texture->empty()) m_pipeline.setTexture(*(m_texture->at(0)));
 
 			m_pipeline.translate(locationA);
@@ -104,8 +104,10 @@ public:
 
 			m_pipeline.translate(locationB);
 		    Geometry::sphere(depth, colorB, m_pipeline);
+		/*
 		}
 		else{
+			if(!m_texture->empty()) m_pipeline.setTexture(*(m_texture->at(0)));
 			//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, m_texture->width(), m_texture->height(), 0, GL_RGB, GL_UNSIGNED_BYTE, m_texture->getTextureData());	// ERROR!
 			// texture.cBuf;
 			
@@ -113,11 +115,14 @@ public:
 		    //texture.cBuf.rewind();
 
 		    glTranslatef(1.2f, 0.0f, 0.0f);
+			m_pipeline.translate(locationA);
 		    Geometry::sphere(depth, colorA, m_pipeline);
 
 		    glTranslatef(-2.4f, 0.0f, 0.0f);
+			m_pipeline.translate(locationB);
 		    Geometry::sphere(depth, colorB, m_pipeline);
 		}
+		*/
 	}
 
 	/**
@@ -143,17 +148,20 @@ class SceneCube : public Scene {
 public:
 	SceneCube(Pipeline& pipe) : Scene(pipe) {}
 	~SceneCube() {};
-	virtual void render(bool usePipeline) 
+	virtual void render() 
 	{
-		if(usePipeline){
+		// if(usePipeline){
 			if(!m_texture->empty()) m_pipeline.setTexture(*(m_texture->at(0)));
 			Geometry::cube(m_pipeline);
+			/*
 		}
 		else{
 			//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, m_texture->width(), m_texture->height(), 0, GL_RGB, GL_UNSIGNED_BYTE, m_texture->getTextureData());	// ERROR!
 			// texture.cBuf;
+			if(!m_texture->empty()) m_pipeline.setTexture(*(m_texture->at(0)));
 			Geometry::cube(m_pipeline);
 		}
+		*/
 	}
 
 	/**

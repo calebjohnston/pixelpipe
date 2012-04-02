@@ -37,9 +37,6 @@ PixelPipeWindow::PixelPipeWindow(std::string title, int width, int height, rende
 	m_textures.push_back(tex2);
 	
 	// set the textures
-	m_pipeline = new SoftwarePipeline();
-	
-	// set the textures
 	m_state = State::getInstance();
 	
 	// set the lights
@@ -49,6 +46,18 @@ PixelPipeWindow::PixelPipeWindow(std::string title, int width, int height, rende
 	m_state->getLights().push_back(pl2);
 	
 	m_mode = mode;
+	
+	switch(m_mode){
+		case RENDER_OPENGL:
+			m_pipeline = new OpenGLPipeline();
+			break;
+		case RENDER_CUDA:
+			break;
+		default:
+		case RENDER_SOFTWARE:
+			m_pipeline = new SoftwarePipeline();
+			break;
+	}
 }
 
 PixelPipeWindow::~PixelPipeWindow()
@@ -82,8 +91,8 @@ void PixelPipeWindow::init()
 			break;
 	}
 	
-	m_scene = new SceneCube(*m_pipeline);
-	// m_scene = new SceneSpheres(*m_pipeline);
+	// m_scene = new SceneCube(*m_pipeline);
+	m_scene = new SceneSpheres(*m_pipeline);
 }
 
 void PixelPipeWindow::init_softwareMode() 
@@ -113,16 +122,7 @@ void PixelPipeWindow::init_softwareMode()
 }
 
 void PixelPipeWindow::init_openGLMode()
-{
-	// set the textures
-	// m_pipeline = Pipeline::getInstance();
-	
-	// set the lights
-	// PointLight pl1(m_camera->getEye(), Color3f(1.0,1.0,1.0));
-	// PointLight pl2(Vector3f(-3.0, 0.0, -5.0), Color3f(1.0,0.25,0.5));
-	// m_pipeline->getLights().push_back(pl1);
-	// m_pipeline->getLights().push_back(pl2);
-	
+{	
 	// configure pipe.	
 	glDepthFunc(GL_LESS);
 	glDisable(GL_DEPTH_TEST);
@@ -140,10 +140,10 @@ void PixelPipeWindow::init_openGLMode()
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
-	// removed this, so the specular component is modulated with the texture - not added on top. 
-	// configure lighting
+	// removed this, so the specular component is modulated with the texture - not added on top.
 	glLightModeli(GL_LIGHT_MODEL_COLOR_CONTROL, GL_SEPARATE_SPECULAR_COLOR);
 
+	// configure lighting
 	float amb[3] = { 0.1, 0.1, 0.1 };
 	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, amb);
     
@@ -225,7 +225,7 @@ void PixelPipeWindow::render_softwareMode()
 	m_pipeline->lookAt(eye, target, up);
 	
 	((SoftwarePipeline*) m_pipeline)->clearFrameBuffer();
-	m_scene->render(true);
+	m_scene->render();
 	((SoftwarePipeline*) m_pipeline)->getFrameBuffer().draw();
 	
 	// swap drawing buffers
@@ -262,7 +262,7 @@ void PixelPipeWindow::render_openGLMode()
 	glLoadIdentity();
 	gluLookAt(eye.x, eye.y, eye.z, target.x, target.y, target.z, up.x, up.y, up.z);
 	
-	m_scene->render(false);
+	m_scene->render();
 	
     glDisable(GL_LIGHTING);
     glDisable(GL_COLOR_MATERIAL);

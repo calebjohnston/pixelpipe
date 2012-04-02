@@ -223,7 +223,7 @@ public:
 	/**
 	 * Sets the pipeline mode to render a particular type of primitive.
 	 */
-	virtual void begin(int primType) = 0;
+	virtual void begin(drawing_mode mode) = 0;
 	
 	/**
 	 * Compares the vertex and fragment processors to makes sure the information passed
@@ -277,7 +277,7 @@ private:
 	 * @param n The 3 normals of the triangle - one for each vertex.
 	 * @param t The 3 texture coordinates of the triangle - one for each vertex.
 	 */
-	virtual void renderTriangle(const Vertex* vertices) = 0;
+	// virtual void renderTriangle(const Vertex* vertices) = 0;
 	
 };	// class Pipeline
 

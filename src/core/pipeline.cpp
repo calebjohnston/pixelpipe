@@ -185,7 +185,7 @@ void Pipeline::viewport(int x, int y, int w, int h)
 	
 }
 
-void Pipeline::begin(int primType)
+void Pipeline::begin(drawing_mode mode)
 {
 	mode = primType;
 	vertexIndex = 0;

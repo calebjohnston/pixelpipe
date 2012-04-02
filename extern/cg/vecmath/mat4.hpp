@@ -145,7 +145,7 @@ public:
 		return adjoint(*this);
 	}
 
-	inline void toArray(T* arr)
+	inline void toArray(T* arr) const
 	{
 		// T arr[16] = {	row[0][0],	row[1][0],	row[2][0],	row[3][0],	
 		// 				row[0][1],	row[1][1],	row[2][1],	row[3][1],	

@@ -27,6 +27,7 @@ set( pipeline_SRCS
   core/camera.cpp
   core/clipper.cpp
   core/framebuffer.cpp
+  core/pipeline_opengl.cpp
   core/pipeline_software.cpp
   core/pixelpipe.cpp
   core/rasterizer.cpp

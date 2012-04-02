@@ -30,19 +30,9 @@ SoftwarePipeline::~SoftwarePipeline()
 {
 }
 
-// SoftwarePipeline* SoftwarePipeline::getInstance() {
-// 	if(instance==NULL){
-// 		instance = new Pipeline();
-// 	}
-// 	return instance;
-// }
-
-
 void SoftwarePipeline::init()
 {
 	framebuffer->init();
-	
-	// configure(TrivialColorFP.class, ConstColorVP.class);
 }
 
 void SoftwarePipeline::setFragmentProcessor(const FragmentProcessor* fragProc)
@@ -256,11 +246,11 @@ void SoftwarePipeline::loadTransposeMatrixMultiply(const Matrix4f& matrix)
 	(*currentMatrix) = (*currentMatrix) * t;
 }
 
-void SoftwarePipeline::begin(int primType)
+void SoftwarePipeline::begin(const drawing_mode mode)
 {
-	mode = primType;
-	vertexIndex = 0;
-	stripParity = 0;
+	this->mode = mode;
+	this->vertexIndex = 0;
+	this->stripParity = 0;
 }
 
 void SoftwarePipeline::vertex(const Vector3f& v, const Color3f& c, const Vector3f& n, const Vector2f& t)

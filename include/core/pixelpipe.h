@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include "core/common.h"
 #include "core/glutwindow.h"
+#include "core/pipeline_opengl.h"
 #include "core/pipeline_software.h"
 #include "core/camera.h"
 #include "core/geometry.h"
