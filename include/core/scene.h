@@ -75,7 +75,7 @@ public:
 
 protected:
 	std::vector<Texture*>* m_texture;	//!< The list of texture data for a scene. Might be empty.
-	Pipeline& m_pipeline;					//!< Reference to the pipeline for dispatching render calls
+	Pipeline& m_pipeline;				//!< Reference to the pipeline for dispatching render calls
 
 };	// class Scene
 
@@ -96,33 +96,13 @@ public:
 	
 	virtual void render() 
 	{
-		//if(usePipeline){
-			if(!m_texture->empty()) m_pipeline.setTexture(*(m_texture->at(0)));
+		if(!m_texture->empty()) m_pipeline.setTexture(*(m_texture->at(0)));
 
-			m_pipeline.translate(locationA);
-		    Geometry::sphere(depth, colorA, m_pipeline);
+		m_pipeline.translate(locationA);
+	    Geometry::sphere(depth, colorA, m_pipeline);
 
-			m_pipeline.translate(locationB);
-		    Geometry::sphere(depth, colorB, m_pipeline);
-		/*
-		}
-		else{
-			if(!m_texture->empty()) m_pipeline.setTexture(*(m_texture->at(0)));
-			//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, m_texture->width(), m_texture->height(), 0, GL_RGB, GL_UNSIGNED_BYTE, m_texture->getTextureData());	// ERROR!
-			// texture.cBuf;
-			
-		    //glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, texture.nx, texture.ny, 0, GL_RGB, GL_UNSIGNED_BYTE, texture.cBuf);
-		    //texture.cBuf.rewind();
-
-		    glTranslatef(1.2f, 0.0f, 0.0f);
-			m_pipeline.translate(locationA);
-		    Geometry::sphere(depth, colorA, m_pipeline);
-
-		    glTranslatef(-2.4f, 0.0f, 0.0f);
-			m_pipeline.translate(locationB);
-		    Geometry::sphere(depth, colorB, m_pipeline);
-		}
-		*/
+		m_pipeline.translate(locationB);
+	    Geometry::sphere(depth, colorB, m_pipeline);
 	}
 
 	/**
@@ -150,18 +130,8 @@ public:
 	~SceneCube() {};
 	virtual void render() 
 	{
-		// if(usePipeline){
-			if(!m_texture->empty()) m_pipeline.setTexture(*(m_texture->at(0)));
-			Geometry::cube(m_pipeline);
-			/*
-		}
-		else{
-			//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, m_texture->width(), m_texture->height(), 0, GL_RGB, GL_UNSIGNED_BYTE, m_texture->getTextureData());	// ERROR!
-			// texture.cBuf;
-			if(!m_texture->empty()) m_pipeline.setTexture(*(m_texture->at(0)));
-			Geometry::cube(m_pipeline);
-		}
-		*/
+		if(!m_texture->empty()) m_pipeline.setTexture(*(m_texture->at(0)));
+		Geometry::cube(m_pipeline);
 	}
 
 	/**

@@ -178,8 +178,6 @@ void PixelPipeWindow::init_CUDAMode()
 
 int PixelPipeWindow::render()
 {
-	// DEV() << "PixelPipeWindow::render";
-	
 	switch(m_mode){
 		case RENDER_OPENGL:
 			this->render_openGLMode();
@@ -203,7 +201,6 @@ void PixelPipeWindow::render_softwareMode()
 	glLoadIdentity();
 	// // glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	
-	// m_pipeline->projectionMatrix.identity();	// temp!
 	m_pipeline->setMatrixMode(MATRIX_PROJECTION);
 	m_pipeline->loadIdentity();
 	
@@ -218,7 +215,6 @@ void PixelPipeWindow::render_softwareMode()
 	
 	m_pipeline->viewport(0, 0, m_width, m_height);
 	
-	// m_pipeline->modelviewMatrix.identity();	// temp!
 	m_pipeline->setMatrixMode(MATRIX_MODELVIEW);
 	m_pipeline->loadIdentity();
 	
@@ -245,8 +241,9 @@ void PixelPipeWindow::render_openGLMode()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glMatrixMode(GL_MODELVIEW);
 	
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
+	m_pipeline->setMatrixMode(MATRIX_PROJECTION);
+	m_pipeline->loadIdentity();
+	
 	float ht = m_camera->getHt();
 	float aspect = m_camera->getAspectRatio();
 	float near = m_camera->getNear();
@@ -254,13 +251,13 @@ void PixelPipeWindow::render_openGLMode()
 	Vector3f eye = m_camera->getEye();
 	Vector3f target = m_camera->getTarget();
 	Vector3f up = m_camera->getUp();
-	glFrustum(-ht * aspect, ht * aspect, -ht, ht, near, far);
+
+	m_pipeline->frustum(-ht * aspect, ht * aspect, -ht, ht, near, far);
+	m_pipeline->viewport(0, 0, m_width, m_height);
 	
-	glViewport(0, 0, m_width, m_height);
-	
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-	gluLookAt(eye.x, eye.y, eye.z, target.x, target.y, target.z, up.x, up.y, up.z);
+	m_pipeline->setMatrixMode(MATRIX_MODELVIEW);
+	m_pipeline->loadIdentity();
+	m_pipeline->lookAt(eye, target, up);
 	
 	m_scene->render();
 	
@@ -281,8 +278,6 @@ void PixelPipeWindow::render_CUDAMode()
 int PixelPipeWindow::resize(int width, int height)
 {
 	GlutWindow::resize(width, height);
-	
-	//DEV() << "resize: " << width << ", " << height;
 	
 	return 0;
 }

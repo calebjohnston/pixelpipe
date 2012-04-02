@@ -68,10 +68,10 @@ namespace pixelpipe {
 
 class Geometry {
 public:
-	/*
-	* Sends a quadrilateral to the OpenGL pipeline. Mimics the other quad
-	* function.
-	*/
+	/**
+	 * Sends a quadrilateral to the OpenGL pipeline. Mimics the other quad
+	 * function.
+	 */
 	static void quad(Vector3f v0, Vector3f v1, Vector3f v2, Vector3f v3, Vector3f n, Color3f c, Pipeline& pipe)
 	{
 		pipe.begin(TRIANGLES);
@@ -82,46 +82,13 @@ public:
 		pipe.vertex(v2, c, n, t2);
 		pipe.vertex(v3, c, n, t3);
 		pipe.end();
-		
-		/*
-		if(usePipeline){
-			pipe.begin(TRIANGLES);
-			pipe.vertex(v0, c, n, t0);
-			pipe.vertex(v1, c, n, t1);
-			pipe.vertex(v2, c, n, t2);
-			pipe.vertex(v0, c, n, t0);
-			pipe.vertex(v2, c, n, t2);
-			pipe.vertex(v3, c, n, t3);
-			pipe.end();
-		}
-		else{
-			glBegin(GL_QUADS);
-
-			glColor3f(c.x, c.y, c.z);
-			glNormal3f(n.x, n.y, n.z);
-
-			glTexCoord2f(t0.x, t0.y);
-			glVertex3f(v0.x, v0.y, v0.z);
-
-			glTexCoord2f(t1.x, t1.y);
-			glVertex3f(v1.x, v1.y, v1.z);
-
-			glTexCoord2f(t2.x, t2.y);
-			glVertex3f(v2.x, v2.y, v2.z);
-
-			glTexCoord2f(t3.x, t3.y);
-			glVertex3f(v3.x, v3.y, v3.z);
-
-			glEnd();
-		}
-		*/
 	}
 
-	/*
-	* Sends two quadrilaterals in the form of four triangles to the software
-	* pipeline. Both quads will occupy the same location, but will be back to
-	* back, giving the effect of a 2 sided polygon.
-	*/
+	/**
+	 * Sends two quadrilaterals in the form of four triangles to the software
+	 * pipeline. Both quads will occupy the same location, but will be back to
+	 * back, giving the effect of a 2 sided polygon.
+	 */
 	static void quadPair(Vector3f v0, Vector3f v1, Vector3f v2, Vector3f v3, Vector3f n, Color3f c1, Color3f c2, Pipeline& pipe)
 	{
 		quad(v0, v1, v2, v3, n, c1, pipe);
@@ -131,10 +98,10 @@ public:
 		n *= -1.0;
 	}
 
-	/*
-	* Draws a unit cube (2x2x2) at the origin using the software pipeline. The
-	* colors are fixed above.
-	*/
+	/**
+	 * Draws a unit cube (2x2x2) at the origin using the software pipeline. The
+	 * colors are fixed above.
+	 */
 	static void cube(Pipeline& pipe)
 	{
 		quad(nnn, nnp, npp, npn, lNormal, lColor, pipe);
@@ -146,10 +113,10 @@ public:
 	}
 	
 
-	/*
-	* Draws a sphere out of triangles, using the spheretri function. The sphere
-	* is rendered to the software pipeline.
-	*/
+	/**
+	 * Draws a sphere out of triangles, using the spheretri function. The sphere
+	 * is rendered to the software pipeline.
+	 */
 	static void sphere(int n, Color3f c, Pipeline& pipe)
 	{
 		spheretri(n, v_p00, v_0p0, v_00p, c, pipe);
@@ -163,115 +130,36 @@ public:
 	}
 	
 	
-	/*
-	* Recursively generates a sphere using triangles and puts the resulting
-	* polygons into the software pipeline.
-	*/
+	/**
+	 * Recursively generates a sphere using triangles and puts the resulting
+	 * polygons into the software pipeline.
+	 */
 	static void spheretri(int n, Vector3f v0, Vector3f v1, Vector3f v2, Color3f c, Pipeline& pipe)
 	{
 		Vector3f nrml;
-		// if(usePipeline){	// no more use pipeline boolean!
-			if (n == 0) {
-				vertices[0] = v0;
-				vertices[1] = v1;
-				vertices[2] = v2;
-				colors[0] = colors[1] = colors[2] = c;
-				if (pipe.isFlatShaded()) {
-					nrml = v0 + v1;
-					nrml += v2;
-					nrml.normalize();
-
-					normals[0] = normals[1] = normals[2] = nrml;
-					
-					pipe.begin(TRIANGLES);
-					pipe.renderTriangle(vertices, colors, normals, NULL);
-					pipe.end();
-				}
-				else {
-					xyTex(v0, texs[0]);
-					xyTex(v1, texs[1]);
-					xyTex(v2, texs[2]);
-					pipe.begin(TRIANGLES);
-					pipe.renderTriangle(vertices, colors, vertices, texs);
-					pipe.end();
-					
-						// glBegin(GL_TRIANGLES);
-						// 
-						// glColor3f(c.x, c.y, c.z);
-						// xyTex(v0, texs[0]);
-						// xyTex(v1, texs[1]);
-						// xyTex(v2, texs[2]);
-						// 
-						// glNormal3f(v0.x, v0.y, v0.z);
-						// glTexCoord2f(texs[0].x, texs[0].y);
-						// glVertex3f(v0.x, v0.y, v0.z);
-						// 
-						// glNormal3f(v1.x, v1.y, v1.z);
-						// glTexCoord2f(texs[1].x, texs[1].y);
-						// glVertex3f(v1.x, v1.y, v1.z);
-						// 
-						// glNormal3f(v2.x, v2.y, v2.z);
-						// glTexCoord2f(texs[2].x, texs[2].y);
-						// glVertex3f(v2.x, v2.y, v2.z);
-						// 
-						// glEnd();
-				}
-			}
-			else {
-				Vector3f v01;
-				Vector3f v12;
-				Vector3f v20;
-
-				v01 = v0 + v1;
-				v01.normalize();
-				v12 = v1 + v2;
-				v12.normalize();
-				v20 = v2 + v0;
-				v20.normalize();
-
-				spheretri(n - 1, v01, v12, v20, c, pipe);
-				spheretri(n - 1, v0, v01, v20, c, pipe);
-				spheretri(n - 1, v1, v12, v01, c, pipe);
-				spheretri(n - 1, v2, v20, v12, c, pipe);
-			}
-		/*
-		}else if (n == 0) {
+		if (n == 0) {
+			vertices[0] = v0;
+			vertices[1] = v1;
+			vertices[2] = v2;
+			colors[0] = colors[1] = colors[2] = c;
 			if (pipe.isFlatShaded()) {
 				nrml = v0 + v1;
 				nrml += v2;
 				nrml.normalize();
 
-				glBegin(GL_TRIANGLES);
-
-				glColor3f(c.x, c.y, c.z);
-				glNormal3f(nrml.x, nrml.y, nrml.z);
-				glVertex3f(v0.x, v0.y, v0.z);
-				glVertex3f(v1.x, v1.y, v1.z);
-				glVertex3f(v2.x, v2.y, v2.z);
-
-				glEnd();
+				normals[0] = normals[1] = normals[2] = nrml;
+				
+				pipe.begin(TRIANGLES);
+				pipe.renderTriangle(vertices, colors, normals, NULL);
+				pipe.end();
 			}
 			else {
-				glBegin(GL_TRIANGLES);
-
-				glColor3f(c.x, c.y, c.z);
 				xyTex(v0, texs[0]);
 				xyTex(v1, texs[1]);
 				xyTex(v2, texs[2]);
-
-				glNormal3f(v0.x, v0.y, v0.z);
-				glTexCoord2f(texs[0].x, texs[0].y);
-				glVertex3f(v0.x, v0.y, v0.z);
-
-				glNormal3f(v1.x, v1.y, v1.z);
-				glTexCoord2f(texs[1].x, texs[1].y);
-				glVertex3f(v1.x, v1.y, v1.z);
-
-				glNormal3f(v2.x, v2.y, v2.z);
-				glTexCoord2f(texs[2].x, texs[2].y);
-				glVertex3f(v2.x, v2.y, v2.z);
-
-				glEnd();
+				pipe.begin(TRIANGLES);
+				pipe.renderTriangle(vertices, colors, vertices, texs);
+				pipe.end();
 			}
 		}
 		else {
@@ -291,13 +179,12 @@ public:
 			spheretri(n - 1, v1, v12, v01, c, pipe);
 			spheretri(n - 1, v2, v20, v12, c, pipe);
 		}
-		*/
 	}
 	
-	/*
-	* Draws a sphere out of triangles, using the spheretri function. The sphere
-	* is rendered to the OpenGL pipeline. Mimics the other sphere function.
-	*/
+	/**
+	 * Draws a sphere out of triangles, using the spheretri function. The sphere
+	 * is rendered to the OpenGL pipeline. Mimics the other sphere function.
+	 */
 /*
 	static void sphere(int n, Color3f c)
 	{
@@ -323,13 +210,13 @@ public:
 protected:
 	
 private:
-	/*
-	* Takes in a 3D location and spits out its texture coordinate. This version
-	* simply returns 1/2 the x and y coordinate, offset by 0.5 This will ensure
-	* that all texture coordinates are valid, based on assumption about the
-	* incoming 3D location. This is valid because we know this method will only
-	* be called from our spheretri methods.
-	*/
+	/**
+	 * Takes in a 3D location and spits out its texture coordinate. This version
+	 * simply returns 1/2 the x and y coordinate, offset by 0.5 This will ensure
+	 * that all texture coordinates are valid, based on assumption about the
+	 * incoming 3D location. This is valid because we know this method will only
+	 * be called from our spheretri methods.
+	 */
 	static void xyTex(Vector3f v, Vector2f tex)
 	{
 		tex.x = v.x / 2 + 0.5f;

@@ -14,9 +14,8 @@
 namespace pixelpipe {
 
 /*!
- * \class Pipeline "core/pipeline.h"
- * \brief The pipeline class establishes the graphics rendering process from input 
- * geometry and textures to an output framebuffer.
+ * \class OpenGLPipeline "core/pipeline_opengl.h"
+ * \brief The pipeline class establishes the OpenGL hardware pipeline.
  * 
  */
 class OpenGLPipeline : public Pipeline {
