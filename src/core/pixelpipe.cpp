@@ -95,6 +95,11 @@ void PixelPipeWindow::init()
 	m_scene = new SceneSpheres(*m_pipeline);
 }
 
+/** 
+ * TODO: We should be able to remove the architecture specific methods 
+ * in favor of having each Pipeline instance configure and render itself
+ * based upon the State settings.
+ */
 void PixelPipeWindow::init_softwareMode() 
 {
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
@@ -104,20 +109,21 @@ void PixelPipeWindow::init_softwareMode()
 	glEnable(GL_BLEND);
 	
 	// setup vertex shaders
-	//ConstColorVP* vertProcessor = new ConstColorVP();				// 3
+	// ConstColorVP* vertProcessor = new ConstColorVP();				// 3
 	SmoothShadedVP* vertProcessor = new SmoothShadedVP();			// 3
-	//TexturedShadedVP* vertProcessor = new TexturedShadedVP();		// 5
-	//FragmentShadedVP* vertProcessor = new FragmentShadedVP();		// 9 + 6 * lightCount
-	//TexturedFragmentShadedVP* vertProcessor = new TexturedFragmentShadedVP();	// 9 + 6 * lightCount
+	// TexturedShadedVP* vertProcessor = new TexturedShadedVP();		// 5
+	// FragmentShadedVP* vertProcessor = new FragmentShadedVP();		// 9 + 6 * lightCount
+	// TexturedFragmentShadedVP* vertProcessor = new TexturedFragmentShadedVP();	// 9 + 6 * lightCount
 	
-	ZBufferFP* fragProcessor = new ZBufferFP();				// 3
-	//ColorFP* fragProcessor = new ColorFP();					// 3
-	//TexturedFP* fragProcessor = new TexturedFP();				// 5
-	//PhongShadedFP* fragProcessor = new PhongShadedFP();		// 9 + 6 * lightCount
-	//TexturedPhongFP* fragProcessor = new TexturedPhongFP();	// 9 + 6 * lightCount
+	ZBufferFP* fragProcessor = new ZBufferFP();					// 3
+	// ColorFP* fragProcessor = new ColorFP();					// 3
+	// TexturedFP* fragProcessor = new TexturedFP();				// 5
+	// PhongShadedFP* fragProcessor = new PhongShadedFP();		// 9 + 6 * lightCount
+	// TexturedPhongFP* fragProcessor = new TexturedPhongFP();	// 9 + 6 * lightCount
 	((SoftwarePipeline*) m_pipeline)->setVertexProcessor(vertProcessor);
 	((SoftwarePipeline*) m_pipeline)->setFragmentProcessor(fragProcessor);
-	//m_pipeline->setTexture(*m_textures.at(0));
+
+	// m_pipeline->setTexture(*m_textures.at(0));
 	m_pipeline->configure();
 }
 
