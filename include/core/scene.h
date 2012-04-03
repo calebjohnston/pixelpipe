@@ -144,6 +144,6 @@ public:
 
 };	// class SceneCube
 
-}	// namespace pixelpipe {
+}	// namespace pixelpipe
 
 #endif	// __PIPELINE_SCENE_H

@@ -210,6 +210,6 @@ private:
 	
 };	// class OpenGLPipeline
 
-}	// namespace pixelpipe {
+}	// namespace pixelpipe
 
 #endif	// __PIPELINE_OPENGL_H

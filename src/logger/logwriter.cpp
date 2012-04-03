@@ -23,4 +23,4 @@ const std::string LogWriter::type() {
 	return _type;
 }
 
-}	// namespace pixelpipe {
+}	// namespace pixelpipe

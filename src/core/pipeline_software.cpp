@@ -379,4 +379,4 @@ void SoftwarePipeline::renderTriangle(const Vertex* vertices)
 	rasterizer->rasterize(triangle1, *fp, *framebuffer);
 }
 	
-}	// namespace pixelpipe {
+}	// namespace pixelpipe

@@ -29,6 +29,6 @@ public:
 	}
 };
 
-}	// namespace pixelpipe {
+}	// namespace pixelpipe
 
 #endif	// #define __PIPELINE_COLOR_FRAG_H

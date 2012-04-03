@@ -69,6 +69,6 @@ protected:
 private:
 	
 };	// class Clipper
-}	// namespace pixelpipe {
+}	// namespace pixelpipe
 
 #endif	// __PIPELINE_CLIPPER_H

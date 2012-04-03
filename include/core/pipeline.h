@@ -291,6 +291,6 @@ private:
 	
 };	// class Pipeline
 
-}	// namespace pixelpipe {
+}	// namespace pixelpipe
 
 #endif	// __PIPELINE_PIPELINE_H

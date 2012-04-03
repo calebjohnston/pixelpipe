@@ -101,6 +101,6 @@ protected:
 
 };	// class Texture
 
-}	// namespace pixelpipe {
+}	// namespace pixelpipe
 
 #endif	// __PIPELINE_TEXTURE_H

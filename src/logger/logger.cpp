@@ -277,4 +277,4 @@ int Logger::LevelAndBelow( Logger::LEVEL level ) {
 	
 }
 
-}	// namespace pixelpipe {
+}	// namespace pixelpipe

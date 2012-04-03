@@ -28,6 +28,6 @@ public:
 
 };
 
-}	// namespace pixelpipe {
+}	// namespace pixelpipe
 
 #endif	//__PIPELINE_LogWriter_H

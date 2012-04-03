@@ -216,6 +216,6 @@ private:
 
 };	// GlutWindow
 
-}	// namespace pixelpipe {
+}	// namespace pixelpipe
 
 #endif	// __PIPELINE_GLUTAPP_H

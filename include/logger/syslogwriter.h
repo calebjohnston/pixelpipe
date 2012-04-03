@@ -33,6 +33,6 @@ private:
 	int _map_level( const Logger::LEVEL& level );
 };
 
-}	// namespace pixelpipe {
+}	// namespace pixelpipe
 
 #endif	// __PIPELINE_SyslogWriter_H

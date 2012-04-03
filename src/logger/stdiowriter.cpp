@@ -30,4 +30,4 @@ void StdOutWriter::Write( Logger::LEVEL level, const std::string& identity, cons
 	std::cout << "[" << Logger::CurrentTime() << " " << Logger::LoggerLevelAsString( level ) << "] " <<  message << std::endl;
 }
 
-}	// namespace pixelpipe {
+}	// namespace pixelpipe

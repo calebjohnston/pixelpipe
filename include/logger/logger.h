@@ -121,6 +121,6 @@ protected:
 	
 };
 
-}	// namespace pixelpipe {
+}	// namespace pixelpipe
 
 #endif	//__PIPELINE_Logger_H

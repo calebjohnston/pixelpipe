@@ -227,4 +227,4 @@ void OpenGLPipeline::renderTriangle(const Vector3f* v, const Color3f* c, const V
 	}
 }
 	
-}	// namespace pixelpipe {
+}	// namespace pixelpipe

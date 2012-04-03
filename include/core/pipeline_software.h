@@ -271,6 +271,6 @@ private:
 	
 };	// class Pipeline
 
-}	// namespace pixelpipe {
+}	// namespace pixelpipe
 
 #endif	// __PIPELINE_SOFTWARE_H

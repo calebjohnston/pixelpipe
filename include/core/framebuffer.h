@@ -127,6 +127,6 @@ protected:
 
 };	// class FrameBuffer
 
-}	// namespace pixelpipe {
+}	// namespace pixelpipe
 
 #endif	// __PIPELINE_FRAMEBUFFER_H

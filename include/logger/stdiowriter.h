@@ -31,6 +31,6 @@ private:
 	
 };
 
-}	// namespace pixelpipe {
+}	// namespace pixelpipe
 
 #endif	//__PIPELINE_StdOutWriter_H

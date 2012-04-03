@@ -59,4 +59,4 @@ int SyslogWriter::_map_level( const Logger::LEVEL& level ) {
 	return LOG_DEBUG;
 }
 
-}	// namespace pixelpipe {
+}	// namespace pixelpipe
