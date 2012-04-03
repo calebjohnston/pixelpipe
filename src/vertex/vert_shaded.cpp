@@ -11,16 +11,6 @@ SmoothShadedVP::SmoothShadedVP() : VertexProcessor()
 	nDotL = 0;
 }
 
-void SmoothShadedVP::updateTransforms(const SoftwarePipeline& pipe)
-{
-	modelViewMatrix = pipe.modelviewMatrix;
-	m = modelViewMatrix;
-	Matrix4f temp = modelViewMatrix;
-	m = pipe.projectionMatrix * temp;
-	temp = m;
-	m = pipe.viewportMatrix * temp;
-}
-
 void SmoothShadedVP::vertex(const Vector3f& v, const Color3f& c, const Vector3f& n, const Vector2f& t, Vertex& output)
 {
 	//transform vertex
@@ -111,7 +101,7 @@ void SmoothShadedVP::vertex(const Vector3f& v, const Color3f& c, const Vector3f&
 	output.v.set(v.x, v.y, v.z, 1.0f);
 	
 	temp = output.v;
-	output.v = m * temp;
+	output.v = MVP * temp;
 
 	output.attributes[0] = outColor.x;
 	output.attributes[1] = outColor.y;

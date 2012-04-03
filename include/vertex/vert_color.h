@@ -20,7 +20,7 @@ namespace pixelpipe {
 class ConstColorVP : public VertexProcessor {
 public:	
 	virtual int nAttr() const { return 3; }
-	virtual void updateTransforms(const SoftwarePipeline& pipe);
+	// virtual void updateTransforms(const SoftwarePipeline& pipe);
 	virtual void triangle(	const cg::vecmath::Vector3f* vs, 
 					const cg::vecmath::Color3f* cs, 
 					const cg::vecmath::Vector3f* ns_ign, 
@@ -40,7 +40,6 @@ public:
 		return out << "[ ConstantColorVertexProcessor ]";
 	}
 protected:
-	cg::vecmath::Matrix4f mvp;	//!< the modelview * projection * viewport matrix
 
 };
 

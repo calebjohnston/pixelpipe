@@ -50,7 +50,7 @@ public:
 	 * 
 	 * @param pipe The reference to the pipeline instance. Can be used to determine the necessary matrices.
 	 */
-	virtual void updateTransforms(const SoftwarePipeline& pipe) = 0;
+	virtual void updateTransforms(const SoftwarePipeline& pipe);
 	
 	/**
 	 * We can access everything we need to know about the pipeline state -- the
@@ -89,6 +89,11 @@ public:
 	 * @param output The processed vertex.
 	 */
 	virtual void vertex(const cg::vecmath::Vector3f& v, const cg::vecmath::Color3f& c, const cg::vecmath::Vector3f& n, const cg::vecmath::Vector2f& t, Vertex& output) = 0;
+	
+protected:
+	cg::vecmath::Matrix4f modelViewMatrix;	//!< the local model-view matrix
+	cg::vecmath::Matrix4f MVP;				//!< the modelview * projection * viewport matrix
+	
 };
 
 }

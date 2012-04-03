@@ -39,6 +39,7 @@ set( pipeline_SRCS
   logger/stdiowriter.cpp
   logger/syslogwriter.cpp
   vertex/vert_color.cpp
+  vertex/vert_processor.cpp
   vertex/vert_frag_shaded.cpp
   vertex/vert_frag_textured.cpp
   vertex/vert_shaded.cpp

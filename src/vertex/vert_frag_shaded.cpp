@@ -13,17 +13,6 @@ FragmentShadedVP::~FragmentShadedVP()
 {
 }
 
-void FragmentShadedVP::updateTransforms(const SoftwarePipeline& pipe)
-{
-	// TODO
-	modelViewMatrix = pipe.modelviewMatrix;		
-	m = modelViewMatrix;
-	Matrix4f temp = modelViewMatrix;
-	m = pipe.projectionMatrix * temp;
-	temp = m;
-	m = pipe.viewportMatrix * temp;
-}
-
 void FragmentShadedVP::vertex(const Vector3f& v, const Color3f& c, const Vector3f& n, const Vector2f& t, Vertex& output)
 {
 	// TODO
@@ -95,7 +84,7 @@ void FragmentShadedVP::vertex(const Vector3f& v, const Color3f& c, const Vector3
 	
 	output.v.set(v.x, v.y, v.z, 1.0f);
 	temp = output.v;
-	output.v = m * temp;	// m.rightMultiply(output.v);
+	output.v = MVP * temp;	// m.rightMultiply(output.v);
 }
 
 void FragmentShadedVP::triangle(const Vector3f* vs, const Color3f* cs, const Vector3f* ns, const Vector2f* ts, Vertex* output)

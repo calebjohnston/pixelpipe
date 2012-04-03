@@ -25,7 +25,7 @@ class SmoothShadedVP : public VertexProcessor {
 public:
 	SmoothShadedVP();
 	virtual int nAttr() const { return 3; }
-	virtual void updateTransforms(const SoftwarePipeline& pipe);
+	// virtual void updateTransforms(const SoftwarePipeline& pipe);
 	virtual void triangle(	const cg::vecmath::Vector3f* vs, 
 					const cg::vecmath::Color3f* cs, 
 					const cg::vecmath::Vector3f* ns_ign, 
@@ -48,8 +48,8 @@ public:
 protected:	
 	float nDotH;	//!< used for storing the dot product of the normal vector with the half vector
 	float nDotL;	//!< used for storing the dot product of the normal vector with the light vector
-	cg::vecmath::Matrix4f modelViewMatrix;		//!< the local modelview matrix
-	cg::vecmath::Matrix4f m;					//!< the modelview * projection * viewport matrix
+	// cg::vecmath::Matrix4f modelViewMatrix;		//!< the local modelview matrix
+	// cg::vecmath::Matrix4f m;					//!< the modelview * projection * viewport matrix
 	cg::vecmath::Vector4f vert;					//!< temporary copy of the input vertex position
 	cg::vecmath::Vector4f normal;				//!< temporary copy of the input vertex normal
 	cg::vecmath::Vector3f viewVector;			//!< temporary copy of the view vector
