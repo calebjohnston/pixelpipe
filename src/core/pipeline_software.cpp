@@ -90,6 +90,13 @@ void SoftwarePipeline::clearFrameBuffer()
 	framebuffer->clear(0, 0, 0, 1);
 }
 
+void SoftwarePipeline::drawFrameBuffer()
+{
+	framebuffer->draw();
+	
+	glutSwapBuffers();
+}
+
 const char* SoftwarePipeline::getFrameData()
 {
 	return framebuffer->getData();
@@ -152,15 +159,32 @@ void SoftwarePipeline::lookAt(Vector3f eye, Vector3f target, Vector3f up)
 
 void SoftwarePipeline::frustum(float l, float r, float b, float t, float n, float f)
 {
-	projectionMatrix.identity();
-	projectionMatrix[0][0] = 2 * n / (r - l);
-	projectionMatrix[0][2] = (r + l) / (r - l);
-	projectionMatrix[1][1] = 2 * n / (t - b);
-	projectionMatrix[1][2] = (t + b) / (t - b);
-	projectionMatrix[2][2] = -(f + n) / (f - n);
-	projectionMatrix[2][3] = -2 * f * n / (f - n);
-	projectionMatrix[3][2] = -1;
-	projectionMatrix[3][3] = 0;
+	Matrix4f& mat = *currentMatrix;
+	mat.identity();
+	mat[0][0] = 2 * n / (r - l);
+	mat[0][2] = (r + l) / (r - l);
+	mat[1][1] = 2 * n / (t - b);
+	mat[1][2] = (t + b) / (t - b);
+	mat[2][2] = -(f + n) / (f - n);
+	mat[2][3] = -2 * f * n / (f - n);
+	mat[3][2] = -1;
+	mat[3][3] = 0;
+	
+	recomputeMatrix();
+}
+
+void SoftwarePipeline::ortho(float l, float r, float b, float t, float n, float f)
+{	
+	Matrix4f& mat = *currentMatrix;
+	mat.identity();
+	mat[0][0] = 2 / (r - l);
+	mat[0][3] = -(r + l) / (r - l);
+	mat[1][1] = 2 / (t - b);
+	mat[1][3] = -(t + b) / (t - b);
+	mat[2][2] = -2 / (f - n);
+	mat[2][3] = -(f + n) / (f - n);
+	mat[3][3] = 1;
+	
 	recomputeMatrix();
 }
 
@@ -174,20 +198,7 @@ void SoftwarePipeline::viewport(int x, int y, int w, int h)
 	viewportMatrix[1][3] = cy;
 	viewportMatrix[2][2] = 0.5;
 	viewportMatrix[2][3] = 0.5;
-	recomputeMatrix();
 	
-}
-
-void SoftwarePipeline::ortho(float l, float r, float b, float t, float n, float f)
-{
-	projectionMatrix.identity();
-	projectionMatrix[0][0] = 2 / (r - l);
-	projectionMatrix[0][3] = -(r + l) / (r - l);
-	projectionMatrix[1][1] = 2 / (t - b);
-	projectionMatrix[1][3] = -(t + b) / (t - b);
-	projectionMatrix[2][2] = -2 / (f - n);
-	projectionMatrix[2][3] = -(f + n) / (f - n);
-	projectionMatrix[3][3] = 1;
 	recomputeMatrix();
 }
 
@@ -312,6 +323,26 @@ void SoftwarePipeline::vertex(const Vector3f& v, const Color3f& c, const Vector3
 void SoftwarePipeline::end()
 {
 	mode = PIPELINE_MODE_NONE;
+}
+
+// TODO: Implementation incomplete
+void SoftwarePipeline::clear(const buffer_bit bit)
+{
+	switch(bit){
+		case BUFFER_DEPTH:
+			// nothing yet ...
+			break;
+		case BUFFER_ACCUM:
+			// nothing yet ...
+			break;
+		case BUFFER_STENCIL:
+			// nothing yet ...
+			break;
+		default:
+		case BUFFER_COLOR:
+			framebuffer->clear(0, 0, 0, 1);
+			break;
+	}
 }
 
 void SoftwarePipeline::swap(Vertex* va, int i, int j) const

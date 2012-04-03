@@ -48,10 +48,12 @@ void OpenGLPipeline::setTexture(const Texture& texture)
 
 void OpenGLPipeline::clearFrameBuffer()
 {
-	// framebuffer->clear(0, 0, 0, 1);
-	
-	INFO() << "OpenGLPipeline::getFrameData not yet supported!";
-	exit;
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+}
+
+void OpenGLPipeline::drawFrameBuffer()
+{	
+	glutSwapBuffers();
 }
 
 const char* OpenGLPipeline::getFrameData()
@@ -82,11 +84,6 @@ void OpenGLPipeline::scale(const Vector3f& scale)
 	glScalef(scale.x, scale.y, scale.z);
 }
 
-// void OpenGLPipeline::recomputeMatrix()
-// {
-	// vp->updateTransforms(*this);
-// }
-
 void OpenGLPipeline::lookAt(Vector3f eye, Vector3f target, Vector3f up)
 {
 	gluLookAt(eye.x, eye.y, eye.z, target.x, target.y, target.z, up.x, up.y, up.z);
@@ -97,14 +94,14 @@ void OpenGLPipeline::frustum(float l, float r, float b, float t, float n, float 
 	glFrustum(l,r,b,t,n,f);
 }
 
-void OpenGLPipeline::viewport(int x, int y, int w, int h)
-{
-	glViewport(x,y,w,h);	
-}
-
 void OpenGLPipeline::ortho(float l, float r, float b, float t, float n, float f)
 {
 	glOrtho(l,r,b,t,n,f);
+}
+
+void OpenGLPipeline::viewport(int x, int y, int w, int h)
+{
+	glViewport(x,y,w,h);	
 }
 
 void OpenGLPipeline::pushMatrix(const Matrix4f* matrix)
@@ -214,6 +211,10 @@ void OpenGLPipeline::end()
 	glEnd();
 }
 
+void OpenGLPipeline::clear(const buffer_bit bit)
+{
+	return;
+}
 
 void OpenGLPipeline::renderTriangle(const Vector3f* v, const Color3f* c, const Vector3f* n, const Vector2f* t)
 {

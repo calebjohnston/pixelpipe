@@ -110,16 +110,16 @@ void PixelPipeWindow::init_softwareMode()
 	
 	// setup vertex shaders
 	// ConstColorVP* vertProcessor = new ConstColorVP();				// 3
-	SmoothShadedVP* vertProcessor = new SmoothShadedVP();			// 3
+	SmoothShadedVP* vertProcessor = new SmoothShadedVP();				// 3
 	// TexturedShadedVP* vertProcessor = new TexturedShadedVP();		// 5
 	// FragmentShadedVP* vertProcessor = new FragmentShadedVP();		// 9 + 6 * lightCount
 	// TexturedFragmentShadedVP* vertProcessor = new TexturedFragmentShadedVP();	// 9 + 6 * lightCount
 	
-	ZBufferFP* fragProcessor = new ZBufferFP();					// 3
-	// ColorFP* fragProcessor = new ColorFP();					// 3
-	// TexturedFP* fragProcessor = new TexturedFP();				// 5
-	// PhongShadedFP* fragProcessor = new PhongShadedFP();		// 9 + 6 * lightCount
-	// TexturedPhongFP* fragProcessor = new TexturedPhongFP();	// 9 + 6 * lightCount
+	ZBufferFP* fragProcessor = new ZBufferFP();							// 3
+	// ColorFP* fragProcessor = new ColorFP();							// 3
+	// TexturedFP* fragProcessor = new TexturedFP();					// 5
+	// PhongShadedFP* fragProcessor = new PhongShadedFP();				// 9 + 6 * lightCount
+	// TexturedPhongFP* fragProcessor = new TexturedPhongFP();			// 9 + 6 * lightCount
 	((SoftwarePipeline*) m_pipeline)->setVertexProcessor(vertProcessor);
 	((SoftwarePipeline*) m_pipeline)->setFragmentProcessor(fragProcessor);
 
@@ -182,6 +182,7 @@ void PixelPipeWindow::init_CUDAMode()
 	return;
 }
 
+/*
 int PixelPipeWindow::render()
 {
 	switch(m_mode){
@@ -193,7 +194,7 @@ int PixelPipeWindow::render()
 			break;
 		default:
 		case RENDER_SOFTWARE:
-			this->render_softwareMode();
+			this->render_openGLMode();
 			break;
 	}
 
@@ -202,9 +203,9 @@ int PixelPipeWindow::render()
 
 void PixelPipeWindow::render_softwareMode() 
 {
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
+	// glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	// glMatrixMode(GL_MODELVIEW);
+	// glLoadIdentity();
 	// // glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	
 	m_pipeline->setMatrixMode(MATRIX_PROJECTION);
@@ -226,26 +227,20 @@ void PixelPipeWindow::render_softwareMode()
 	
 	m_pipeline->lookAt(eye, target, up);
 	
-	((SoftwarePipeline*) m_pipeline)->clearFrameBuffer();
+	m_pipeline->clearFrameBuffer();
 	m_scene->render();
-	((SoftwarePipeline*) m_pipeline)->getFrameBuffer().draw();
-	
-	// swap drawing buffers
-	glutSwapBuffers();
+	m_pipeline->drawFrameBuffer();
 }
-
-void PixelPipeWindow::render_openGLMode() 
-{
-	glEnable(GL_DEPTH_TEST);
-	glDisable(GL_TEXTURE_2D);
+*/
+int PixelPipeWindow::render() 
+{	
+	m_pipeline->clearFrameBuffer();
 	
+	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_LIGHTING);
 	glEnable(GL_COLOR_MATERIAL);
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_TEXTURE_2D);
-	
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glMatrixMode(GL_MODELVIEW);
 	
 	m_pipeline->setMatrixMode(MATRIX_PROJECTION);
 	m_pipeline->loadIdentity();
@@ -271,14 +266,10 @@ void PixelPipeWindow::render_openGLMode()
     glDisable(GL_COLOR_MATERIAL);
     glDisable(GL_DEPTH_TEST);
     glDisable(GL_TEXTURE_2D);
-	
-	// swap drawing buffers
-	glutSwapBuffers();
-}
 
-void PixelPipeWindow::render_CUDAMode() 
-{
-	return;
+	m_pipeline->drawFrameBuffer();
+	
+	return 0;
 }
 
 int PixelPipeWindow::resize(int width, int height)

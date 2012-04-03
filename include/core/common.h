@@ -9,6 +9,13 @@ static const double PI = 3.141592653589793;
 
 namespace pixelpipe {
 
+enum buffer_bit {
+	BUFFER_COLOR,
+	BUFFER_DEPTH,
+	BUFFER_ACCUM,
+	BUFFER_STENCIL
+};
+
 enum drawing_mode {
 	TRIANGLES,
 	TRIANGLE_STRIP,

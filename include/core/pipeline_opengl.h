@@ -60,6 +60,11 @@ public:
 	 * Clears the current frame buffer.
 	 */
 	virtual void clearFrameBuffer();
+
+	/**
+	 * Draws the current frame buffer. Or with double buffering, swaps the frame buffers.
+	 */
+	virtual void drawFrameBuffer();
 	
 	/**
 	 * Accessor method for the framebuffer.
@@ -98,16 +103,16 @@ public:
 	 * ! @copydoc Pipeline::frustum()
 	 */
 	virtual void frustum(float l, float r, float b, float t, float n, float f);
+
+	/**
+	 * ! @copydoc Pipeline::ortho()
+	 */
+	virtual void ortho(float l, float r, float b, float t, float n, float f);
 	
 	/**
 	 * ! @copydoc Pipeline::viewport()
 	 */
 	virtual void viewport(int x, int y, int w, int h);
-	
-	/**
-	 * ! @copydoc Pipeline::ortho()
-	 */
-	virtual void ortho(float l, float r, float b, float t, float n, float f);
 	
 	/**
 	 * ! @copydoc Pipeline::pushMatrix()
@@ -165,6 +170,10 @@ public:
 	 */
 	virtual void end();
 	
+	/**
+	 * ! @copydoc Pipeline::clear()
+	 */
+	virtual void clear(const buffer_bit bit = BUFFER_COLOR);
 	
 	/**
 	 * Renders a triangle to the software pipeline.
@@ -184,11 +193,7 @@ public:
 		return out << "[ OpenGLPipeline ]";
 	}
 
-protected:	
-	/**
-	 * Is this needed for OpenGL???
-	 */
-	// void recomputeMatrix();
+protected:
 	
 private:	
 	// void swap(Vertex* va, int i, int j) const;

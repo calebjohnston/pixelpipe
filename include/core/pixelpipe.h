@@ -58,22 +58,7 @@ protected:
 	virtual int mouseReleased(int button, int x, int y);
 	virtual int mouseMoved(int x, int y);
 
-private:
-	/**
-	 * Render software mode
-	 */
-	void render_softwareMode();
-
-	/**
-	 * Render OpenGL mode
-	 */
-	void render_openGLMode();
-
-	/**
-	 * Render OpenGL mode
-	 */
-	void render_CUDAMode();
-	
+private:	
 	/**
 	 * Init software mode
 	 */

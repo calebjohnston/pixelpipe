@@ -67,6 +67,11 @@ public:
 	 * Clears the current frame buffer.
 	 */
 	virtual void clearFrameBuffer() = 0;
+
+	/**
+	 * Draws the current frame buffer.
+	 */
+	virtual void drawFrameBuffer() = 0;
 	
 	/**
 	 * Accessor method for the framebuffer.
@@ -219,7 +224,6 @@ public:
 	 */
 	virtual void loadTransposeMatrixMultiply(const cg::vecmath::Matrix4f& matrix) = 0;
 	
-	
 	/**
 	 * Sets the pipeline mode to render a particular type of primitive.
 	 */
@@ -240,6 +244,12 @@ public:
 	 * @return a boolean flag representing the validity of the configuration.
 	 */
 	virtual void end() = 0;
+	
+	/**
+	 *  
+	 * 
+	 */
+	virtual void clear(const buffer_bit bit = BUFFER_COLOR) = 0;
 	
 	
 	/**
