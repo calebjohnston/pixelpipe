@@ -3,6 +3,16 @@
 using namespace cg::vecmath;
 
 namespace pixelpipe {
+	
+VertexProcessor::VertexProcessor()
+{
+	modelViewMatrix.identity();
+	MVP.identity();
+}
+
+VertexProcessor::~VertexProcessor()
+{
+}
 
 void VertexProcessor::updateTransforms(const SoftwarePipeline& pipe) {
 	modelViewMatrix = pipe.modelviewMatrix;		

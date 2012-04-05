@@ -30,7 +30,7 @@ PixelPipeWindow::PixelPipeWindow(std::string title, int width, int height, rende
 	float aspect = (float)m_width / (float)m_height;
 	m_camera->setAspect(aspect);
 	
-	//Texture* tex1 = new Texture("../resources/textures/checker.png");
+	// Texture* tex1 = new Texture("../resources/textures/checker.png");
 	Texture* tex1 = new Texture("../resources/textures/carbonite.jpg");
 	Texture* tex2 = new Texture("../resources/textures/silverblob.jpg");
 	m_textures.push_back(tex1);
@@ -40,8 +40,8 @@ PixelPipeWindow::PixelPipeWindow(std::string title, int width, int height, rende
 	m_state = State::getInstance();
 	
 	// set the lights
-	PointLight pl1(m_camera->getEye(), Color3f(1.0,1.0,1.0));
-	PointLight pl2(Vector3f(-3.0, 0.0, -5.0), Color3f(1.0,0.25,0.5));
+	PointLight pl1(Vector3f(-2.0, -2.0, 0), Color3f(1.0,0.5,0.5));
+	PointLight pl2(Vector3f(2.0, 2.0, 0), Color3f(0.5,0.5,1.0));
 	m_state->getLights().push_back(pl1);
 	m_state->getLights().push_back(pl2);
 	
@@ -91,8 +91,8 @@ void PixelPipeWindow::init()
 			break;
 	}
 	
-	// m_scene = new SceneCube(*m_pipeline);
-	m_scene = new SceneSpheres(*m_pipeline);
+	m_scene = new SceneCube(*m_pipeline);
+	// m_scene = new SceneSpheres(*m_pipeline);
 }
 
 /** 
@@ -110,12 +110,22 @@ void PixelPipeWindow::init_softwareMode()
 	
 	// setup vertex shaders
 	// ConstColorVP* vertProcessor = new ConstColorVP();				// 3
-	SmoothShadedVP* vertProcessor = new SmoothShadedVP();				// 3
+	SmoothShadedVP* vertProcessor = new SmoothShadedVP();			// 3
+	/*
+	Vector3f* v = new Vector3f(1.0, 2.0, 3.0);
+	Color3f* c = new Color3f(0.5, 0.25, 0.125);
+	Vector3f* n = new Vector3f(2.0, 3.0, -1.0);
+	Vector2f* t = new Vector2f(0,0);
+	Vertex* output = new Vertex();
+	vertProcessor->vertex(*v, *c, *n, *t, *output);
+	INFO() << "vertex: " << output->v.x << ", " << output->v.y << ", " << output->v.z;
+	*/
+	
 	// TexturedShadedVP* vertProcessor = new TexturedShadedVP();		// 5
 	// FragmentShadedVP* vertProcessor = new FragmentShadedVP();		// 9 + 6 * lightCount
 	// TexturedFragmentShadedVP* vertProcessor = new TexturedFragmentShadedVP();	// 9 + 6 * lightCount
 	
-	ZBufferFP* fragProcessor = new ZBufferFP();							// 3
+	ZBufferFP* fragProcessor = new ZBufferFP();						// 3
 	// ColorFP* fragProcessor = new ColorFP();							// 3
 	// TexturedFP* fragProcessor = new TexturedFP();					// 5
 	// PhongShadedFP* fragProcessor = new PhongShadedFP();				// 9 + 6 * lightCount
@@ -123,7 +133,7 @@ void PixelPipeWindow::init_softwareMode()
 	((SoftwarePipeline*) m_pipeline)->setVertexProcessor(vertProcessor);
 	((SoftwarePipeline*) m_pipeline)->setFragmentProcessor(fragProcessor);
 
-	// m_pipeline->setTexture(*m_textures.at(0));
+	m_pipeline->setTexture(*m_textures.at(0));
 	m_pipeline->configure();
 }
 
@@ -138,6 +148,8 @@ void PixelPipeWindow::init_openGLMode()
 	glEnable(GL_NORMALIZE);
 	glPolygonMode(GL_FRONT, GL_FILL);
 	glShadeModel(GL_SMOOTH);
+    glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
+    glEnable(GL_COLOR_MATERIAL);
     
 	// Configure textures
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
@@ -150,28 +162,32 @@ void PixelPipeWindow::init_openGLMode()
 	glLightModeli(GL_LIGHT_MODEL_COLOR_CONTROL, GL_SEPARATE_SPECULAR_COLOR);
 
 	// configure lighting
-	float amb[3] = { 0.1, 0.1, 0.1 };
+	Color3f s = m_state->getSpecularColor();
+	float a = m_state->getAmbientIntensity();
+	float amb[3] = { a, a, a };
 	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, amb);
     
 	glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_TRUE);
     
 	const unsigned max_ogl_lights = 8;
 	int lights[max_ogl_lights] = { GL_LIGHT0, GL_LIGHT1, GL_LIGHT2, GL_LIGHT3, GL_LIGHT4, GL_LIGHT5, GL_LIGHT6, GL_LIGHT7 };
-
-	for( int i = 0; i < std::min(max_ogl_lights, (unsigned) m_state->getLights().size()); i++) {
+	
+	for(size_t i = 0; i < std::min(max_ogl_lights, (unsigned) m_state->getLights().size()); i++) {
 		Color3f d = m_state->getLights().at(i).getIntensity();
 		Point3f p = m_state->getLights().at(i).getPosition();
+		
 		glEnable(lights[i]);
 		float diffuse[4] = { d.x, d.y, d.z, 1.0 };
 		float specular[4] = { 1.0, 1.0, 1.0, 1.0 };
 		float position[4] = { p.x, p.y, p.z, 1.0 };
+		
 		glLightfv(lights[i], GL_DIFFUSE, diffuse);
 		glLightfv(lights[i], GL_SPECULAR, specular);
 		glLightfv(lights[i], GL_POSITION, position);
 	}
 
-	float mat[3] = { 0.4, 0.4, 0.4 };
-	glMateriali(GL_FRONT, GL_SHININESS, 40);
+	float mat[3] = { s.x, s.y, s.z };
+	glMateriali(GL_FRONT, GL_SHININESS, m_state->getSpecularExponent());
 	glMaterialfv(GL_FRONT, GL_SPECULAR, mat);
     
 	glClearColor(0, 0, 0, 1);
@@ -182,56 +198,6 @@ void PixelPipeWindow::init_CUDAMode()
 	return;
 }
 
-/*
-int PixelPipeWindow::render()
-{
-	switch(m_mode){
-		case RENDER_OPENGL:
-			this->render_openGLMode();
-			break;
-		case RENDER_CUDA:
-			this->render_CUDAMode();
-			break;
-		default:
-		case RENDER_SOFTWARE:
-			this->render_openGLMode();
-			break;
-	}
-
-	return 0;
-}
-
-void PixelPipeWindow::render_softwareMode() 
-{
-	// glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	// glMatrixMode(GL_MODELVIEW);
-	// glLoadIdentity();
-	// // glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	
-	m_pipeline->setMatrixMode(MATRIX_PROJECTION);
-	m_pipeline->loadIdentity();
-	
-	float ht = m_camera->getHt();
-	float aspect = m_camera->getAspectRatio();
-	float near = m_camera->getNear();
-	float far = m_camera->getFar();
-	Vector3f eye = m_camera->getEye();
-	Vector3f target = m_camera->getTarget();
-	Vector3f up = m_camera->getUp();
-	m_pipeline->frustum(-ht * aspect, ht * aspect, -ht, ht, near, far);
-	
-	m_pipeline->viewport(0, 0, m_width, m_height);
-	
-	m_pipeline->setMatrixMode(MATRIX_MODELVIEW);
-	m_pipeline->loadIdentity();
-	
-	m_pipeline->lookAt(eye, target, up);
-	
-	m_pipeline->clearFrameBuffer();
-	m_scene->render();
-	m_pipeline->drawFrameBuffer();
-}
-*/
 int PixelPipeWindow::render() 
 {	
 	m_pipeline->clearFrameBuffer();

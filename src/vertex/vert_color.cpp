@@ -16,7 +16,6 @@ void ConstColorVP::vertex(const Vector3f& v, const Color3f& c, const Vector3f& n
 	output.v.set(v.x, v.y, v.z, 1);
 	cg::vecmath::Vector4f temp = output.v;
 	output.v = MVP * temp;
-	// MVP.rightMultiply(output.v);
 
 	output.setAttrs(nAttr());
 	output.attributes[0] = c.x;

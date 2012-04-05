@@ -190,14 +190,15 @@ void SoftwarePipeline::ortho(float l, float r, float b, float t, float n, float 
 
 void SoftwarePipeline::viewport(int x, int y, int w, int h)
 {
-	float cx = x + 0.5 * w, cy = y + 0.5 * h;
+	float cx = x + 0.5 * w;
+	float cy = y + 0.5 * h;
 	viewportMatrix.identity();
 	viewportMatrix[0][0] = 0.5 * w;
 	viewportMatrix[0][3] = cx;
 	viewportMatrix[1][1] = 0.5 * h;
 	viewportMatrix[1][3] = cy;
-	viewportMatrix[2][2] = 0.5;
-	viewportMatrix[2][3] = 0.5;
+	// viewportMatrix[2][2] = 0.5;
+	// viewportMatrix[2][3] = 0.5;
 	
 	recomputeMatrix();
 }
@@ -318,6 +319,21 @@ void SoftwarePipeline::vertex(const Vector3f& v, const Color3f& c, const Vector3
 			vertexIndex++;
 		break;
 	}
+}
+
+Matrix4f SoftwarePipeline::getViewportMatrix()
+{
+	return viewportMatrix;
+}
+
+Matrix4f SoftwarePipeline::getModelViewMatrix()
+{
+	return modelviewMatrix;
+}
+
+Matrix4f SoftwarePipeline::getProjectionMatrix()
+{
+	return projectionMatrix;
 }
 
 void SoftwarePipeline::end()

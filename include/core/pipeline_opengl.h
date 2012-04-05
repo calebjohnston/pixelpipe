@@ -169,6 +169,21 @@ public:
 	 * @return a boolean flag representing the validity of the configuration.
 	 */
 	virtual void end();
+
+	/**
+	 * ! @copydoc Pipeline::getViewportMatrix()
+	 */
+	virtual cg::vecmath::Matrix4f getViewportMatrix();
+
+	/**
+	 * ! @copydoc Pipeline::getModelViewMatrix()
+	 */
+	virtual cg::vecmath::Matrix4f getModelViewMatrix();
+
+	/**
+	 * ! @copydoc Pipeline::getProjectionMatrix()
+	 */
+	virtual cg::vecmath::Matrix4f getProjectionMatrix();
 	
 	/**
 	 * ! @copydoc Pipeline::clear()

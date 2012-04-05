@@ -35,7 +35,8 @@ public:
 		row[3][3] = 1.0;
 	}
     template<class U> Mat4(const Mat4<U>& m) { *this = m; }
-	template<class U> Mat4(const T* arr)
+	// template<class U> Mat4(const T* arr)	// doesn't work in clang++? why?
+	Mat4(const T* arr)
 	{
 		row[0] = TVec4<T>(arr[0], arr[4], arr[8], arr[12]);
 		row[1] = TVec4<T>(arr[1], arr[5], arr[9], arr[13]);

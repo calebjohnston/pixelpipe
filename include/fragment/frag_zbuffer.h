@@ -28,6 +28,7 @@ public:
 	{
 		return out << "[ ZBufferedFragmentProcessor ]";
 	}
+	// inline std::ostream &operator<<(std::ostream &out, const TVec3<T>& v)
 };
 
 }

@@ -206,6 +206,38 @@ void OpenGLPipeline::vertex(const Vector3f& v, const Color3f& c, const Vector3f&
 	glVertex3f(v.x, v.y, v.z);
 }
 
+Matrix4f OpenGLPipeline::getViewportMatrix()
+{
+	float vp[4] = { 0 };
+	float mat[16] = { 0 };
+	glGetFloatv(GL_VIEWPORT, vp);
+	
+	float x = vp[0], y = vp[1], w = vp[2], h = vp[3];
+	mat[0] = w * 0.5;
+	mat[5] = h * 0.5;
+	mat[10] = 1.0;
+	mat[12] = x + 0.5 * w;
+	mat[13] = y + 0.5 * h;
+	mat[15] = 1.0;
+	
+	return Matrix4f(mat);
+}
+
+Matrix4f OpenGLPipeline::getModelViewMatrix()
+{
+	float* mat = (float*) malloc(sizeof(float)*16);
+	glGetFloatv(GL_MODELVIEW_MATRIX, mat);
+	return Matrix4f(mat);
+}
+
+Matrix4f OpenGLPipeline::getProjectionMatrix()
+{
+	float* mat = (float*) malloc(sizeof(float)*16);
+	glGetFloatv(GL_PROJECTION_MATRIX, mat);
+	Matrix4f matrix(mat);
+	return matrix;
+}
+
 void OpenGLPipeline::end()
 {
 	glEnd();

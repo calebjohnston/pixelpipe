@@ -203,6 +203,21 @@ public:
 	 * @return a boolean flag representing the validity of the configuration.
 	 */
 	virtual void end();
+
+	/**
+	 * ! @copydoc Pipeline::getViewportMatrix()
+	 */
+	virtual cg::vecmath::Matrix4f getViewportMatrix();
+
+	/**
+	 * ! @copydoc Pipeline::getModelViewMatrix()
+	 */
+	virtual cg::vecmath::Matrix4f getModelViewMatrix();
+
+	/**
+	 * ! @copydoc Pipeline::getProjectionMatrix()
+	 */
+	virtual cg::vecmath::Matrix4f getProjectionMatrix();
 	
 	/**
 	 * ! @copydoc Pipeline::clear()
@@ -233,9 +248,9 @@ public:
 	cg::vecmath::Matrix4f* currentMatrix;	//!< The currently selected matrix using the MatrixMode methods.
 
 protected:
-	int vertexIndex;	//!< The index of the vertex as determined by the drawing mode.
-	int stripParity;	//!< The flag for triangle strip management
-	drawing_mode mode;	//!< The drawing mode (TRIANGLES, TRIANGLE_STRIP, TRIANGLE_FAN, QUAD, QUAD_STRIP)
+	int vertexIndex;			//!< The index of the vertex as determined by the drawing mode.
+	int stripParity;			//!< The flag for triangle strip management
+	drawing_mode mode;			//!< The drawing mode (TRIANGLES, TRIANGLE_STRIP, TRIANGLE_FAN, QUAD, QUAD_STRIP)
 	
 	/**
 	 * Notifies the TP of any changes to the modelview, projection, or viewing

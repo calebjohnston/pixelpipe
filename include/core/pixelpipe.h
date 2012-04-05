@@ -24,7 +24,7 @@ namespace pixelpipe {
  */
 class PixelPipeWindow : public GlutWindow {
 public:
-	PixelPipeWindow(std::string title="PixelPipe", int width=800, int height=600, render_mode mode=RENDER_SOFTWARE);
+	PixelPipeWindow(std::string title="PixelPipe", int width=800, int height=600, render_mode mode=RENDER_OPENGL);
 	~PixelPipeWindow();
 	virtual int run();
 	

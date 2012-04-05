@@ -18,16 +18,6 @@ namespace pixelpipe {
  */
 class FragmentProcessor {
 public:	
-	/** A list of valid Fragment Processors */
-	// static public Class[] classes = {
-	// 	TrivialColorFP.class,
-	// 	ColorZBufferFP.class,
-	// 	TexturedFP.class,
-	// 	PhongShadedFP.class,
-	// 	TexturedPhongFP.class,
-	// 	ReflectionMapFP.class
-	// 	};
-	
 	virtual int nAttr() const = 0;
 	virtual void fragment(Fragment& f, FrameBuffer& fb) = 0;
 	

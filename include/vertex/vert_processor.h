@@ -25,14 +25,8 @@ namespace pixelpipe {
  */
 class VertexProcessor {
 public:
-	/** A list of valid Triangle Processors */
-	// static Class[] classes = { 
-	// 	ConstColorVP.class, 
-	// 	SmoothShadedVP.class, 
-	// 	TexturedSmoothShadedVP.class, 
-	// 	FragmentShadedVP.class, 
-	// 	TexturedFragmentShadedVP.class 
-	// 	};
+	VertexProcessor();
+	~VertexProcessor();
 	
 	/**
 	 * Returns the number of attributes this triangle processor will provide.

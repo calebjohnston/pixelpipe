@@ -206,6 +206,23 @@ public:
 	virtual void setMatrixMode(const matrix_mode mode) = 0;
 	
 	/**
+	 * Returns a copy of the viewport expressed as a matrix of the form:
+	 * 
+	 * @return a copy of the viewport matrix
+	 */
+	virtual cg::vecmath::Matrix4f getViewportMatrix() = 0;
+	
+	/**
+	 * @return a copy of the modelview matrix
+	 */
+	virtual cg::vecmath::Matrix4f getModelViewMatrix() = 0;
+	
+	/**
+	 * @return a copy of the projection matrix
+	 */
+	virtual cg::vecmath::Matrix4f getProjectionMatrix() = 0;
+	
+	/**
 	 * Multiply the currently selected matrix with the specified matrix
 	 * 
 	 * @param matrix a constant reference to a 4x4 matrix to multiply
@@ -269,25 +286,6 @@ public:
 	{
 		return out << "[ Pipeline ]";
 	}
-
-protected:
-	
-private:
-	/*
-	Vertex vertexCache[4];		//!< The vertex cache used to transfer geometry to through the pipeline.
-	Vertex triangle1[3];		//!< The local copy of the first triangle stored after clipping.
-	Vertex triangle2[3];		//!< The local copy of the second triangle stored after clipping.
-	*/
-	
-	/**
-	 * Renders a triangle from already-processed vertices.
-	 * 
-	 * @param v The 3 vertices of the triangle.
-	 * @param c The 3 colors of the triangle - one for each vertex.
-	 * @param n The 3 normals of the triangle - one for each vertex.
-	 * @param t The 3 texture coordinates of the triangle - one for each vertex.
-	 */
-	// virtual void renderTriangle(const Vertex* vertices) = 0;
 	
 };	// class Pipeline
 

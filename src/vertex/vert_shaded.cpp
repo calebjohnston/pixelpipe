@@ -14,18 +14,18 @@ SmoothShadedVP::SmoothShadedVP() : VertexProcessor()
 void SmoothShadedVP::vertex(const Vector3f& v, const Color3f& c, const Vector3f& n, const Vector2f& t, Vertex& output)
 {
 	//transform vertex
-	vert.set(v.x,v.y,v.z,1.0f);
+	vert.set(v.x, v.y, v.z, 1.0f);
 	Vector4f temp = vert;
 	vert = modelViewMatrix * temp;
-	transformedVertex.set(vert.x,vert.y,vert.z);
+	transformedVertex.set(vert.x, vert.y, vert.z);
 
 	//transform normals
 	Vector3f temp3 = n;
 	temp3.normalize();
-	normal.set(temp3.x,temp3.y,temp3.z,0.0f);
+	normal.set(temp3.x, temp3.y, temp3.z, 0.0f);
 	temp = normal;
 	normal = modelViewMatrix * temp;
-	transformedNormal.set(normal.x,normal.y,normal.z);
+	transformedNormal.set(normal.x, normal.y, normal.z);
 	transformedNormal.normalize();
 
 	//calculate view vector
@@ -105,7 +105,7 @@ void SmoothShadedVP::vertex(const Vector3f& v, const Color3f& c, const Vector3f&
 
 	output.attributes[0] = outColor.x;
 	output.attributes[1] = outColor.y;
-	output.attributes[2] = outColor.z; 
+	output.attributes[2] = outColor.z;
 }
 
 void SmoothShadedVP::triangle(const Vector3f* vs, const Color3f* cs, const Vector3f* ns, const Vector2f* ts, Vertex* output)

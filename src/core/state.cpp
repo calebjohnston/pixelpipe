@@ -16,7 +16,6 @@ State::State()
 	specularExponent = 40.0;
 	
 	this->lights = new std::vector<PointLight>();
-	DEV() << "the lights: " << this->lights->size();
 }
 
 State::~State()
