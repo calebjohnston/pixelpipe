@@ -18,6 +18,36 @@ Camera::~Camera()
 {
 }
 
+void Camera::setEye(const Vector3f& vec)
+{
+	this->m_eye = vec;
+}
+
+void Camera::setTarget(const Vector3f& vec)
+{
+	this->m_target = vec;
+}
+
+void Camera::getUp(const Vector3f& vec)
+{
+	this->m_up = vec;
+}
+
+void Camera::setNear(float val)
+{
+	this->m_near = val;
+}
+
+void Camera::setFar(float val)
+{
+	this->m_far = val;
+}
+
+void Camera::setHt(float val)
+{
+	this->m_ht = val;
+}
+
 void Camera::orbit(const Vector2f& mouseDelta)
 {
 	// Build arbitrary frame at target point with w = up

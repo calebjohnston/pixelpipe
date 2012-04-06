@@ -41,11 +41,37 @@ public:
 	void orbit(const cg::vecmath::Vector2f& mouseDelta);
 	void panDolly(const cg::vecmath::Vector2f& mouseDelta, bool dolly);
 	void dolly(float d);
-	// void setProjection(Pipeline& pipe) const;
-	// void setProjection(GLAutoDrawable d);
 	void setAspect(float d);
-	// void setup(Pipeline& pipe) const;
-	// void setup(GLAutoDrawable d);
+	
+	/**
+	 * @param vec the camera's new position vector.
+	 */
+	void setEye(const cg::vecmath::Vector3f& vec);
+	
+	/**
+	 * @param vec the camera's new target vector.
+	 */
+	void setTarget(const cg::vecmath::Vector3f& vec);
+	
+	/**
+	 * @param vec the camera's new up vector.
+	 */
+	void getUp(const cg::vecmath::Vector3f& vec);
+	
+	/**
+	 * @param val the camera's new near clipping plane distance.
+	 */
+	void setNear(float val);
+	
+	/**
+	 * @param val the camera's new var clipping plane distance.
+	 */
+	void setFar(float val);
+	
+	/**
+	 * @param val the camera's new height scaling factor.
+	 */
+	void setHt(float val);
 	
 	/**
 	 * @param v the camera's position vector.
