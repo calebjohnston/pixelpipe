@@ -91,28 +91,27 @@ void FrameBuffer::allocateGLTexture()
 
 void FrameBuffer::drawGLTexture(float x, float y) const 
 {
-	//int step = img->widthStep/sizeof(char);
-	/*
-	for(int i=0; i<height; i++){
-		for(int j=0; j<width; j++){
-			for(int k=0; k<3; k++){
-				tmp_img[(i*width + j)*channels + k] = ((char*)(data + i*step))[j*channels + k];
-			}
-		}
-	}
-	*/
-
 	// Draw the texture using OpenGL
 	glEnable(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, this->m_textureHandle);//(const_cast<GLuint*>(&textureHandle)));
+	glBindTexture(GL_TEXTURE_2D, this->m_textureHandle);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB8, this->m_width, this->m_height, 0, GL_RGB, GL_UNSIGNED_BYTE, this->m_cData);
 	
+	/*
 	glBegin(GL_TRIANGLE_FAN);
 	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 	glTexCoord2f(0, 0); glVertex3f(x, y, 0);
 	glTexCoord2f(1, 0); glVertex3f(x + this->m_width, y, 0);
 	glTexCoord2f(1, 1); glVertex3f(x + this->m_width, y + this->m_height, 0);
 	glTexCoord2f(0, 1); glVertex3f(x, y + this->m_height, 0);
+	glEnd();
+	*/
+	
+	glBegin(GL_QUADS);
+	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+	glTexCoord2f(0, 1); glVertex3f(x, y, 0);
+	glTexCoord2f(1, 1); glVertex3f(x + this->m_width, y, 0);
+	glTexCoord2f(1, 0); glVertex3f(x + this->m_width, y + this->m_height, 0);
+	glTexCoord2f(0, 0); glVertex3f(x, y + this->m_height, 0);
 	glEnd();
 		
 	//glDisableClientState(GL_TEXTURE_COORD_ARRAY);
