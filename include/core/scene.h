@@ -33,7 +33,7 @@ class Scene {
 public:
 	Scene(Pipeline& pipe) : m_pipeline(pipe) {
 		m_texture = new std::vector<Texture*>();
-		m_texture->reserve(32);
+		m_texture->resize(32);
 	}
 	
 	~Scene() {
@@ -47,13 +47,10 @@ public:
 	*/
 	virtual void setTexture(const Texture* tex, int index)
 	{
-		// for now we will rely upon vector::at to throw the out of bounds exception
-		//if(m_texture->size() < index){
-			if(m_texture->at(index) != NULL){
-				delete m_texture->at(index);
-			}
-			(*m_texture)[index] = (Texture*)tex;
-		//}
+		if(m_texture->at(index) != NULL){
+			delete m_texture->at(index);
+		}
+		(*m_texture)[index] = (Texture*)tex;
 	}
 	
 	/**
