@@ -25,14 +25,6 @@ public:
 	virtual int nAttr() const { return size; }
 	virtual void fragment(Fragment& f, FrameBuffer& fb);
 	
-	/**
-	 * Output utility function for logging and debugging purposes.
-	 */
-	inline std::ostream& operator<<(std::ostream &out)
-	{
-		return out << "[ TexturedPhongFragmentProcessor ]";
-	}
-	
 protected:
 	int size;							//!< the size of the parameters that must be sent to the rasterizer.
 	float nDotH;						//!< used for storing the dot product of the normal vector with the half vector
@@ -46,6 +38,14 @@ protected:
 	cg::vecmath::Vector3f halfVector;	//!< the local temporary for the half vector at the fragment
 };
 
+}
+
+/**
+ * Output utility function for logging and debugging purposes.
+ */
+inline std::ostream& operator<<(std::ostream &out, const pixelpipe::TexturedPhongFP& fp)
+{
+	return out << "[ TexturedPhongFragmentProcessor ]";
 }
 
 #endif	// __PIPELINE_TEXTURED_PHONG_FRAG_H

@@ -33,6 +33,14 @@ protected:
 	
 };	// class FragmentProcessor
 
-};	// namespace pixelpipe {
+};	// namespace pixelpipe
+
+/**
+ * Output utility function for logging and debugging purposes.
+ */
+inline std::ostream& operator<<(std::ostream &out, const pixelpipe::FragmentProcessor& fp)
+{
+	return out << "[ FragmentProcessor ]";
+}
 
 #endif	// __PIPELINE_FRAGMENT_PROCESSOR_H

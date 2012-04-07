@@ -23,18 +23,18 @@ public:
 	virtual int nAttr() const { return 5; }
 	virtual void fragment(Fragment& f, FrameBuffer& fb);
 	
-	/**
-	 * Output utility function for logging and debugging purposes.
-	 */
-	inline std::ostream& operator<<(std::ostream &out)
-	{
-		return out << "[ TexturedFragmentProcessor ]";
-	}
-	
 protected:
 	cg::vecmath::Color3f color;	//!< local temporary color value sampled from the texture
 };
 
+}
+
+/**
+ * Output utility function for logging and debugging purposes.
+ */
+inline std::ostream& operator<<(std::ostream &out, const pixelpipe::TexturedFP& fp)
+{
+	return out << "[ TexturedFragmentProcessor ]";
 }
 
 #endif	// __PIPELINE_TEXTURED_FRAG_H

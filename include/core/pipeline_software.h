@@ -1,7 +1,7 @@
 #ifndef __PIPELINE_SOFTWARE_H
 #define __PIPELINE_SOFTWARE_H
 
-#include <vector>
+#include <list>
 
 #include "core/common.h"
 #include "core/fragment.h"
@@ -105,7 +105,7 @@ public:
 	 *
 	 * @return a reference to the framebuffer object
 	 */
-	virtual FrameBuffer& getFrameBuffer() const { return *framebuffer; }
+	virtual FrameBuffer& getFrameBuffer() const { return *m_framebuffer; }
 	
 	/**
 	 * ! @copydoc Pipeline::loadIdentity()
@@ -151,7 +151,7 @@ public:
 	/**
 	 * ! @copydoc Pipeline::pushMatrix()
 	 */
-	virtual void pushMatrix(const cg::vecmath::Matrix4f* matrix = NULL);
+	virtual void pushMatrix(cg::vecmath::Matrix4f* matrix = NULL);
 	
 	/**
 	 * ! @copydoc Pipeline::popMatrix()
@@ -207,6 +207,21 @@ public:
 	/**
 	 * ! @copydoc Pipeline::getViewportMatrix()
 	 */
+	virtual cg::vecmath::Matrix4f& viewportMatrix() const { return (*this->m_viewportMatrix); }
+
+	/**
+	 * ! @copydoc Pipeline::getModelViewMatrix()
+	 */
+	virtual cg::vecmath::Matrix4f& modelViewMatrix() const { return (*this->m_modelviewMatrix); }
+
+	/**
+	 * ! @copydoc Pipeline::getProjectionMatrix()
+	 */
+	virtual cg::vecmath::Matrix4f& projectionMatrix() const { return (*this->m_projectionMatrix); }
+
+	/**
+	 * ! @copydoc Pipeline::getViewportMatrix()
+	 */
 	virtual cg::vecmath::Matrix4f getViewportMatrix();
 
 	/**
@@ -233,24 +248,19 @@ public:
 	 * @param t The 3 texture coordinates of the triangle - one for each vertex.
 	 */
 	virtual void renderTriangle(const cg::vecmath::Vector3f* v, const cg::vecmath::Color3f* c, const cg::vecmath::Vector3f* n, const cg::vecmath::Vector2f* t);
-	
-	/**
-	 * Output utility function for logging and debugging purposes.
-	 */
-	inline std::ostream& operator<<(std::ostream &out)
-	{
-		return out << "[ SoftwarePipeline ]";
-	}
-	
-	cg::vecmath::Matrix4f modelviewMatrix;	//!< The model-view matrix.
-	cg::vecmath::Matrix4f projectionMatrix;	//!< The projection matrix.
-	cg::vecmath::Matrix4f viewportMatrix;	//!< The viewport matrix.
-	cg::vecmath::Matrix4f* currentMatrix;	//!< The currently selected matrix using the MatrixMode methods.
 
 protected:
-	int vertexIndex;			//!< The index of the vertex as determined by the drawing mode.
-	int stripParity;			//!< The flag for triangle strip management
-	drawing_mode mode;			//!< The drawing mode (TRIANGLES, TRIANGLE_STRIP, TRIANGLE_FAN, QUAD, QUAD_STRIP)
+	matrix_mode m_matrixMode;		//!< The currently selected matrix mode.
+	int m_vertexIndex;				//!< The index of the vertex as determined by the drawing mode.
+	int m_stripParity;				//!< The flag for triangle strip management
+	drawing_mode m_mode;			//!< The drawing mode (TRIANGLES, TRIANGLE_STRIP, TRIANGLE_FAN, QUAD, QUAD_STRIP)
+	cg::vecmath::Matrix4f* m_modelviewMatrix;			//!< The model-view matrix.
+	cg::vecmath::Matrix4f* m_projectionMatrix;			//!< The projection matrix.
+	cg::vecmath::Matrix4f* m_viewportMatrix;			//!< The viewport matrix.
+	cg::vecmath::Matrix4f* m_currentMatrix;				//!< The currently selected matrix using the MatrixMode methods.
+	std::list<cg::vecmath::Matrix4f*>* m_modelviewStack;	//!< A LIFO stack of user-defined modelview matrices
+	std::list<cg::vecmath::Matrix4f*>* m_projectionStack;	//!< A LIFO stack of user-defined modelview matrices
+	std::list<cg::vecmath::Matrix4f*>* m_viewportStack;		//!< A LIFO stack of user-defined modelview matrices
 	
 	/**
 	 * Notifies the TP of any changes to the modelview, projection, or viewing
@@ -259,18 +269,15 @@ protected:
 	void recomputeMatrix();
 	
 private:
-	// Class[] EMPTY_CLASS_ARRAY;
-	// Object[] EMPTY_OBJECT_ARRAY;
+	VertexProcessor* m_vp;			//!< The current vertex processor being used.
+	Clipper* m_clipper;				//!< The geometry clipper being used to perform frustum culling.
+	Rasterizer* m_rasterizer;		//!< An instance of the rasterizer being used to perform blitting.
+	FragmentProcessor* m_fp;		//!< The current fragment processor being used.
+	FrameBuffer* m_framebuffer;		//!< The current framebuffer being used as the render target.
 	
-	VertexProcessor* vp;		//!< The current vertex processor being used.
-	Clipper* clipper;			//!< The geometry clipper being used to perform frustum culling.
-	Rasterizer* rasterizer;		//!< An instance of the rasterizer being used to perform blitting.
-	FragmentProcessor* fp;		//!< The current fragment processor being used.
-	FrameBuffer* framebuffer;	//!< The current framebuffer being used as the render target.
-	
-	Vertex vertexCache[4];		//!< The vertex cache used to transfer geometry to through the pipeline.
-	Vertex triangle1[3];		//!< The local copy of the first triangle stored after clipping.
-	Vertex triangle2[3];		//!< The local copy of the second triangle stored after clipping.
+	Vertex m_vertexCache[4];		//!< The vertex cache used to transfer geometry to through the pipeline.
+	Vertex m_triangle1[3];			//!< The local copy of the first triangle stored after clipping.
+	Vertex m_triangle2[3];			//!< The local copy of the second triangle stored after clipping.
 	
 	void swap(Vertex* va, int i, int j) const;
 	
@@ -287,5 +294,13 @@ private:
 };	// class Pipeline
 
 }	// namespace pixelpipe
+
+/**
+ * Output utility function for logging and debugging purposes.
+ */
+inline std::ostream& operator<<(std::ostream &out, const pixelpipe::SoftwarePipeline& pipe)
+{
+	return out << "[ SoftwarePipeline ]";
+}
 
 #endif	// __PIPELINE_SOFTWARE_H

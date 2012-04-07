@@ -15,12 +15,12 @@ VertexProcessor::~VertexProcessor()
 }
 
 void VertexProcessor::updateTransforms(const SoftwarePipeline& pipe) {
-	modelViewMatrix = pipe.modelviewMatrix;		
+	modelViewMatrix = pipe.modelViewMatrix();		
 	MVP = modelViewMatrix;
 	Matrix4f temp = modelViewMatrix;
-	MVP = pipe.projectionMatrix * temp;
+	MVP = pipe.projectionMatrix() * temp;
 	temp = MVP;
-	MVP = pipe.viewportMatrix * temp;
+	MVP = pipe.viewportMatrix() * temp;
 }
 
 }

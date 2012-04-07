@@ -73,7 +73,7 @@ public:
 	/**
 	 * 
 	 */
-	bool getDepthTest() { return this->m_depthTestEnabled; }
+	bool getDepthTest() const { return this->m_depthTestEnabled; }
 
 	/**
 	 * 
@@ -83,7 +83,7 @@ public:
 	/**
 	 * 
 	 */
-	bool getTexturing2D() { return this->m_texture2dEnabled; }
+	bool getTexturing2D() const { return this->m_texture2dEnabled; }
 
 	/**
 	 * Accessor method for the global ambient intensity
@@ -123,14 +123,6 @@ public:
 	cg::vecmath::Color3f& getSpecularColor() const { return *(this->specularColor); }
 	
 	/**
-	 * Output utility function for logging and debugging purposes.
-	 */
-	inline std::ostream& operator<<(std::ostream &out)
-	{
-		return out << "[ State ]";
-	}
-	
-	/**
 	 * Singleton interface
 	 */
 	static State* getInstance() {
@@ -164,6 +156,14 @@ private:
 	
 };
 
+}
+
+/**
+ * Output utility function for logging and debugging purposes.
+ */
+inline std::ostream& operator<<(std::ostream &out, pixelpipe::State& s)
+{
+	return out << "[ State ]";
 }
 
 #endif	// __PIPELINE_STATE_H

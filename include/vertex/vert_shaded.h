@@ -36,14 +36,6 @@ public:
 				const cg::vecmath::Vector3f& n_ign, 
 				const cg::vecmath::Vector2f& t_ign, 
 				Vertex& output);
-
-	/**
-	 * Output utility function for logging and debugging purposes.
-	 */
-	inline std::ostream& operator<<(std::ostream &out)
-	{
-		return out << "[ SmoothShadedVertexProcessor ]";
-	}
 	
 protected:	
 	float nDotH;	//!< used for storing the dot product of the normal vector with the half vector
@@ -61,6 +53,14 @@ protected:
 	
 };
 
+}
+
+/**
+ * Output utility function for logging and debugging purposes.
+ */
+inline std::ostream& operator<<(std::ostream &out, const pixelpipe::SmoothShadedVP& vp)
+{
+	return out << "[ SmoothShadedVertexProcessor ]";
 }
 
 #endif	// __PIPELINE_SMOOTH_SHADED_PROCESSOR_H

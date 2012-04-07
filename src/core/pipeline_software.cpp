@@ -24,37 +24,52 @@ namespace pixelpipe {
  */
 SoftwarePipeline::SoftwarePipeline(int nx, int ny)
 {	
-	framebuffer = new FrameBuffer(nx, ny);
+	m_framebuffer = new FrameBuffer(nx, ny);
 	
-	mode = PIPELINE_MODE_NONE;
-	modelviewMatrix.identity();
-	projectionMatrix.identity();
-	viewportMatrix.identity();
+	m_mode = PIPELINE_MODE_NONE;
+	m_modelviewMatrix = new Matrix4f();
+	m_projectionMatrix = new Matrix4f();
+	m_viewportMatrix = new Matrix4f();
 	
-	currentMatrix = &modelviewMatrix;
+	m_modelviewMatrix->identity();
+	m_projectionMatrix->identity();
+	m_viewportMatrix->identity();
+	m_currentMatrix = m_modelviewMatrix;
 	
-	clipper = new Clipper(3);
-	rasterizer = NULL;
+	m_modelviewStack = new std::list<Matrix4f*>();
+	
+	m_clipper = new Clipper(3);
+	m_rasterizer = NULL;
 }
 
 SoftwarePipeline::~SoftwarePipeline()
-{
+{	
+	m_currentMatrix = NULL;
+	
+	delete m_modelviewMatrix;
+	delete m_projectionMatrix;
+	delete m_viewportMatrix;
+	delete m_vp;
+	delete m_fp;
+	delete m_clipper;
+	delete m_rasterizer;
+	delete m_framebuffer;
 }
 
 void SoftwarePipeline::init()
 {
-	framebuffer->init();
+	m_framebuffer->init();
 }
 
 void SoftwarePipeline::setFragmentProcessor(const FragmentProcessor* fragProc)
 {
-	fp = const_cast<FragmentProcessor*>(fragProc);
-	if(rasterizer==NULL) rasterizer = new Rasterizer(fp->nAttr(), framebuffer->getWidth(), framebuffer->getHeight());
+	m_fp = const_cast<FragmentProcessor*>(fragProc);
+	if(m_rasterizer==NULL) m_rasterizer = new Rasterizer(m_fp->nAttr(), m_framebuffer->getWidth(), m_framebuffer->getHeight());
 }
 
 void SoftwarePipeline::setVertexProcessor(const VertexProcessor* vertProc)
 {
-	vp = const_cast<VertexProcessor*>(vertProc);
+	m_vp = const_cast<VertexProcessor*>(vertProc);
 }
 
 void SoftwarePipeline::configure()
@@ -63,50 +78,50 @@ void SoftwarePipeline::configure()
 	
 	if(state->getTexturing2D()){
 		if(true){
-			vp = new TexturedFragmentShadedVP();
-			fp = new TexturedPhongFP();
+			m_vp = new TexturedFragmentShadedVP();
+			m_fp = new TexturedPhongFP();
 		}
 		else if(false){
-			vp = new FragmentShadedVP();
-			fp = new PhongShadedFP();
+			m_vp = new FragmentShadedVP();
+			m_fp = new PhongShadedFP();
 		}
 		else {
-			vp = new TexturedShadedVP();
-			fp = new TexturedFP();
+			m_vp = new TexturedShadedVP();
+			m_fp = new TexturedFP();
 		}
 	}
 	else{
 		if(state->getLighting()){
-			vp = new SmoothShadedVP();
+			m_vp = new SmoothShadedVP();
 			if(state->getDepthTest()){
-				fp = new ZBufferFP();
+				m_fp = new ZBufferFP();
 			}else{
-				fp = new ColorFP();
+				m_fp = new ColorFP();
 			}
 		}
 		else{
-			vp = new ConstColorVP();
+			m_vp = new ConstColorVP();
 			if(state->getDepthTest()){
-				fp = new ZBufferFP();
+				m_fp = new ZBufferFP();
 			}else{
-				fp = new ColorFP();
+				m_fp = new ColorFP();
 			}
 		}
 	}
 	
-	if(fp->nAttr() != vp->nAttr()) throw "Unsupported configuration.";
+	if(m_fp->nAttr() != m_vp->nAttr()) throw "Unsupported configuration.";
 	
-	rasterizer = new Rasterizer(fp->nAttr(), framebuffer->getWidth(), framebuffer->getHeight());
-	rasterizer->setAttributeCount(fp->nAttr());
-	clipper->setAttributeCount(fp->nAttr());
+	m_rasterizer = new Rasterizer(m_fp->nAttr(), m_framebuffer->getWidth(), m_framebuffer->getHeight());
+	m_rasterizer->setAttributeCount(m_fp->nAttr());
+	m_clipper->setAttributeCount(m_fp->nAttr());
 		
-	vp->updateTransforms(*this);
-	vp->updateLightModel(*this);
+	m_vp->updateTransforms(*this);
+	m_vp->updateLightModel(*this);
 }
 
 bool SoftwarePipeline::validConfiguration()
 {
-	return fp->nAttr() == vp->nAttr();
+	return m_fp->nAttr() == m_vp->nAttr();
 }
 
 bool SoftwarePipeline::isFlatShaded()
@@ -116,62 +131,69 @@ bool SoftwarePipeline::isFlatShaded()
 
 void SoftwarePipeline::setTexture(const Texture& texture)
 {
-	fp->setTexture(texture);
+	m_fp->setTexture(texture);
 }
 
 void SoftwarePipeline::clearFrameBuffer()
 {
-	framebuffer->clear(0, 0, 0, 1);
+	m_framebuffer->clear(0, 0, 0, 1);
 }
 
 void SoftwarePipeline::drawFrameBuffer()
 {
-	framebuffer->draw();
+	m_framebuffer->draw();
 	
 	glutSwapBuffers();
 }
 
 const char* SoftwarePipeline::getFrameData()
 {
-	return framebuffer->getData();
+	return m_framebuffer->getData();
 }
 
 void SoftwarePipeline::loadIdentity()
 {
-	// modelviewMatrix.identity();
-	// recomputeMatrix();
-	
-	currentMatrix->identity();
+	m_currentMatrix->identity();
 	recomputeMatrix();
 }
 
 void SoftwarePipeline::rotate(float angle, const Vector3f& axis)
 {
 	Matrix4f temp = rotationMatrix(angle, axis, false);
-	Matrix4f mv(modelviewMatrix);
-	modelviewMatrix = mv * temp;
+	Matrix4f mv(*m_modelviewMatrix);
+	(*m_modelviewMatrix) = mv * temp;
 	recomputeMatrix();
 }
 
 void SoftwarePipeline::translate(const Vector3f& delta)
 {
 	Matrix4f temp = translationMatrix(delta);
-	Matrix4f mv(modelviewMatrix);
-	modelviewMatrix = mv * temp;
+	Matrix4f mv(*m_modelviewMatrix);
+	(*m_modelviewMatrix) = mv * temp;
 	recomputeMatrix();
 }
 
 void SoftwarePipeline::scale(const Vector3f& scale)
 {
 	Matrix4f temp = scalingMatrix(scale);
-	Matrix4f mv(modelviewMatrix);
-	modelviewMatrix = mv * temp;
+	Matrix4f mv(*m_modelviewMatrix);
+	(*m_modelviewMatrix) = mv * temp;
 	recomputeMatrix();
 }
 
 void SoftwarePipeline::recomputeMatrix()
 {
-	vp->updateTransforms(*this);
+	// we'll squash the matrix stack here...
+	/*
+	if(!m_modelviewStack->empty()){
+		std::list<Matrix4f*>::iterator iter;
+		for(iter=m_modelviewStack->begin(); iter != m_modelviewStack->end(); iter++){
+			m_modelviewMatrix *= (*iter);
+		}
+	}
+	*/
+	
+	m_vp->updateTransforms(*this);
 }
 
 void SoftwarePipeline::lookAt(Vector3f eye, Vector3f target, Vector3f up)
@@ -186,14 +208,14 @@ void SoftwarePipeline::lookAt(Vector3f eye, Vector3f target, Vector3f up)
 	Vector3f v;
 	v = cross(w, u);
 	T = cameraToFrame(u, v, w, eye);
-	Matrix4f mv(modelviewMatrix);
-	modelviewMatrix = mv * T;
+	Matrix4f mv(*m_modelviewMatrix);
+	(*m_modelviewMatrix) = mv * T;
 	recomputeMatrix();
 }
 
 void SoftwarePipeline::frustum(float l, float r, float b, float t, float n, float f)
 {
-	Matrix4f& mat = *currentMatrix;
+	Matrix4f& mat = *m_currentMatrix;
 	mat.identity();
 	mat[0][0] = 2 * n / (r - l);
 	mat[0][2] = (r + l) / (r - l);
@@ -209,7 +231,7 @@ void SoftwarePipeline::frustum(float l, float r, float b, float t, float n, floa
 
 void SoftwarePipeline::ortho(float l, float r, float b, float t, float n, float f)
 {	
-	Matrix4f& mat = *currentMatrix;
+	Matrix4f& mat = *m_currentMatrix;
 	mat.identity();
 	mat[0][0] = 2 / (r - l);
 	mat[0][3] = -(r + l) / (r - l);
@@ -226,153 +248,166 @@ void SoftwarePipeline::viewport(int x, int y, int w, int h)
 {
 	float cx = x + 0.5 * w;
 	float cy = y + 0.5 * h;
-	viewportMatrix.identity();
-	viewportMatrix[0][0] = 0.5 * w;
-	viewportMatrix[0][3] = cx;
-	viewportMatrix[1][1] = 0.5 * h;
-	viewportMatrix[1][3] = cy;
-	// viewportMatrix[2][2] = 0.5;
-	// viewportMatrix[2][3] = 0.5;
+	m_viewportMatrix->identity();
+	(*m_viewportMatrix)[0][0] = 0.5 * w;
+	(*m_viewportMatrix)[0][3] = cx;
+	(*m_viewportMatrix)[1][1] = 0.5 * h;
+	(*m_viewportMatrix)[1][3] = cy;
 	
 	recomputeMatrix();
 }
 
-void SoftwarePipeline::pushMatrix(const Matrix4f* matrix)
+void SoftwarePipeline::pushMatrix(Matrix4f* matrix)
 {
-	INFO() << "no support for pushMatrix yet!";
-	exit;
+	if(matrix==NULL){
+		matrix = new Matrix4f();
+		matrix->identity();
+	}
+	m_modelviewStack->push_back(matrix);
 }
 
 void SoftwarePipeline::popMatrix()
 {
-	INFO() << "no support for popMatrix yet!";
-	exit;
+	switch(m_matrixMode){
+		case MATRIX_MODELVIEW:
+			m_modelviewStack->pop_back();
+			break;
+		case MATRIX_PROJECTION:
+			m_projectionStack->pop_back();
+			break;
+		case MATRIX_VIEWPORT:
+		case MATRIX_TEXTURE:
+		case MATRIX_COLOR:
+		default:
+		break;
+	}
 }
 
 void SoftwarePipeline::loadMatrix(const Matrix4f& matrix)
 {
-	(*currentMatrix) = matrix;
+	(*m_currentMatrix) = matrix;
 }
 
 void SoftwarePipeline::loadTransposeMatrix(const Matrix4f& matrix)
 {
-	(*currentMatrix) = matrix;
-	transpose(*currentMatrix);
+	(*m_currentMatrix) = matrix;
+	transpose(*m_currentMatrix);
 }
 
 void SoftwarePipeline::setMatrixMode(const matrix_mode mode)
 {
-	switch(mode){
+	m_matrixMode = mode;
+	switch(m_matrixMode){
 		case MATRIX_MODELVIEW:
-			currentMatrix = &modelviewMatrix;
+			m_currentMatrix = m_modelviewMatrix;
 			break;
 		case MATRIX_PROJECTION:
-			currentMatrix = &projectionMatrix;
+			m_currentMatrix = m_projectionMatrix;
 			break;
 		case MATRIX_VIEWPORT:
-			currentMatrix = &viewportMatrix;
+			m_currentMatrix = m_viewportMatrix;
 			break;
 		case MATRIX_TEXTURE:
-			// currentMatrix = 
+			// m_currentMatrix = 
 			break;
 		case MATRIX_COLOR:
-			// currentMatrix = 
+			// m_currentMatrix = 
 			break;
 	}
 }
 
 void SoftwarePipeline::multiplyMatrix(const Matrix4f& matrix)
 {
-	(*currentMatrix) = (*currentMatrix) * matrix;
+	(*m_currentMatrix) = (*m_currentMatrix) * matrix;
 }
 
 void SoftwarePipeline::loadTransposeMatrixMultiply(const Matrix4f& matrix)
 {
 	Matrix4f t = transpose(matrix);
-	(*currentMatrix) = (*currentMatrix) * t;
+	(*m_currentMatrix) = (*m_currentMatrix) * t;
 }
 
 void SoftwarePipeline::begin(const drawing_mode mode)
 {
-	this->mode = mode;
-	this->vertexIndex = 0;
-	this->stripParity = 0;
+	this->m_mode = mode;
+	this->m_vertexIndex = 0;
+	this->m_stripParity = 0;
 }
 
 void SoftwarePipeline::vertex(const Vector3f& v, const Color3f& c, const Vector3f& n, const Vector2f& t)
 {
-	vp->vertex(v, c, n, t, vertexCache[vertexIndex]);
+	m_vp->vertex(v, c, n, t, m_vertexCache[m_vertexIndex]);
 	
-	switch (mode) {
+	switch (m_mode) {
 	case TRIANGLES:
-		if (vertexIndex == 2) {
-			renderTriangle(vertexCache);
-			vertexIndex = 0;
+		if (m_vertexIndex == 2) {
+			renderTriangle(m_vertexCache);
+			m_vertexIndex = 0;
 		} else
-			vertexIndex++;
+			m_vertexIndex++;
 		break;
 		
 	case TRIANGLE_STRIP:
-		if (vertexIndex == 2) {
-			renderTriangle(vertexCache);
-			swap(vertexCache, stripParity, 2);
-			stripParity ^= 1;
+		if (m_vertexIndex == 2) {
+			renderTriangle(m_vertexCache);
+			swap(m_vertexCache, m_stripParity, 2);
+			m_stripParity ^= 1;
 		} else
-			vertexIndex++;
+			m_vertexIndex++;
 		break;
 		
 	case TRIANGLE_FAN:
-		if (vertexIndex == 2) {
-			renderTriangle(vertexCache);
-			swap(vertexCache, 1, 2);
+		if (m_vertexIndex == 2) {
+			renderTriangle(m_vertexCache);
+			swap(m_vertexCache, 1, 2);
 		} else
-			vertexIndex++;
+			m_vertexIndex++;
 		break;
 		
 	case QUADS:
-		if (vertexIndex == 3) {
-			renderTriangle(vertexCache);
-			swap(vertexCache, 1, 2);
-			swap(vertexCache, 2, 3);
-			renderTriangle(vertexCache);
-			vertexIndex = 0;
+		if (m_vertexIndex == 3) {
+			renderTriangle(m_vertexCache);
+			swap(m_vertexCache, 1, 2);
+			swap(m_vertexCache, 2, 3);
+			renderTriangle(m_vertexCache);
+			m_vertexIndex = 0;
 		} else
-			vertexIndex++;
+			m_vertexIndex++;
 		break;
 		
 	case QUAD_STRIP:
-		if (vertexIndex == 3) {
-			swap(vertexCache, 2, 3);
-			renderTriangle(vertexCache);
-			swap(vertexCache, 1, 2);
-			swap(vertexCache, 2, 3);
-			renderTriangle(vertexCache);
-			swap(vertexCache, 0, 2);
-			vertexIndex = 2;
+		if (m_vertexIndex == 3) {
+			swap(m_vertexCache, 2, 3);
+			renderTriangle(m_vertexCache);
+			swap(m_vertexCache, 1, 2);
+			swap(m_vertexCache, 2, 3);
+			renderTriangle(m_vertexCache);
+			swap(m_vertexCache, 0, 2);
+			m_vertexIndex = 2;
 		} else
-			vertexIndex++;
+			m_vertexIndex++;
 		break;
 	}
 }
 
 Matrix4f SoftwarePipeline::getViewportMatrix()
 {
-	return viewportMatrix;
+	return *m_viewportMatrix;
 }
 
 Matrix4f SoftwarePipeline::getModelViewMatrix()
 {
-	return modelviewMatrix;
+	return *m_modelviewMatrix;
 }
 
 Matrix4f SoftwarePipeline::getProjectionMatrix()
 {
-	return projectionMatrix;
+	return *m_projectionMatrix;
 }
 
 void SoftwarePipeline::end()
 {
-	mode = PIPELINE_MODE_NONE;
+	m_mode = PIPELINE_MODE_NONE;
 }
 
 // TODO: Implementation incomplete
@@ -390,7 +425,7 @@ void SoftwarePipeline::clear(const buffer_bit bit)
 			break;
 		default:
 		case BUFFER_COLOR:
-			framebuffer->clear(0, 0, 0, 1);
+			m_framebuffer->clear(0, 0, 0, 1);
 			break;
 	}
 }
@@ -404,15 +439,15 @@ void SoftwarePipeline::swap(Vertex* va, int i, int j) const
 
 void SoftwarePipeline::renderTriangle(const Vector3f* v, const Color3f* c, const Vector3f* n, const Vector2f* t)
 {
-	vp->triangle(v, c, n, t, vertexCache);
+	m_vp->triangle(v, c, n, t, m_vertexCache);
 	
-	renderTriangle(vertexCache);
+	renderTriangle(m_vertexCache);
 }
 
 void SoftwarePipeline::renderTriangle(const Vertex* vertices)
 {
 	// See how many "unclipped" triangles we have
-	int numberOfTriangles = clipper->clip(vertices, triangle1, triangle2);
+	int numberOfTriangles = m_clipper->clip(vertices, m_triangle1, m_triangle2);
 	
 	// If we have none, just stop
 	if (numberOfTriangles == 0) return;
@@ -420,13 +455,12 @@ void SoftwarePipeline::renderTriangle(const Vertex* vertices)
 	// If we have two...render the second one
 	if (numberOfTriangles == 2) {
 		// Rasterize triangle, sending results to fp
-		rasterizer->rasterize(triangle2, *fp, *framebuffer);
+		m_rasterizer->rasterize(m_triangle2, *m_fp, *m_framebuffer);
 	}
 	
 	// And if we have 1 or 2, render the first one
-	
-	//Rasterize triangle, sending results to fp
-	rasterizer->rasterize(triangle1, *fp, *framebuffer);
+	// Rasterize triangle, sending results to fp
+	m_rasterizer->rasterize(m_triangle1, *m_fp, *m_framebuffer);
 }
 	
 }	// namespace pixelpipe

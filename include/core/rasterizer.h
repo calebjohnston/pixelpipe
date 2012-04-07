@@ -47,25 +47,17 @@ public:
 	 */
 	void setAttributeCount(int count);
 	
-	/**
-	 * Output utility function for logging and debugging purposes.
-	 */
-	inline std::ostream& operator<<(std::ostream &out)
-	{
-		return out << "[ Rasterizer ]";
-	}
 	
 protected:
-	int na;			//!< the number of attributes to be expected for each vertex being rasterized
-	int nx;			//!< the width of the target framebuffer
-	int ny;			//!< the height of the target framebuffer
-	
-	float* vData;	//!< The array of vertex & attribute floats that are computed during rasterization
-	float* xInc;	//!< The x increment value used during the rasterization process.
-	float* yInc;	//!< The y increment value used during the rasterization process.
-	float* rowData;	//!< The local copy of row data used during the rasterization process.
-	float* pixData;	//!< The local copy of fragment data used during the rasterization process.
-	Fragment* frag;	//!< The fragment to be written to the framebuffer after rasterization.
+	int m_attributes;	//!< the number of attributes to be expected for each vertex being rasterized
+	int m_frameWidth;	//!< the width of the target framebuffer
+	int m_frameHeight;	//!< the height of the target framebuffer
+	float* m_vData;		//!< The array of vertex & attribute floats that are computed during rasterization
+	float* m_xInc;		//!< The x increment value used during the rasterization process.
+	float* m_yInc;		//!< The y increment value used during the rasterization process.
+	float* m_rowData;	//!< The local copy of row data used during the rasterization process.
+	float* m_pixData;	//!< The local copy of fragment data used during the rasterization process.
+	Fragment* m_frag;	//!< The fragment to be written to the framebuffer after rasterization.
 	
 private:
 	static int ceil(float x);
@@ -75,6 +67,14 @@ private:
 	
 };
 
+}
+
+/**
+ * Output utility function for logging and debugging purposes.
+ */
+inline std::ostream& operator<<(std::ostream &out, const pixelpipe::Rasterizer& r)
+{
+	return out << "[ Rasterizer ]";
 }
 
 #endif	// __PIPELINE_RASTERIZER_H

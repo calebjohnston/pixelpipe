@@ -112,14 +112,6 @@ public:
 	 */
 	float getAspectRatio() const { return m_aspect; }
 	
-	/**
-	 * Output utility function for logging and debugging purposes.
-	 */
-	inline std::ostream& operator<<(std::ostream &out)
-	{
-		return out << "[ Camera ]";
-	}
-	
 protected:
 	float m_near;		//!< The depth of the near clipping plane
 	float m_far;		//!< The depth of the far clipping plane
@@ -145,6 +137,14 @@ private:
 	static cg::vecmath::Vector3f nonParallelVector(cg::vecmath::Vector3f v);
 };
 
+}
+
+/**
+ * Output utility function for logging and debugging purposes.
+ */
+inline std::ostream& operator<<(std::ostream &out, const pixelpipe::Camera& c)
+{
+	return out << "[ Camera position=" << c.getEye() << ", target=" << c.getTarget() << ", near=" << c.getNear() << ", far=" << c.getFar() << ", aspect=" << c.getAspectRatio() << " ]";
 }
 
 #endif	// __PIPELINE_CAMERA_H

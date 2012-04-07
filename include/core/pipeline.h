@@ -169,7 +169,7 @@ public:
 	 * 
 	 * @see http://www.opengl.org/sdk/docs/man/xhtml/glPushMatrix.xml
 	 */
-	virtual void pushMatrix(const cg::vecmath::Matrix4f* matrix = NULL) = 0;
+	virtual void pushMatrix(cg::vecmath::Matrix4f* matrix = NULL) = 0;
 	
 	/**
 	 * Removes the matrix at the top of the matrix stack
@@ -279,16 +279,16 @@ public:
 	 */
 	virtual void renderTriangle(const cg::vecmath::Vector3f* v, const cg::vecmath::Color3f* c, const cg::vecmath::Vector3f* n, const cg::vecmath::Vector2f* t) = 0;
 	
-	/**
-	 * Output utility function for logging and debugging purposes.
-	 */
-	inline std::ostream& operator<<(std::ostream &out)
-	{
-		return out << "[ Pipeline ]";
-	}
-	
 };	// class Pipeline
 
 }	// namespace pixelpipe
+
+/**
+ * Output utility function for logging and debugging purposes.
+ */
+inline std::ostream& operator<<(std::ostream &out, const pixelpipe::Pipeline& pipe)
+{
+	return out << "[ Pipeline ]";
+}
 
 #endif	// __PIPELINE_PIPELINE_H

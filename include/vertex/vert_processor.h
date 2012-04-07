@@ -92,4 +92,12 @@ protected:
 
 }
 
+/**
+ * Output utility function for logging and debugging purposes.
+ */
+inline std::ostream& operator<<(std::ostream &out, const pixelpipe::VertexProcessor& vp)
+{
+	return out << "[ VertexProcessor ]";
+}
+
 #endif	// __PIPELINE_VERTEX_PROCESSOR_H

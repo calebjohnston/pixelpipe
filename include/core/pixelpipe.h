@@ -24,7 +24,7 @@ namespace pixelpipe {
  */
 class PixelPipeWindow : public GlutWindow {
 public:
-	PixelPipeWindow(std::string title="PixelPipe", int width=800, int height=600, render_mode mode=RENDER_OPENGL);
+	PixelPipeWindow(std::string title="PixelPipe", int width=800, int height=600, render_mode mode=RENDER_SOFTWARE);
 	~PixelPipeWindow();
 	virtual int run();
 	
@@ -41,8 +41,13 @@ public:
 	{
 		return out << "[ PixelPipeWindow ]";
 	}
+
+	/**
+	 * Output utility function for logging and debugging purposes.
+	 */
+	std::string getModeStr() const;
 	
-protected:	
+protected:		
 	render_mode m_mode;		//!< the current mode the pipeline is rendering in
 	Scene* m_scene;			//!< the current scene instance
 	Camera* m_camera;		//!< the camera instance being used
@@ -58,24 +63,15 @@ protected:
 	virtual int mouseReleased(int button, int x, int y);
 	virtual int mouseMoved(int x, int y);
 
-private:	
-	/**
-	 * Init software mode
-	 */
-	void init_softwareMode();
-
-	/**
-	 * Init OpenGL mode
-	 */
-	void init_openGLMode();
-
-	/**
-	 * Init OpenGL mode
-	 */
-	void init_CUDAMode();
+private:
 
 };	// PixelPipeWindow
 
 }	// namespace pipeline
+
+inline std::ostream &operator<<(std::ostream &out, const pixelpipe::PixelPipeWindow& pipe)
+	{
+		return out << "[ PixelPipeWindow: " << pipe.getModeStr() << " mode ]";
+	}
 
 #endif	// __PIPELINE_APP_WINDOW_H

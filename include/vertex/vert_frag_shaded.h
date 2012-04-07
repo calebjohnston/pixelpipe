@@ -39,14 +39,6 @@ public:
 				const cg::vecmath::Vector2f& t, 
 				Vertex& output);
 	
-	/**
-	 * Output utility function for logging and debugging purposes.
-	 */
-	inline std::ostream& operator<<(std::ostream &out)
-	{
-		return out << "[ FragmentShadedVertexProcessor ]";
-	}
-	
 protected:
 	cg::vecmath::Vector4f vert;					//!< temporary copy of the input vertex position
 	cg::vecmath::Vector4f normal;				//!< temporary copy of the input vertex normal
@@ -59,6 +51,15 @@ protected:
 	
 };
 
+}
+
+
+/**
+ * Output utility function for logging and debugging purposes.
+ */
+inline std::ostream& operator<<(std::ostream &out, const pixelpipe::FragmentShadedVP& vp)
+{
+	return out << "[ FragmentShadedVertexProcessor ]";
 }
 
 #endif	// __PIPELINE_FRAG_SHADED_PROCESSOR_H

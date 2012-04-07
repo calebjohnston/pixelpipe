@@ -32,13 +32,13 @@ namespace pixelpipe {
 class Scene {
 public:
 	Scene(Pipeline& pipe) : m_pipeline(pipe) {
-		m_texture = new std::vector<Texture*>();
-		m_texture->reserve(32);
+		m_textures = new std::vector<Texture*>();
+		m_textures->reserve(32);
 	}
 	
 	~Scene() {
-		m_texture->clear();
-		delete m_texture;
+		m_textures->clear();
+		delete m_textures;
 	}
 	/**
 	* Accessor method for the texture for this scene.
@@ -47,12 +47,12 @@ public:
 	*/
 	virtual void setTexture(const Texture* tex, int index)
 	{
-		if(index >= m_texture->size() || m_texture->empty()) m_texture->resize(index+1);
+		if(index >= m_textures->size() || m_textures->empty()) m_textures->resize(index+1);
 		
-		if(m_texture->at(index) != NULL){
-			delete m_texture->at(index);
+		if(m_textures->at(index) != NULL){
+			delete m_textures->at(index);
 		}
-		(*m_texture)[index] = (Texture*)tex;
+		(*m_textures)[index] = (Texture*)tex;
 	}
 	
 	/**
@@ -62,7 +62,7 @@ public:
 	*/
 	virtual Texture& getTexture(int index)
 	{
-		return *(m_texture->at(index));
+		return *(m_textures->at(index));
 	}
 
 	/**
@@ -73,7 +73,7 @@ public:
 	virtual void render() = 0;
 
 protected:
-	std::vector<Texture*>* m_texture;	//!< The list of texture data for a scene. Might be empty.
+	std::vector<Texture*>* m_textures;	//!< The list of texture data for a scene. Might be empty.
 	Pipeline& m_pipeline;				//!< Reference to the pipeline for dispatching render calls
 
 };	// class Scene
@@ -82,42 +82,34 @@ class SceneSpheres : public Scene {
 public:
 	SceneSpheres(Pipeline& pipe) : Scene(pipe)
 	{
-		depth = 3;
+		m_depth = 3;
 		
-		colorA = Color3f(0.4f, 0.5f, 0.8f);
-		colorB = Color3f(0.8f, 0.5f, 0.4f);
+		m_colorA = Color3f(0.4f, 0.5f, 0.8f);
+		m_colorB = Color3f(0.8f, 0.5f, 0.4f);
 
-		locationA = Vector3f(1.2f, 0.0f, 0.0f);
-		locationB = Vector3f(-2.4f, 0.0f, 0.0f);
+		m_locationA = Vector3f(1.2f, 0.0f, 0.0f);
+		m_locationB = Vector3f(-2.4f, 0.0f, 0.0f);
 	}
 	
 	~SceneSpheres() {}
 	
 	virtual void render() 
 	{
-		if(!m_texture->empty()) m_pipeline.setTexture(*(m_texture->at(0)));
+		if(!m_textures->empty()) m_pipeline.setTexture(*(m_textures->at(0)));
 
-		m_pipeline.translate(locationA);
-	    Geometry::sphere(depth, colorA, m_pipeline);
+		m_pipeline.translate(m_locationA);
+	    Geometry::sphere(m_depth, m_colorA, m_pipeline);
 
-		m_pipeline.translate(locationB);
-	    Geometry::sphere(depth, colorB, m_pipeline);
-	}
-
-	/**
-	 * Output utility function for logging and debugging purposes.
-	 */
-	inline std::ostream& operator<<(std::ostream &out)
-	{
-		return out << "[ SceneSpheres ]";
+		m_pipeline.translate(m_locationB);
+	    Geometry::sphere(m_depth, m_colorB, m_pipeline);
 	}
 	
 protected:
-	int depth;			//!< The triangulation depth of the spheres
-	Color3f colorA;		//!< The color of the first sphere.
-	Color3f colorB;		//!< The color of the second sphere.
-	Vector3f locationA;	//!< The amount to translate the center of the first sphere.
-	Vector3f locationB;	//!< The amount to translate the center of the second sphere. 
+	int m_depth;			//!< The triangulation depth of the spheres
+	Color3f m_colorA;		//!< The color of the first sphere.
+	Color3f m_colorB;		//!< The color of the second sphere.
+	Vector3f m_locationA;	//!< The amount to translate the center of the first sphere.
+	Vector3f m_locationB;	//!< The amount to translate the center of the second sphere. 
 
 };	// class SceneSpheres
 
@@ -129,20 +121,37 @@ public:
 	~SceneCube() {};
 	virtual void render() 
 	{
-		if(!m_texture->empty()) m_pipeline.setTexture(*(m_texture->at(0)));
+		if(!m_textures->empty()) m_pipeline.setTexture(*(m_textures->at(0)));
 		Geometry::cube(m_pipeline);
-	}
-
-	/**
-	 * Output utility function for logging and debugging purposes.
-	 */
-	inline std::ostream& operator<<(std::ostream &out)
-	{
-		return out << "[ SceneCube ]";
 	}
 
 };	// class SceneCube
 
 }	// namespace pixelpipe
+
+
+/**
+ * Output utility function for logging and debugging purposes.
+ */
+inline std::ostream& operator<<(std::ostream &out, pixelpipe::Scene& s)
+{
+	return out << "[ Scene ]";
+}
+
+/**
+ * Output utility function for logging and debugging purposes.
+ */
+inline std::ostream& operator<<(std::ostream &out, pixelpipe::SceneSpheres& s)
+{
+	return out << "[ SceneSpheres ]";
+}
+
+/**
+ * Output utility function for logging and debugging purposes.
+ */
+inline std::ostream& operator<<(std::ostream &out, pixelpipe::SceneCube& s)
+{
+	return out << "[ SceneCube ]";
+}
 
 #endif	// __PIPELINE_SCENE_H

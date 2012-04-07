@@ -199,7 +199,7 @@ void OpenGLPipeline::viewport(int x, int y, int w, int h)
 	glViewport(x,y,w,h);	
 }
 
-void OpenGLPipeline::pushMatrix(const Matrix4f* matrix)
+void OpenGLPipeline::pushMatrix(Matrix4f* matrix)
 {
 	glPushMatrix();
 	if(matrix != NULL){

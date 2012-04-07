@@ -32,17 +32,18 @@ public:
 				const cg::vecmath::Vector2f& t_ign, 
 				Vertex& output);
 	
-	/**
-	 * Output utility function for logging and debugging purposes.
-	 */
-	inline std::ostream& operator<<(std::ostream &out)
-	{
-		return out << "[ ConstantColorVertexProcessor ]";
-	}
 protected:
 
 };
 
+}
+
+/**
+ * Output utility function for logging and debugging purposes.
+ */
+inline std::ostream& operator<<(std::ostream &out, const pixelpipe::ConstColorVP& vp)
+{
+	return out << "[ ConstantColorVertexProcessor ]";
 }
 
 #endif	// __PIPELINE_CONSTANT_COLOR_PROCESSOR_H

@@ -94,14 +94,6 @@ public:
 	 * @param x the specified y location at which to start drawing
 	 */
 	void draw(float x=0, float y=0) const { this->drawGLTexture(x,y); };
-	
-	/**
-	 * Output utility function for logging and debugging purposes.
-	 */
-	inline std::ostream& operator<<(std::ostream &out)
-	{
-		return out << "[ FrameBuffer ]";
-	}
 
 protected:
 	int m_width;				//!< The width of the image in the frame buffer.
@@ -128,5 +120,14 @@ protected:
 };	// class FrameBuffer
 
 }	// namespace pixelpipe
+
+
+/**
+ * Output utility function for logging and debugging purposes.
+ */
+inline std::ostream& operator<<(std::ostream &out, const pixelpipe::FrameBuffer& t)
+{
+	return out << "[ FrameBuffer ]";
+}
 
 #endif	// __PIPELINE_FRAMEBUFFER_H

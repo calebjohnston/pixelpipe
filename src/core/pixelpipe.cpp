@@ -80,121 +80,6 @@ void PixelPipeWindow::init()
 		m_scene->setTexture(m_textures.at(1), 1);
 	}
 	m_pipeline->configure();
-	
-	/*
-	switch(m_mode){
-		case RENDER_OPENGL:
-			this->init_openGLMode();
-			break;
-		case RENDER_CUDA:
-			this->init_CUDAMode();
-			break;
-		default:
-		case RENDER_SOFTWARE:
-			this->init_softwareMode();
-			break;
-	}
-	*/
-}
-
-/** 
- * TODO: We should be able to remove the architecture specific methods 
- * in favor of having each Pipeline instance configure and render itself
- * based upon the State settings.
- */
-/*
-void PixelPipeWindow::init_softwareMode() 
-{
-	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-	glClearDepth(1.0);
-	glDepthFunc(GL_LESS);
-	glDisable(GL_DEPTH_TEST);
-	glEnable(GL_BLEND);	
-	
-	// setup vertex shaders
-	// ConstColorVP* vertProcessor = new ConstColorVP();				// 3
-	// SmoothShadedVP* vertProcessor = new SmoothShadedVP();			// 3	
-	// TexturedShadedVP* vertProcessor = new TexturedShadedVP();		// 5
-	// FragmentShadedVP* vertProcessor = new FragmentShadedVP();		// 9 + 6 * lightCount
-	TexturedFragmentShadedVP* vertProcessor = new TexturedFragmentShadedVP();	// 9 + 6 * lightCount
-	
-	// ZBufferFP* fragProcessor = new ZBufferFP();						// 3
-	// ColorFP* fragProcessor = new ColorFP();							// 3
-	// TexturedFP* fragProcessor = new TexturedFP();					// 5
-	// PhongShadedFP* fragProcessor = new PhongShadedFP();				// 9 + 6 * lightCount
-	TexturedPhongFP* fragProcessor = new TexturedPhongFP();			// 9 + 6 * lightCount
-	((SoftwarePipeline*) m_pipeline)->setVertexProcessor(vertProcessor);
-	((SoftwarePipeline*) m_pipeline)->setFragmentProcessor(fragProcessor);
-
-	m_scene->setTexture(m_textures.at(0), 0);
-	m_scene->setTexture(m_textures.at(1), 1);
-	m_pipeline->configure();
-}
-*/
-
-void PixelPipeWindow::init_openGLMode()
-{	
-	// configure pipe.	
-	glDepthFunc(GL_LESS);
-	glDisable(GL_DEPTH_TEST);
-	glCullFace(GL_BACK);
-	glEnable(GL_CULL_FACE);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	glEnable(GL_NORMALIZE);
-	glPolygonMode(GL_FRONT, GL_FILL);
-	glShadeModel(GL_SMOOTH);
-    // glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
-    // glEnable(GL_COLOR_MATERIAL);
-    
-	// Configure textures
-	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-
-	// removed this, so the specular component is modulated with the texture - not added on top.
-	glLightModeli(GL_LIGHT_MODEL_COLOR_CONTROL, GL_SEPARATE_SPECULAR_COLOR);
-	
-	m_scene->setTexture(m_textures.at(0), 0);
-	m_scene->setTexture(m_textures.at(1), 1);
-	m_pipeline->configure();
-
-	// configure lighting
-	Color3f s = m_state->getSpecularColor();
-	float a = m_state->getAmbientIntensity();
-	float amb[3] = { a, a, a };
-	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, amb);
-    
-	glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_TRUE);
-    
-	const unsigned max_ogl_lights = 8;
-	int lights[max_ogl_lights] = { GL_LIGHT0, GL_LIGHT1, GL_LIGHT2, GL_LIGHT3, GL_LIGHT4, GL_LIGHT5, GL_LIGHT6, GL_LIGHT7 };
-	
-	for(size_t i = 0; i < std::min(max_ogl_lights, (unsigned) m_state->getLights().size()); i++) {
-		Color3f d = m_state->getLights().at(i).getIntensity();
-		Point3f p = m_state->getLights().at(i).getPosition();
-		
-		glEnable(lights[i]);
-		float diffuse[4] = { d.x, d.y, d.z, 1.0 };
-		float specular[4] = { 1.0, 1.0, 1.0, 1.0 };
-		float position[4] = { p.x, p.y, p.z, 1.0 };
-		
-		glLightfv(lights[i], GL_DIFFUSE, diffuse);
-		glLightfv(lights[i], GL_SPECULAR, specular);
-		glLightfv(lights[i], GL_POSITION, position);
-	}
-
-	float mat[3] = { s.x, s.y, s.z };
-	glMateriali(GL_FRONT, GL_SHININESS, m_state->getSpecularExponent());
-	glMaterialfv(GL_FRONT, GL_SPECULAR, mat);
-	
-	glClearColor(0, 0, 0, 1);
-}
-
-void PixelPipeWindow::init_CUDAMode() 
-{
-	return;
 }
 
 int PixelPipeWindow::render() 
@@ -235,6 +120,20 @@ int PixelPipeWindow::render()
 	m_pipeline->drawFrameBuffer();
 	
 	return 0;
+}
+
+std::string PixelPipeWindow::getModeStr() const
+{
+	std::string str;		
+	switch(this->m_mode){
+		case RENDER_OPENGL: str = "OpenGL"; 
+			break;
+		case RENDER_SOFTWARE: str = "Software"; 
+			break;
+		case RENDER_CUDA: str = "CUDA"; 
+			break;
+	}
+	return str;
 }
 
 int PixelPipeWindow::resize(int width, int height)

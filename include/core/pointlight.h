@@ -21,8 +21,8 @@ public:
 	 */
 	PointLight(cg::vecmath::Point3f pos, cg::vecmath::Color3f intens)
 	{
-		position = new cg::vecmath::Point3f(pos);
-		intensity = new cg::vecmath::Color3f(intens);
+		m_position = new cg::vecmath::Point3f(pos);
+		m_intensity = new cg::vecmath::Color3f(intens);
 	}
 	
 	/**
@@ -38,8 +38,8 @@ public:
 	 */
 	PointLight& operator=(const PointLight& light)
 	{
-		position = new cg::vecmath::Point3f(light.getPosition());
-		intensity = new cg::vecmath::Color3f(light.getIntensity());
+		m_position = new cg::vecmath::Point3f(light.getPosition());
+		m_intensity = new cg::vecmath::Color3f(light.getIntensity());
 		
 		return *this;
 	}
@@ -48,8 +48,8 @@ public:
 	 * Destructor deallocates the member properties.
 	 */
 	~PointLight(){
-		delete position;
-		delete intensity;
+		delete m_position;
+		delete m_intensity;
 	}
 
 	/**
@@ -57,43 +57,43 @@ public:
 	 * 
 	 * @return a reference to the light's position vector
 	 */
-	cg::vecmath::Point3f& getPosition() const { return *position; }
+	cg::vecmath::Point3f& getPosition() const { return *m_position; }
 
 	/**
 	 * Accessor method for the light color.
 	 * 
 	 * @return a reference to the light's color member
 	 */
-	cg::vecmath::Color3f& getIntensity() const { return *intensity; } 
+	cg::vecmath::Color3f& getIntensity() const { return *m_intensity; } 
 	
 	/**
 	 * Accessor method for the light position.
 	 * 
 	 * @param pos a new position vector
 	 */
-	void setPosition(cg::vecmath::Point3f pos) { *intensity = pos; }
+	void setPosition(cg::vecmath::Point3f pos) { *m_intensity = pos; }
 	
 	/**
 	 * Accessor method for the light color.
 	 * 
 	 * @param val a new color value
 	 */
-	void setIntensity(cg::vecmath::Color3f val) { *intensity = val; }
-	
-	/**
-	 * Output utility function for logging and debugging purposes.
-	 */
-	inline std::ostream& operator<<(std::ostream &out)
-	{
-		return out << "[ PointLight: position=(" << position->x << "," << position->y << "," << position->z << "), intensity=(" << intensity->x << "," << intensity->y << "," << intensity->z << ") ]";
-	}
+	void setIntensity(cg::vecmath::Color3f val) { *m_intensity = val; }
 	
 protected:
-	cg::vecmath::Point3f* position;		//!< The position of the light.
-	cg::vecmath::Color3f* intensity;	//!< The color intesity of the light source.
+	cg::vecmath::Point3f* m_position;	//!< The position of the light.
+	cg::vecmath::Color3f* m_intensity;	//!< The color intesity of the light source.
 	
 };
 
+}
+
+/**
+ * Output utility function for logging and debugging purposes.
+ */
+inline std::ostream& operator<<(std::ostream &out, const pixelpipe::PointLight& p)
+{
+	return out << "[ PointLight: position=" << p.getPosition() << ", intensity=" << p.getIntensity() << " ]";
 }
 
 #endif	// __PIPELINE_POINTLIGHT_H

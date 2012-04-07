@@ -116,7 +116,7 @@ public:
 	/**
 	 * ! @copydoc Pipeline::pushMatrix()
 	 */
-	virtual void pushMatrix(const cg::vecmath::Matrix4f* matrix = NULL);
+	virtual void pushMatrix(cg::vecmath::Matrix4f* matrix = NULL);
 	
 	/**
 	 * ! @copydoc Pipeline::popMatrix()
@@ -198,14 +198,6 @@ public:
 	 * @param t The 3 texture coordinates of the triangle - one for each vertex.
 	 */
 	virtual void renderTriangle(const cg::vecmath::Vector3f* v, const cg::vecmath::Color3f* c, const cg::vecmath::Vector3f* n, const cg::vecmath::Vector2f* t);
-	
-	/**
-	 * Output utility function for logging and debugging purposes.
-	 */
-	inline std::ostream& operator<<(std::ostream &out)
-	{
-		return out << "[ OpenGLPipeline ]";
-	}
 
 protected:
 	GLuint m_textureHandle;
@@ -226,5 +218,13 @@ private:
 };	// class OpenGLPipeline
 
 }	// namespace pixelpipe
+
+/**
+ * Output utility function for logging and debugging purposes.
+ */
+inline std::ostream& operator<<(std::ostream &out, const pixelpipe::OpenGLPipeline& pipe)
+{
+	return out << "[ OpenGLPipeline ]";
+}
 
 #endif	// __PIPELINE_OPENGL_H

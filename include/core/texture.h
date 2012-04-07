@@ -41,10 +41,10 @@ public:
 	 */
 	Texture& operator=(const Texture& tex)
 	{
-		//*(this->cBuf) = tex.getTextureData();
-		if(cBuf!=NULL) delete cBuf;
-		cBuf = new cg::image::ByteRaster(tex.getTextureData().width(), tex.getTextureData().height(), tex.getTextureData().channels());
-		*cBuf = tex.getTextureData();
+		//*(this->m_raster) = tex.getTextureData();
+		if(m_raster!=NULL) delete m_raster;
+		m_raster = new cg::image::ByteRaster(tex.getTextureData().width(), tex.getTextureData().height(), tex.getTextureData().channels());
+		*m_raster = tex.getTextureData();
 		
 		return *this;
 	}
@@ -85,29 +85,31 @@ public:
 	 * 
 	 * @return a const reference to the current Raster object.
 	 */
-	const cg::image::ByteRaster& getTextureData() const { return *cBuf; }
+	const cg::image::ByteRaster& getTextureData() const { return *m_raster; }
 	
 	/**
 	 * Accessor method for the raw texture data.
 	 * 
 	 * @return a const reference to the current texture data.
 	 */
-	unsigned char* getTextureBytes() const { return cBuf->head(); }
+	unsigned char* getTextureBytes() const { return m_raster->head(); }
 
-	/**
-	 * Output utility function for logging and debugging purposes.
-	 */
-	inline std::ostream& operator<<(std::ostream &out)
-	{
-		return out << "[ Texture: width=" << width() << ", height=" << height() << " ]";
-	}
 	
 protected:
-	std::string filename;			//!< The name of the file from where the data was loaded.
-	cg::image::ByteRaster* cBuf;	//!< The RGB data for each pixel.
+	// std::string m_filename;				//!< The name of the file from where the data was loaded.
+	cg::image::ByteRaster* m_raster;	//!< The RGB data for each pixel.
 
 };	// class Texture
 
 }	// namespace pixelpipe
+
+
+/**
+ * Output utility function for logging and debugging purposes.
+ */
+inline std::ostream& operator<<(std::ostream &out, const pixelpipe::Texture& t)
+{
+	return out << "[ Texture: width=" << t.width() << ", height=" << t.height() << " ]";
+}
 
 #endif	// __PIPELINE_TEXTURE_H

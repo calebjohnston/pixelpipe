@@ -32,16 +32,17 @@ public:
 				const cg::vecmath::Vector3f& n_ign, 
 				const cg::vecmath::Vector2f& t_ign, 
 				Vertex& output);
-
-	/**
-	 * Output utility function for logging and debugging purposes.
-	 */
-	inline std::ostream& operator<<(std::ostream &out)
-	{
-		return out << "[ TexturedFragmentShadedVertexProcessor ]";
-	}
+				
 };
 
+}
+
+/**
+ * Output utility function for logging and debugging purposes.
+ */
+inline std::ostream& operator<<(std::ostream &out, const pixelpipe::TexturedFragmentShadedVP& vp)
+{
+	return out << "[ TexturedFragmentShadedVertexProcessor ]";
 }
 
 #endif	// __PIPELINE_TEXTURED_FRAG_SHADED_PROCESSOR_H

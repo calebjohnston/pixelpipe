@@ -20,17 +20,16 @@ class ZBufferFP : public FragmentProcessor {
 public:
 	virtual int nAttr() const { return 3; }
 	virtual void fragment(Fragment& f, FrameBuffer& fb);
-	
-	/**
-	 * Output utility function for logging and debugging purposes.
-	 */
-	inline std::ostream& operator<<(std::ostream &out)
-	{
-		return out << "[ ZBufferedFragmentProcessor ]";
-	}
-	// inline std::ostream &operator<<(std::ostream &out, const TVec3<T>& v)
 };
 
+}
+
+/**
+ * Output utility function for logging and debugging purposes.
+ */
+inline std::ostream& operator<<(std::ostream &out, const pixelpipe::ZBufferFP& fp)
+{
+	return out << "[ ZBufferedFragmentProcessor ]";
 }
 
 #endif	// __PIPELINE_Z_BUFFERED_FRAG_H

@@ -49,26 +49,27 @@ public:
 	 * 
 	 * @param count the new count
 	 */
-	void setAttributeCount(int count)
+	void setAttributeCount(unsigned count)
 	{
-		na = count;
-	}
-	
-	/**
-	 * Output utility function for logging and debugging purposes.
-	 */
-	inline std::ostream& operator<<(std::ostream &out)
-	{
-		return out << "[ Clipper ]";
+		m_attributes = count;
 	}
 	
 protected:
-	int na;				//!< Number of user-supplied attributes
-	Vertex fClip[3];	//!< Temporaries for clipping
+	unsigned m_attributes;	//!< Number of user-supplied attributes
+	Vertex m_fClip[3];		//!< Temporaries for clipping
 	
 private:
 	
 };	// class Clipper
+
 }	// namespace pixelpipe
+
+/**
+ * Output utility function for logging and debugging purposes.
+ */
+inline std::ostream& operator<<(std::ostream &out, const pixelpipe::Clipper& c)
+{
+	return out << "[ Clipper ]";
+}
 
 #endif	// __PIPELINE_CLIPPER_H

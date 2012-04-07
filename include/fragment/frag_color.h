@@ -20,15 +20,16 @@ public:
 	
 	virtual void fragment(Fragment& f, FrameBuffer& fb);
 	
-	/**
-	 * Output utility function for logging and debugging purposes.
-	 */
-	inline std::ostream& operator<<(std::ostream &out)
-	{
-		return out << "[ ColorFragmentProcessor ]";
-	}
 };
 
 }	// namespace pixelpipe
+
+/**
+ * Output utility function for logging and debugging purposes.
+ */
+inline std::ostream& operator<<(std::ostream &out, const pixelpipe::ColorFP& fp)
+{
+	return out << "[ ColorFragmentProcessor ]";
+}
 
 #endif	// #define __PIPELINE_COLOR_FRAG_H
