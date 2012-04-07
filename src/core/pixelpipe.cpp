@@ -20,7 +20,7 @@ namespace pixelpipe {
 PixelPipeWindow::PixelPipeWindow(std::string title, int width, int height, render_mode mode)
 	: GlutWindow(title, width, height)
 {	
-	Vector3f* eye = new Vector3f(1.0, 3.0, 3.0);
+	Vector3f* eye = new Vector3f(3.0, 3.0, 3.0);
 	Vector3f* target = new Vector3f(0.0, 0.0, 0.0);
 	Vector3f* upVec = new Vector3f(0.0, 1.0, 0.0);
 	float near = 1.0;
@@ -78,6 +78,9 @@ void PixelPipeWindow::init()
 	
 	m_pipeline->init();
 	
+	// m_scene = new SceneCube(*m_pipeline);
+	m_scene = new SceneSpheres(*m_pipeline);
+	
 	switch(m_mode){
 		case RENDER_OPENGL:
 			this->init_openGLMode();
@@ -90,9 +93,6 @@ void PixelPipeWindow::init()
 			this->init_softwareMode();
 			break;
 	}
-	
-	m_scene = new SceneCube(*m_pipeline);
-	// m_scene = new SceneSpheres(*m_pipeline);
 }
 
 /** 
@@ -106,34 +106,25 @@ void PixelPipeWindow::init_softwareMode()
 	glClearDepth(1.0);
 	glDepthFunc(GL_LESS);
 	glDisable(GL_DEPTH_TEST);
-	glEnable(GL_BLEND);
+	glEnable(GL_BLEND);	
 	
 	// setup vertex shaders
 	// ConstColorVP* vertProcessor = new ConstColorVP();				// 3
-	SmoothShadedVP* vertProcessor = new SmoothShadedVP();			// 3
-	/*
-	Vector3f* v = new Vector3f(1.0, 2.0, 3.0);
-	Color3f* c = new Color3f(0.5, 0.25, 0.125);
-	Vector3f* n = new Vector3f(2.0, 3.0, -1.0);
-	Vector2f* t = new Vector2f(0,0);
-	Vertex* output = new Vertex();
-	vertProcessor->vertex(*v, *c, *n, *t, *output);
-	INFO() << "vertex: " << output->v.x << ", " << output->v.y << ", " << output->v.z;
-	*/
-	
-	// TexturedShadedVP* vertProcessor = new TexturedShadedVP();		// 5
+	// SmoothShadedVP* vertProcessor = new SmoothShadedVP();			// 3	
+	TexturedShadedVP* vertProcessor = new TexturedShadedVP();		// 5
 	// FragmentShadedVP* vertProcessor = new FragmentShadedVP();		// 9 + 6 * lightCount
 	// TexturedFragmentShadedVP* vertProcessor = new TexturedFragmentShadedVP();	// 9 + 6 * lightCount
 	
-	ZBufferFP* fragProcessor = new ZBufferFP();						// 3
+	// ZBufferFP* fragProcessor = new ZBufferFP();						// 3
 	// ColorFP* fragProcessor = new ColorFP();							// 3
-	// TexturedFP* fragProcessor = new TexturedFP();					// 5
+	TexturedFP* fragProcessor = new TexturedFP();					// 5
 	// PhongShadedFP* fragProcessor = new PhongShadedFP();				// 9 + 6 * lightCount
 	// TexturedPhongFP* fragProcessor = new TexturedPhongFP();			// 9 + 6 * lightCount
 	((SoftwarePipeline*) m_pipeline)->setVertexProcessor(vertProcessor);
 	((SoftwarePipeline*) m_pipeline)->setFragmentProcessor(fragProcessor);
 
-	m_pipeline->setTexture(*m_textures.at(0));
+	m_scene->setTexture(m_textures.at(0), 0);
+	m_scene->setTexture(m_textures.at(1), 1);
 	m_pipeline->configure();
 }
 
@@ -148,8 +139,8 @@ void PixelPipeWindow::init_openGLMode()
 	glEnable(GL_NORMALIZE);
 	glPolygonMode(GL_FRONT, GL_FILL);
 	glShadeModel(GL_SMOOTH);
-    glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
-    glEnable(GL_COLOR_MATERIAL);
+    // glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
+    // glEnable(GL_COLOR_MATERIAL);
     
 	// Configure textures
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
@@ -160,6 +151,10 @@ void PixelPipeWindow::init_openGLMode()
 
 	// removed this, so the specular component is modulated with the texture - not added on top.
 	glLightModeli(GL_LIGHT_MODEL_COLOR_CONTROL, GL_SEPARATE_SPECULAR_COLOR);
+	
+	m_scene->setTexture(m_textures.at(0), 0);
+	m_scene->setTexture(m_textures.at(1), 1);
+	m_pipeline->configure();
 
 	// configure lighting
 	Color3f s = m_state->getSpecularColor();
@@ -189,7 +184,7 @@ void PixelPipeWindow::init_openGLMode()
 	float mat[3] = { s.x, s.y, s.z };
 	glMateriali(GL_FRONT, GL_SHININESS, m_state->getSpecularExponent());
 	glMaterialfv(GL_FRONT, GL_SPECULAR, mat);
-    
+	
 	glClearColor(0, 0, 0, 1);
 }
 
@@ -263,12 +258,27 @@ int PixelPipeWindow::keyPressed(unsigned char key)
 		pthread_exit(NULL);
 	}
 	*/
-	
+	Vector3f* v = NULL;
 	switch(key){
 		case '1': this->m_mode = RENDER_OPENGL;
 			break;
 	
 		case '2': this->m_mode = RENDER_SOFTWARE;
+			break;
+	
+		case '3': 
+			v = new Vector3f(5.0, 2.0, 1.0);
+			m_camera->setEye(*v);
+			break;
+	
+		case '4': 
+			v = new Vector3f(0.0, 4.0, 4.0);
+			m_camera->setEye(*v);
+			break;
+	
+		case '5':
+			v = new Vector3f(-5.0, 0.0, -2.5);
+			m_camera->setEye(*v);
 			break;
 	}
 	

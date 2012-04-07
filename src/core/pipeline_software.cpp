@@ -59,15 +59,81 @@ void SoftwarePipeline::configure()
 		// vp = (VertexProcessor) c.newInstance(EMPTY_OBJECT_ARRAY);
 		
 //		fp->updateLightModel();
+		
+		// ========================================================================
+		// --
+		// ConstColorVP* vertProcessor = new ConstColorVP();				// 3
+		// SmoothShadedVP* vertProcessor = new SmoothShadedVP();			// 3
+		// TexturedShadedVP* vertProcessor = new TexturedShadedVP();		// 5
+		// FragmentShadedVP* vertProcessor = new FragmentShadedVP();		// 9 + 6 * lightCount
+		// TexturedFragmentShadedVP* vertProcessor = new TexturedFragmentShadedVP();	// 9 + 6 * lightCount
+		// --
+		// ZBufferFP* fragProcessor = new ZBufferFP();						// 3
+		// ColorFP* fragProcessor = new ColorFP();							// 3
+		// TexturedFP* fragProcessor = new TexturedFP();					// 5
+		// PhongShadedFP* fragProcessor = new PhongShadedFP();				// 9 + 6 * lightCount
+		// TexturedPhongFP* fragProcessor = new TexturedPhongFP();			// 9 + 6 * lightCount
+		// --
+		// this->setVertexProcessor(vertProcessor);
+		// this->setFragmentProcessor(fragProcessor);
+		// ========================================================================
+		
 	rasterizer->setAttributeCount(fp->nAttr());
 	clipper->setAttributeCount(fp->nAttr());
 		
 		vp->updateTransforms(*this);
 		vp->updateLightModel(*this);
-	// }
-	// catch (Exception e) {
-	// 	throw new RuntimeException(e);
-	// }
+		/*
+		if(m_state->getTexturing2D()){
+			TexturedShadedVP* vertProcessor = new TexturedShadedVP();
+		}
+		else{
+			if(m_state->getLighting()){
+				
+			}
+			else{
+				ConstColorVP* vertProcessor = new ConstColorVP();
+			}
+		}
+		*/
+	
+	/*
+	    if (classesChanged) {
+	      if (tpClass == ConstColorVP.class) {
+	        gl.glDisable(GL.GL_LIGHTING);
+	        gl.glDisable(GL.GL_COLOR_MATERIAL);
+	        gl.glShadeModel(GL.GL_SMOOTH);
+	      }
+	      else if (tpClass == TexturedFragmentShadedVP.class ) {
+	        gl.glEnable(GL.GL_LIGHTING);
+	        gl.glDisable(GL.GL_COLOR_MATERIAL);	// ignore vertex colors
+	        gl.glMaterialfv(GL.GL_FRONT, GL.GL_DIFFUSE, WHITE,0);
+	        gl.glMaterialfv(GL.GL_FRONT, GL.GL_AMBIENT, WHITE,0);
+	        gl.glShadeModel(GL.GL_SMOOTH);
+	      }
+	      else {
+	        gl.glEnable(GL.GL_LIGHTING);
+	        gl.glColorMaterial(GL.GL_FRONT, GL.GL_AMBIENT_AND_DIFFUSE);
+	        gl.glEnable(GL.GL_COLOR_MATERIAL);
+	        gl.glShadeModel(GL.GL_SMOOTH);
+	      }
+
+	      if (fpClass == TrivialColorFP.class) {
+	        gl.glDisable(GL.GL_DEPTH_TEST);
+	        gl.glDisable(GL.GL_TEXTURE_2D);
+	      }
+	      else if (fpClass == TexturedFP.class || fpClass == TexturedPhongFP.class) {
+	        gl.glEnable(GL.GL_DEPTH_TEST);
+	        gl.glEnable(GL.GL_TEXTURE_2D);
+	      }
+	      else {
+	        gl.glEnable(GL.GL_DEPTH_TEST);
+	        gl.glDisable(GL.GL_TEXTURE_2D);
+	      }
+
+	      classesChanged = false;
+	    }
+*/
 }
 
 bool SoftwarePipeline::validConfiguration()
