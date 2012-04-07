@@ -98,7 +98,6 @@ public:
 	 */
 	virtual void lookAt(cg::vecmath::Vector3f eye, cg::vecmath::Vector3f target, cg::vecmath::Vector3f up);
 	
-	
 	/**
 	 * ! @copydoc Pipeline::frustum()
 	 */
@@ -209,6 +208,7 @@ public:
 	}
 
 protected:
+	GLuint m_textureHandle;
 	
 private:	
 	// void swap(Vertex* va, int i, int j) const;

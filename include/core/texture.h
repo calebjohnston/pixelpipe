@@ -81,11 +81,18 @@ public:
 	void setTextureData(const cg::image::ByteRaster& buffer);
 	
 	/**
+	 * Accessor method for the ByteRaster object.
+	 * 
+	 * @return a const reference to the current Raster object.
+	 */
+	const cg::image::ByteRaster& getTextureData() const { return *cBuf; }
+	
+	/**
 	 * Accessor method for the raw texture data.
 	 * 
 	 * @return a const reference to the current texture data.
 	 */
-	const cg::image::ByteRaster& getTextureData() const { return *cBuf; }
+	unsigned char* getTextureBytes() const { return cBuf->head(); }
 
 	/**
 	 * Output utility function for logging and debugging purposes.

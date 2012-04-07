@@ -27,12 +27,19 @@ void OpenGLPipeline::init()
 void OpenGLPipeline::configure()
 {
 	// hmm???
+	
+	glGenTextures(1, &(this->m_textureHandle));
+	glBindTexture(GL_TEXTURE_2D, this->m_textureHandle);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 /** NOT YET IMPLEMENTED */
 bool OpenGLPipeline::validConfiguration()
-{
-	return true;
+{	
+	// return true;
+	return (glGetError() == GL_NO_ERROR);
 }
 
 /** NOT YET IMPLEMENTED */
@@ -43,7 +50,10 @@ bool OpenGLPipeline::isFlatShaded()
 
 void OpenGLPipeline::setTexture(const Texture& texture)
 {
-	// fp->setTexture(texture);
+	glEnable(GL_TEXTURE_2D);
+	// glActiveTexture(GL_TEXTURE0 + 0);
+	glBindTexture(GL_TEXTURE_2D, this->m_textureHandle);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB8, texture.width(), texture.height(), 0, GL_RGB, GL_UNSIGNED_BYTE, texture.getTextureBytes());
 }
 
 void OpenGLPipeline::clearFrameBuffer()

@@ -114,8 +114,7 @@ public:
 	
 
 	/**
-	 * Draws a sphere out of triangles, using the spheretri function. The sphere
-	 * is rendered to the software pipeline.
+	 * Draws a sphere out of triangles, using the spheretri function. 
 	 */
 	static void sphere(int n, Color3f c, Pipeline& pipe)
 	{
@@ -180,24 +179,6 @@ public:
 			spheretri(n - 1, v2, v20, v12, c, pipe);
 		}
 	}
-	
-	/**
-	 * Draws a sphere out of triangles, using the spheretri function. The sphere
-	 * is rendered to the OpenGL pipeline. Mimics the other sphere function.
-	 */
-/*
-	static void sphere(int n, Color3f c)
-	{
-		spheretri(n, v_p00, v_0p0, v_00p, c, d);
-		spheretri(n, v_00n, v_0p0, v_p00, c, d);
-		spheretri(n, v_n00, v_0p0, v_00n, c, d);
-		spheretri(n, v_00p, v_0p0, v_n00, c, d);
-		spheretri(n, v_00p, v_0n0, v_p00, c, d);
-		spheretri(n, v_p00, v_0n0, v_00n, c, d);
-		spheretri(n, v_00n, v_0n0, v_n00, c, d);
-		spheretri(n, v_n00, v_0n0, v_00p, c, d);
-	}
-*/
 
 	/**
 	 * Output utility function for logging and debugging purposes.
@@ -217,7 +198,7 @@ private:
 	 * incoming 3D location. This is valid because we know this method will only
 	 * be called from our spheretri methods.
 	 */
-	static void xyTex(Vector3f v, Vector2f tex)
+	static void xyTex(const Vector3f v, Vector2f& tex)
 	{
 		tex.x = v.x / 2 + 0.5f;
 		tex.y = v.y / 2 + 0.5f;
