@@ -87,7 +87,7 @@ public:
 		m_colorA = Color3f(0.4f, 0.5f, 0.8f);
 		m_colorB = Color3f(0.8f, 0.5f, 0.4f);
 
-		m_locationA = Vector3f(1.2f, 0.0f, 0.0f);
+		m_locationA = Vector3f(2.2f, 0.0f, 0.0f);
 		m_locationB = Vector3f(-2.4f, 0.0f, 0.0f);
 	}
 	
@@ -97,11 +97,16 @@ public:
 	{
 		if(!m_textures->empty()) m_pipeline.setTexture(*(m_textures->at(0)));
 
+		m_pipeline.setMatrixMode(MATRIX_MODELVIEW);
+		
 		m_pipeline.translate(m_locationA);
 	    Geometry::sphere(m_depth, m_colorA, m_pipeline);
 
 		m_pipeline.translate(m_locationB);
+		m_pipeline.pushMatrix();
+		m_pipeline.scale(Vector3f(0.4f, 0.5f, 0.8f));
 	    Geometry::sphere(m_depth, m_colorB, m_pipeline);
+		m_pipeline.popMatrix();
 	}
 	
 protected:

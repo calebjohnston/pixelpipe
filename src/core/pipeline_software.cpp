@@ -30,30 +30,40 @@ SoftwarePipeline::SoftwarePipeline(int nx, int ny)
 	m_modelviewMatrix = new Matrix4f();
 	m_projectionMatrix = new Matrix4f();
 	m_viewportMatrix = new Matrix4f();
-	
 	m_modelviewMatrix->identity();
 	m_projectionMatrix->identity();
 	m_viewportMatrix->identity();
-	m_currentMatrix = m_modelviewMatrix;
 	
 	m_modelviewStack = new std::list<Matrix4f*>();
+	m_modelviewStack->push_back(new Matrix4f(*m_modelviewMatrix));
+	m_projectionStack = new std::list<Matrix4f*>();
+	m_projectionStack->push_back(new Matrix4f(*m_projectionMatrix));
+	
+	m_currentMatrix = m_modelviewStack->back();
+	
+	m_matrixMode = MATRIX_MODELVIEW;
 	
 	m_clipper = new Clipper(3);
 	m_rasterizer = NULL;
+	m_vp = NULL;
+	m_fp = NULL;
 }
 
 SoftwarePipeline::~SoftwarePipeline()
 {	
 	m_currentMatrix = NULL;
 	
+	delete m_modelviewStack;
+	delete m_projectionStack;
 	delete m_modelviewMatrix;
 	delete m_projectionMatrix;
 	delete m_viewportMatrix;
-	delete m_vp;
-	delete m_fp;
-	delete m_clipper;
-	delete m_rasterizer;
-	delete m_framebuffer;
+	
+	if(m_vp) delete m_vp;
+	if(m_fp) delete m_fp;
+	if(m_clipper) delete m_clipper;
+	if(m_rasterizer) delete m_rasterizer;
+	if(m_framebuffer) delete m_framebuffer;
 }
 
 void SoftwarePipeline::init()
@@ -63,12 +73,16 @@ void SoftwarePipeline::init()
 
 void SoftwarePipeline::setFragmentProcessor(const FragmentProcessor* fragProc)
 {
+	if(m_fp != NULL) delete m_fp;
+	
 	m_fp = const_cast<FragmentProcessor*>(fragProc);
 	if(m_rasterizer==NULL) m_rasterizer = new Rasterizer(m_fp->nAttr(), m_framebuffer->getWidth(), m_framebuffer->getHeight());
 }
 
 void SoftwarePipeline::setVertexProcessor(const VertexProcessor* vertProc)
 {
+	if(m_vp != NULL) delete m_vp;
+	
 	m_vp = const_cast<VertexProcessor*>(vertProc);
 }
 
@@ -160,38 +174,48 @@ void SoftwarePipeline::loadIdentity()
 void SoftwarePipeline::rotate(float angle, const Vector3f& axis)
 {
 	Matrix4f temp = rotationMatrix(angle, axis, false);
-	Matrix4f mv(*m_modelviewMatrix);
-	(*m_modelviewMatrix) = mv * temp;
+	Matrix4f mv(*m_currentMatrix);
+	(*m_currentMatrix) = mv * temp;
 	recomputeMatrix();
 }
 
 void SoftwarePipeline::translate(const Vector3f& delta)
 {
 	Matrix4f temp = translationMatrix(delta);
-	Matrix4f mv(*m_modelviewMatrix);
-	(*m_modelviewMatrix) = mv * temp;
+	Matrix4f mv(*m_currentMatrix);
+	(*m_currentMatrix) = mv * temp;
 	recomputeMatrix();
 }
 
 void SoftwarePipeline::scale(const Vector3f& scale)
 {
 	Matrix4f temp = scalingMatrix(scale);
-	Matrix4f mv(*m_modelviewMatrix);
-	(*m_modelviewMatrix) = mv * temp;
+	Matrix4f mv(*m_currentMatrix);
+	(*m_currentMatrix) = mv * temp;
 	recomputeMatrix();
 }
 
 void SoftwarePipeline::recomputeMatrix()
 {
-	// we'll squash the matrix stack here...
-	/*
-	if(!m_modelviewStack->empty()){
+	if(m_modelviewStack->size() > 1){
+		m_modelviewMatrix->identity();
 		std::list<Matrix4f*>::iterator iter;
 		for(iter=m_modelviewStack->begin(); iter != m_modelviewStack->end(); iter++){
-			m_modelviewMatrix *= (*iter);
+			(*m_modelviewMatrix) = (*m_modelviewMatrix) * (*(*iter));
 		}
+	}else{
+		(*m_modelviewMatrix) = *(m_modelviewStack->back());
 	}
-	*/
+	
+	if(m_projectionStack->size() > 1){
+		m_projectionMatrix->identity();
+		std::list<Matrix4f*>::iterator iter;
+		for(iter=m_projectionStack->begin(); iter != m_projectionStack->end(); iter++){
+			(*m_projectionMatrix) = (*m_projectionMatrix) * (*(*iter));
+		}
+	}else{
+		(*m_projectionMatrix) = *(m_projectionStack->back());
+	}
 	
 	m_vp->updateTransforms(*this);
 }
@@ -208,8 +232,8 @@ void SoftwarePipeline::lookAt(Vector3f eye, Vector3f target, Vector3f up)
 	Vector3f v;
 	v = cross(w, u);
 	T = cameraToFrame(u, v, w, eye);
-	Matrix4f mv(*m_modelviewMatrix);
-	(*m_modelviewMatrix) = mv * T;
+	Matrix4f mv(*m_currentMatrix);
+	(*m_currentMatrix) = mv * T;
 	recomputeMatrix();
 }
 
@@ -259,11 +283,32 @@ void SoftwarePipeline::viewport(int x, int y, int w, int h)
 
 void SoftwarePipeline::pushMatrix(Matrix4f* matrix)
 {
+	bool recompute = true;
 	if(matrix==NULL){
 		matrix = new Matrix4f();
 		matrix->identity();
+		recompute = false;
 	}
-	m_modelviewStack->push_back(matrix);
+	
+	switch(m_matrixMode){
+		case MATRIX_MODELVIEW:
+			m_modelviewStack->push_back(matrix);
+			m_currentMatrix = m_modelviewStack->back();
+			break;
+		case MATRIX_PROJECTION:
+			m_projectionStack->push_back(matrix);
+			m_currentMatrix = m_projectionStack->back();
+			break;
+		case MATRIX_VIEWPORT:
+		case MATRIX_TEXTURE:
+		case MATRIX_COLOR:
+		default:
+			throw "Unsupported operation: matrix stacks only supported for projection and modelview modes for now.";
+	}
+	
+	if(recompute){
+		recomputeMatrix();
+	}
 }
 
 void SoftwarePipeline::popMatrix()
@@ -271,9 +316,11 @@ void SoftwarePipeline::popMatrix()
 	switch(m_matrixMode){
 		case MATRIX_MODELVIEW:
 			m_modelviewStack->pop_back();
+			m_currentMatrix = m_modelviewStack->back();
 			break;
 		case MATRIX_PROJECTION:
 			m_projectionStack->pop_back();
+			m_currentMatrix = m_projectionStack->back();
 			break;
 		case MATRIX_VIEWPORT:
 		case MATRIX_TEXTURE:
@@ -286,12 +333,14 @@ void SoftwarePipeline::popMatrix()
 void SoftwarePipeline::loadMatrix(const Matrix4f& matrix)
 {
 	(*m_currentMatrix) = matrix;
+	recomputeMatrix();
 }
 
 void SoftwarePipeline::loadTransposeMatrix(const Matrix4f& matrix)
 {
 	(*m_currentMatrix) = matrix;
 	transpose(*m_currentMatrix);
+	recomputeMatrix();
 }
 
 void SoftwarePipeline::setMatrixMode(const matrix_mode mode)
@@ -299,10 +348,10 @@ void SoftwarePipeline::setMatrixMode(const matrix_mode mode)
 	m_matrixMode = mode;
 	switch(m_matrixMode){
 		case MATRIX_MODELVIEW:
-			m_currentMatrix = m_modelviewMatrix;
+			m_currentMatrix = m_modelviewStack->back();
 			break;
 		case MATRIX_PROJECTION:
-			m_currentMatrix = m_projectionMatrix;
+			m_currentMatrix = m_projectionStack->back();
 			break;
 		case MATRIX_VIEWPORT:
 			m_currentMatrix = m_viewportMatrix;
@@ -319,12 +368,14 @@ void SoftwarePipeline::setMatrixMode(const matrix_mode mode)
 void SoftwarePipeline::multiplyMatrix(const Matrix4f& matrix)
 {
 	(*m_currentMatrix) = (*m_currentMatrix) * matrix;
+	recomputeMatrix();
 }
 
 void SoftwarePipeline::loadTransposeMatrixMultiply(const Matrix4f& matrix)
 {
 	Matrix4f t = transpose(matrix);
 	(*m_currentMatrix) = (*m_currentMatrix) * t;
+	recomputeMatrix();
 }
 
 void SoftwarePipeline::begin(const drawing_mode mode)

@@ -9,7 +9,7 @@ namespace pixelpipe {
 
 PixelPipeWindow::PixelPipeWindow(std::string title, int width, int height, render_mode mode)
 	: GlutWindow(title, width, height)
-{	
+{		
 	Vector3f* eye = new Vector3f(3.0, 3.0, 3.0);
 	Vector3f* target = new Vector3f(0.0, 0.0, 0.0);
 	Vector3f* upVec = new Vector3f(0.0, 1.0, 0.0);
@@ -74,11 +74,11 @@ void PixelPipeWindow::init()
 	m_state->enableLighting(true);
 	m_state->enableDepthTest(true);
 	
-	m_state->enableTexturing2D(true);
-	if(!m_textures.empty()){
-		m_scene->setTexture(m_textures.at(0), 0);
-		m_scene->setTexture(m_textures.at(1), 1);
-	}
+	// m_state->enableTexturing2D(true);
+	// if(!m_textures.empty()){
+	// 	m_scene->setTexture(m_textures.at(0), 0);
+	// 	m_scene->setTexture(m_textures.at(1), 1);
+	// }
 	m_pipeline->configure();
 }
 

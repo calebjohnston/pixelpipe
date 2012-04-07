@@ -36,11 +36,11 @@ public:
 	virtual int nAttr() const = 0;
 	
 	/**
-	 * We can access everything we need to know about the pipeline state -- the
-	 * current transformation matrices and the lighting parameters -- via the
-	 * Pipeline reference above. But for efficiency we may want to do some
-	 * precomputation. This function will be called by the pipeline to notify this
-	 * object whenever the transforms parameters are changed.
+	 * We can access everything we need to know about the pipeline state: 
+	 * the current transformation matrices and the lighting parameters, via 
+	 * the Pipeline reference above. But for efficiency we may want to do some
+	 * precomputation. This function will be called by the pipeline to notify
+	 * this object whenever the transforms parameters are changed.
 	 * 
 	 * @param pipe The reference to the pipeline instance. Can be used to determine the necessary matrices.
 	 */

@@ -260,7 +260,7 @@ protected:
 	cg::vecmath::Matrix4f* m_currentMatrix;				//!< The currently selected matrix using the MatrixMode methods.
 	std::list<cg::vecmath::Matrix4f*>* m_modelviewStack;	//!< A LIFO stack of user-defined modelview matrices
 	std::list<cg::vecmath::Matrix4f*>* m_projectionStack;	//!< A LIFO stack of user-defined modelview matrices
-	std::list<cg::vecmath::Matrix4f*>* m_viewportStack;		//!< A LIFO stack of user-defined modelview matrices
+	// std::list<cg::vecmath::Matrix4f*>* m_viewportStack;		//!< A LIFO stack of user-defined modelview matrices
 	
 	/**
 	 * Notifies the TP of any changes to the modelview, projection, or viewing
