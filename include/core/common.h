@@ -9,6 +9,18 @@ static const double PI = 3.141592653589793;
 
 namespace pixelpipe {
 
+enum shade_model {
+	SHADE_FLAT,
+	SHADE_SMOOTH
+};
+
+enum light_model {
+	LIGHT_AMBIENT,
+	LIGHT_LOCAL_VIEWER,
+	LIGHT_COLOR_CONTROL, 
+	LIGHT_TWO_SIDE
+};
+
 enum buffer_bit {
 	BUFFER_COLOR,
 	BUFFER_DEPTH,

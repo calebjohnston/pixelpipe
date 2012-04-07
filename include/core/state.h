@@ -36,6 +36,56 @@ public:
 	void setLights(std::vector<PointLight>* newLights);
 
 	/**
+	 * 
+	 */
+	void setShadeModel(const shade_model value);
+
+	/**
+	 * 
+	 */
+	shade_model getShadeModel() const;
+	
+	/**
+	 * 
+	 */
+	void setLightModel(const light_model value);
+
+	/**
+	 * 
+	 */
+	light_model getLightModel() const;
+
+	/**
+	 * 
+	 */
+	void enableLighting(bool value = true);
+
+	/**
+	 * 
+	 */
+	bool getLighting() const { return this->m_lightingEnabled; }
+
+	/**
+	 * 
+	 */
+	void enableDepthTest(bool value = true);
+
+	/**
+	 * 
+	 */
+	bool getDepthTest() { return this->m_depthTestEnabled; }
+
+	/**
+	 * 
+	 */
+	void enableTexturing2D(bool value = true);
+
+	/**
+	 * 
+	 */
+	bool getTexturing2D() { return this->m_texture2dEnabled; }
+
+	/**
 	 * Accessor method for the global ambient intensity
 	 */
 	void setAmbientIntensity(float value);
@@ -104,24 +154,13 @@ private:
 	 * @param intens the color of the light
 	 */
 	State();
-	
-	/**
-	 * Copy constructor
-	 */
-	// State(const State& state)
-	// {
-	// 	*this = state;
-	// }
-
-	/**
-	 * Copy constructor
-	 */
-	// State& operator=(const State& state)
-	// 	{
-	// 		return *this;
-	// 	}
-	
 	static State* instance;
+	
+	shade_model m_shadeModel;
+	light_model m_lightModel;
+	bool m_lightingEnabled;
+	bool m_depthTestEnabled;
+	bool m_texture2dEnabled;
 	
 };
 

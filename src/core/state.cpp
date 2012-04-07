@@ -23,6 +23,41 @@ State::~State()
 	// delete values ...
 }
 
+void State::setShadeModel(const shade_model value)
+{
+	this->m_shadeModel = value;
+}
+
+shade_model State::getShadeModel() const
+{
+	return this->m_shadeModel;
+}
+
+void State::setLightModel(const light_model value)
+{
+	this->m_lightModel = value;
+}
+
+light_model State::getLightModel() const
+{
+	return this->m_lightModel;
+}
+
+void State::enableLighting(bool value)
+{
+	this->m_lightingEnabled = value;
+}
+
+void State::enableDepthTest(bool value)
+{
+	this->m_depthTestEnabled = value;
+}
+
+void State::enableTexturing2D(bool value)
+{
+	this->m_texture2dEnabled = value;
+}
+
 void State::setAmbientIntensity(float value)
 {
 	this->ambientIntensity = value;
@@ -40,12 +75,12 @@ void State::setSpecularColor(Color3f* color)
 
 void State::setLights(std::vector<PointLight>* newLights)
 {
-	if(lights!=NULL && newLights != this->lights) {
-		delete lights;
-		lights = NULL;
+	if(this->lights!=NULL && newLights != this->lights) {
+		delete this->lights;
+		this->lights = NULL;
 	}
 
-	lights = newLights;
+	this->lights = newLights;
 }
 
 }	// namespace pixelpipe
