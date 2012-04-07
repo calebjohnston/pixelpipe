@@ -2,16 +2,6 @@
 
 #include "core/pixelpipe.h"
 #include "core/common.h"
-#include "vertex/vert_color.h"
-#include "vertex/vert_frag_shaded.h"
-#include "vertex/vert_frag_textured.h"
-#include "vertex/vert_shaded.h"
-#include "vertex/vert_textured_shaded.h"
-#include "fragment/frag_color.h"
-#include "fragment/frag_phong.h"
-#include "fragment/frag_textured.h"
-#include "fragment/frag_textured_phong.h"
-#include "fragment/frag_zbuffer.h"
 
 using namespace cg::vecmath;
 
@@ -81,6 +71,17 @@ void PixelPipeWindow::init()
 	// m_scene = new SceneCube(*m_pipeline);
 	m_scene = new SceneSpheres(*m_pipeline);
 	
+	m_state->enableLighting(true);
+	m_state->enableDepthTest(true);
+	
+	m_state->enableTexturing2D(true);
+	if(!m_textures.empty()){
+		m_scene->setTexture(m_textures.at(0), 0);
+		m_scene->setTexture(m_textures.at(1), 1);
+	}
+	m_pipeline->configure();
+	
+	/*
 	switch(m_mode){
 		case RENDER_OPENGL:
 			this->init_openGLMode();
@@ -93,6 +94,7 @@ void PixelPipeWindow::init()
 			this->init_softwareMode();
 			break;
 	}
+	*/
 }
 
 /** 
@@ -100,6 +102,7 @@ void PixelPipeWindow::init()
  * in favor of having each Pipeline instance configure and render itself
  * based upon the State settings.
  */
+/*
 void PixelPipeWindow::init_softwareMode() 
 {
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
@@ -111,15 +114,15 @@ void PixelPipeWindow::init_softwareMode()
 	// setup vertex shaders
 	// ConstColorVP* vertProcessor = new ConstColorVP();				// 3
 	// SmoothShadedVP* vertProcessor = new SmoothShadedVP();			// 3	
-	TexturedShadedVP* vertProcessor = new TexturedShadedVP();		// 5
+	// TexturedShadedVP* vertProcessor = new TexturedShadedVP();		// 5
 	// FragmentShadedVP* vertProcessor = new FragmentShadedVP();		// 9 + 6 * lightCount
-	// TexturedFragmentShadedVP* vertProcessor = new TexturedFragmentShadedVP();	// 9 + 6 * lightCount
+	TexturedFragmentShadedVP* vertProcessor = new TexturedFragmentShadedVP();	// 9 + 6 * lightCount
 	
 	// ZBufferFP* fragProcessor = new ZBufferFP();						// 3
 	// ColorFP* fragProcessor = new ColorFP();							// 3
-	TexturedFP* fragProcessor = new TexturedFP();					// 5
+	// TexturedFP* fragProcessor = new TexturedFP();					// 5
 	// PhongShadedFP* fragProcessor = new PhongShadedFP();				// 9 + 6 * lightCount
-	// TexturedPhongFP* fragProcessor = new TexturedPhongFP();			// 9 + 6 * lightCount
+	TexturedPhongFP* fragProcessor = new TexturedPhongFP();			// 9 + 6 * lightCount
 	((SoftwarePipeline*) m_pipeline)->setVertexProcessor(vertProcessor);
 	((SoftwarePipeline*) m_pipeline)->setFragmentProcessor(fragProcessor);
 
@@ -127,6 +130,7 @@ void PixelPipeWindow::init_softwareMode()
 	m_scene->setTexture(m_textures.at(1), 1);
 	m_pipeline->configure();
 }
+*/
 
 void PixelPipeWindow::init_openGLMode()
 {	

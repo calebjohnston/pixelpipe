@@ -1,5 +1,15 @@
 
 #include "core/pipeline_software.h"
+#include "vertex/vert_color.h"
+#include "vertex/vert_frag_shaded.h"
+#include "vertex/vert_frag_textured.h"
+#include "vertex/vert_shaded.h"
+#include "vertex/vert_textured_shaded.h"
+#include "fragment/frag_color.h"
+#include "fragment/frag_phong.h"
+#include "fragment/frag_textured.h"
+#include "fragment/frag_textured_phong.h"
+#include "fragment/frag_zbuffer.h"
 
 using namespace cg::vecmath;
 
@@ -24,6 +34,7 @@ SoftwarePipeline::SoftwarePipeline(int nx, int ny)
 	currentMatrix = &modelviewMatrix;
 	
 	clipper = new Clipper(3);
+	rasterizer = NULL;
 }
 
 SoftwarePipeline::~SoftwarePipeline()
@@ -38,7 +49,7 @@ void SoftwarePipeline::init()
 void SoftwarePipeline::setFragmentProcessor(const FragmentProcessor* fragProc)
 {
 	fp = const_cast<FragmentProcessor*>(fragProc);
-	rasterizer = new Rasterizer(fp->nAttr(), framebuffer->getWidth(), framebuffer->getHeight());
+	if(rasterizer==NULL) rasterizer = new Rasterizer(fp->nAttr(), framebuffer->getWidth(), framebuffer->getHeight());
 }
 
 void SoftwarePipeline::setVertexProcessor(const VertexProcessor* vertProc)
@@ -46,94 +57,51 @@ void SoftwarePipeline::setVertexProcessor(const VertexProcessor* vertProc)
 	vp = const_cast<VertexProcessor*>(vertProc);
 }
 
-//void SoftwarePipeline::configure(Class fpClass, Class vpClass)
 void SoftwarePipeline::configure()
-{
-	// try {
-		// TO-DO: MOST OF THIS STUFF WON'T WORK, FIX IT
-		// Constructor c = fpClass.getConstructor(EMPTY_CLASS_ARRAY);
-		// fp = (FragmentProcessor) c.newInstance(EMPTY_OBJECT_ARRAY);
-		// rasterizer = new Rasterizer(fp->nAttr(), framebuffer->getWidth(), framebuffer->getHeight());
-		// clipper = new Clipper(fp->nAttr());
-		// c = vpClass.getConstructor(EMPTY_CLASS_ARRAY);
-		// vp = (VertexProcessor) c.newInstance(EMPTY_OBJECT_ARRAY);
-		
-//		fp->updateLightModel();
-		
-		// ========================================================================
-		// --
-		// ConstColorVP* vertProcessor = new ConstColorVP();				// 3
-		// SmoothShadedVP* vertProcessor = new SmoothShadedVP();			// 3
-		// TexturedShadedVP* vertProcessor = new TexturedShadedVP();		// 5
-		// FragmentShadedVP* vertProcessor = new FragmentShadedVP();		// 9 + 6 * lightCount
-		// TexturedFragmentShadedVP* vertProcessor = new TexturedFragmentShadedVP();	// 9 + 6 * lightCount
-		// --
-		// ZBufferFP* fragProcessor = new ZBufferFP();						// 3
-		// ColorFP* fragProcessor = new ColorFP();							// 3
-		// TexturedFP* fragProcessor = new TexturedFP();					// 5
-		// PhongShadedFP* fragProcessor = new PhongShadedFP();				// 9 + 6 * lightCount
-		// TexturedPhongFP* fragProcessor = new TexturedPhongFP();			// 9 + 6 * lightCount
-		// --
-		// this->setVertexProcessor(vertProcessor);
-		// this->setFragmentProcessor(fragProcessor);
-		// ========================================================================
-		
+{		
+	State* state = State::getInstance();
+	
+	if(state->getTexturing2D()){
+		if(true){
+			vp = new TexturedFragmentShadedVP();
+			fp = new TexturedPhongFP();
+		}
+		else if(false){
+			vp = new FragmentShadedVP();
+			fp = new PhongShadedFP();
+		}
+		else {
+			vp = new TexturedShadedVP();
+			fp = new TexturedFP();
+		}
+	}
+	else{
+		if(state->getLighting()){
+			vp = new SmoothShadedVP();
+			if(state->getDepthTest()){
+				fp = new ZBufferFP();
+			}else{
+				fp = new ColorFP();
+			}
+		}
+		else{
+			vp = new ConstColorVP();
+			if(state->getDepthTest()){
+				fp = new ZBufferFP();
+			}else{
+				fp = new ColorFP();
+			}
+		}
+	}
+	
+	if(fp->nAttr() != vp->nAttr()) throw "Unsupported configuration.";
+	
+	rasterizer = new Rasterizer(fp->nAttr(), framebuffer->getWidth(), framebuffer->getHeight());
 	rasterizer->setAttributeCount(fp->nAttr());
 	clipper->setAttributeCount(fp->nAttr());
 		
-		vp->updateTransforms(*this);
-		vp->updateLightModel(*this);
-		/*
-		if(m_state->getTexturing2D()){
-			TexturedShadedVP* vertProcessor = new TexturedShadedVP();
-		}
-		else{
-			if(m_state->getLighting()){
-				
-			}
-			else{
-				ConstColorVP* vertProcessor = new ConstColorVP();
-			}
-		}
-		*/
-	
-	/*
-	    if (classesChanged) {
-	      if (tpClass == ConstColorVP.class) {
-	        gl.glDisable(GL.GL_LIGHTING);
-	        gl.glDisable(GL.GL_COLOR_MATERIAL);
-	        gl.glShadeModel(GL.GL_SMOOTH);
-	      }
-	      else if (tpClass == TexturedFragmentShadedVP.class ) {
-	        gl.glEnable(GL.GL_LIGHTING);
-	        gl.glDisable(GL.GL_COLOR_MATERIAL);	// ignore vertex colors
-	        gl.glMaterialfv(GL.GL_FRONT, GL.GL_DIFFUSE, WHITE,0);
-	        gl.glMaterialfv(GL.GL_FRONT, GL.GL_AMBIENT, WHITE,0);
-	        gl.glShadeModel(GL.GL_SMOOTH);
-	      }
-	      else {
-	        gl.glEnable(GL.GL_LIGHTING);
-	        gl.glColorMaterial(GL.GL_FRONT, GL.GL_AMBIENT_AND_DIFFUSE);
-	        gl.glEnable(GL.GL_COLOR_MATERIAL);
-	        gl.glShadeModel(GL.GL_SMOOTH);
-	      }
-
-	      if (fpClass == TrivialColorFP.class) {
-	        gl.glDisable(GL.GL_DEPTH_TEST);
-	        gl.glDisable(GL.GL_TEXTURE_2D);
-	      }
-	      else if (fpClass == TexturedFP.class || fpClass == TexturedPhongFP.class) {
-	        gl.glEnable(GL.GL_DEPTH_TEST);
-	        gl.glEnable(GL.GL_TEXTURE_2D);
-	      }
-	      else {
-	        gl.glEnable(GL.GL_DEPTH_TEST);
-	        gl.glDisable(GL.GL_TEXTURE_2D);
-	      }
-
-	      classesChanged = false;
-	    }
-*/
+	vp->updateTransforms(*this);
+	vp->updateLightModel(*this);
 }
 
 bool SoftwarePipeline::validConfiguration()

@@ -15,6 +15,12 @@ State::State()
 	specularColor = new Color3f(0.4, 0.4, 0.4);
 	specularExponent = 40.0;
 	
+	m_shadeModel = SHADE_SMOOTH;
+	m_lightModel = LIGHT_AMBIENT;
+	m_lightingEnabled = false;
+	m_depthTestEnabled = false;
+	m_texture2dEnabled = false;
+	
 	this->lights = new std::vector<PointLight>();
 }
 

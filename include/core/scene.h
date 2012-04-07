@@ -33,7 +33,7 @@ class Scene {
 public:
 	Scene(Pipeline& pipe) : m_pipeline(pipe) {
 		m_texture = new std::vector<Texture*>();
-		m_texture->resize(32);
+		m_texture->reserve(32);
 	}
 	
 	~Scene() {
@@ -47,6 +47,8 @@ public:
 	*/
 	virtual void setTexture(const Texture* tex, int index)
 	{
+		if(index >= m_texture->size() || m_texture->empty()) m_texture->resize(index+1);
+		
 		if(m_texture->at(index) != NULL){
 			delete m_texture->at(index);
 		}

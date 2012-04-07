@@ -26,13 +26,98 @@ void OpenGLPipeline::init()
 
 void OpenGLPipeline::configure()
 {
-	// hmm???
+	State* state = State::getInstance();
 	
-	glGenTextures(1, &(this->m_textureHandle));
-	glBindTexture(GL_TEXTURE_2D, this->m_textureHandle);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glBindTexture(GL_TEXTURE_2D, 0);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glEnable(GL_NORMALIZE);
+	glPolygonMode(GL_FRONT, GL_FILL);
+	
+	if(state->getTexturing2D()){
+		glEnable(GL_TEXTURE_2D);
+		
+		// prepare texture
+		glGenTextures(1, &(this->m_textureHandle));
+		glBindTexture(GL_TEXTURE_2D, this->m_textureHandle);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glBindTexture(GL_TEXTURE_2D, 0);
+		
+		// Configure textures
+		glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		
+	}else{
+		glDisable(GL_TEXTURE_2D);
+	}
+	
+	glShadeModel(GL_SMOOTH);
+	if(state->getLighting()){
+		if(state->getTexturing2D()){
+			if(true){
+				glDisable(GL_COLOR_MATERIAL);
+				float white[3] = {1.0, 1.0, 1.0};
+				glMaterialfv(GL_FRONT, GL_DIFFUSE, white);
+				glMaterialfv(GL_FRONT, GL_AMBIENT, white);
+			}
+			else if(false){
+				glEnable(GL_COLOR_MATERIAL);
+			}
+			else{
+	        	glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
+			}
+		}
+		
+		glEnable(GL_LIGHTING);
+		glShadeModel(GL_SMOOTH);
+		// removed this, so the specular component is modulated with the texture - not added on top.
+		glLightModeli(GL_LIGHT_MODEL_COLOR_CONTROL, GL_SEPARATE_SPECULAR_COLOR);
+		
+		// configure lighting
+		Color3f s = state->getSpecularColor();
+		float a = state->getAmbientIntensity();
+		float amb[3] = { a, a, a };
+		glLightModelfv(GL_LIGHT_MODEL_AMBIENT, amb);
+		glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_TRUE);
+
+		const unsigned max_ogl_lights = 8;
+		int lights[max_ogl_lights] = { GL_LIGHT0, GL_LIGHT1, GL_LIGHT2, GL_LIGHT3, GL_LIGHT4, GL_LIGHT5, GL_LIGHT6, GL_LIGHT7 };
+
+		for(size_t i = 0; i < std::min(max_ogl_lights, (unsigned) state->getLights().size()); i++) {
+			Color3f d = state->getLights().at(i).getIntensity();
+			Point3f p = state->getLights().at(i).getPosition();
+
+			glEnable(lights[i]);
+			float diffuse[4] = { d.x, d.y, d.z, 1.0 };
+			float specular[4] = { 1.0, 1.0, 1.0, 1.0 };
+			float position[4] = { p.x, p.y, p.z, 1.0 };
+
+			glLightfv(lights[i], GL_DIFFUSE, diffuse);
+			glLightfv(lights[i], GL_SPECULAR, specular);
+			glLightfv(lights[i], GL_POSITION, position);
+		}
+		
+		float mat[3] = { s.x, s.y, s.z };
+		glMateriali(GL_FRONT, GL_SHININESS, state->getSpecularExponent());
+		glMaterialfv(GL_FRONT, GL_SPECULAR, mat);
+		
+	}else{
+		glDisable(GL_LIGHTING);
+	}
+	
+	if(state->getDepthTest()){
+		glEnable(GL_DEPTH_TEST);
+		glDepthFunc(GL_LESS);
+		glEnable(GL_CULL_FACE);
+		glCullFace(GL_BACK);
+	}
+	else{
+		glDisable(GL_DEPTH_TEST);
+	}
+		
+	glClearColor(0, 0, 0, 1);
 }
 
 /** NOT YET IMPLEMENTED */
@@ -262,10 +347,6 @@ void OpenGLPipeline::renderTriangle(const Vector3f* v, const Color3f* c, const V
 {
 	for (unsigned k = 0; k < 3; k++) {
 		this->vertex(v[k], c[k], n[k], t[k]);
-		// glColor3f(c[k].x, c[k].y, c[k].z);
-		// glNormal3f(n[k].x, n[k].y, n[k].z);
-		// glTexCoord2f(t[k].x, t[k].y);
-		// glVertex3f(v[k].x, v[k].y, v[k].z);
 	}
 }
 	
