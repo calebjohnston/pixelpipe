@@ -168,7 +168,37 @@ public:
 	 * @return a boolean flag representing the validity of the configuration.
 	 */
 	virtual void end();
+	
+	/**
+	 * ! @copydoc Pipeline::setActiveTexture()
+	 */
+	virtual void setActiveTexture(unsigned unit);
 
+	/**
+	 * ! @copydoc Pipeline::getActiveTexture()
+	 */
+	virtual unsigned getActiveTexture() const;
+
+	/**
+	 * ! @copydoc Pipeline::generateTexture()
+	 */
+	virtual unsigned generateTexture();
+
+	/**
+	 * ! @copydoc Pipeline::deleteTexture()
+	 */
+	virtual void deleteTexture(unsigned* texture);
+
+	/**
+	 * ! @copydoc Pipeline::bindTexture()
+	 */
+	virtual void bindTexture(unsigned texture);
+
+	/**
+	 * ! @copydoc Pipeline::loadTexture2D()
+	 */
+	virtual void loadTexture2D(const unsigned width, const unsigned height, const pixel_format format, const pixel_type type, const void* data);
+	
 	/**
 	 * ! @copydoc Pipeline::getViewportMatrix()
 	 */

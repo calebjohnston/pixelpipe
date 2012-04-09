@@ -36,6 +36,12 @@ public:
 		W=w; H=h; nchan=c;
 		data = new T[length()];
     }
+	Raster(int w, int h, int c, const T* image_data)
+    {
+		W=w; H=h; nchan=c;
+		data = new T[length()];
+		memcpy(data, image_data, (size_t) length());
+    }
     virtual ~Raster() { delete[] data; }
 
     int width() const { return W; }
@@ -78,6 +84,7 @@ class ByteRaster : public Raster<unsigned char>
 {
 public:
     ByteRaster(int w, int h, int c) : Raster<unsigned char>(w,h,c) {}
+	ByteRaster(int w, int h, int c, unsigned char* data) : Raster<unsigned char>(w,h,c,data) {}
     ByteRaster(const ByteRaster& img);
     ByteRaster(const FloatRaster& img);
 };
@@ -87,6 +94,7 @@ class FloatRaster : public Raster<float>
 {
 public:
     FloatRaster(int w, int h, int c) : Raster<float>(w,h,c) {}
+	FloatRaster(int w, int h, int c, float* data) : Raster<float>(w,h,c,data) {}
     FloatRaster(const FloatRaster &img);
     FloatRaster(const ByteRaster &img);
 };

@@ -247,20 +247,68 @@ public:
 	virtual void begin(drawing_mode mode) = 0;
 	
 	/**
-	 * Compares the vertex and fragment processors to makes sure the information passed
-	 * between them is in the same in size. 
+	 * Compares the vertex and fragment processors to makes sure the 
+	 * information passed between them is in the same in size. 
 	 *
 	 * @return a boolean flag representing the validity of the configuration.
 	 */
 	virtual void vertex(const cg::vecmath::Vector3f& v, const cg::vecmath::Color3f& c, const cg::vecmath::Vector3f& n, const cg::vecmath::Vector2f& t) = 0;
 	
 	/**
-	 * Compares the vertex and fragment processors to makes sure the information passed
-	 * between them is in the same in size. 
+	 * Compares the vertex and fragment processors to makes sure the 
+	 * information passed between them is in the same in size. 
 	 *
 	 * @return a boolean flag representing the validity of the configuration.
 	 */
 	virtual void end() = 0;
+
+	/**
+	 * Selects the active texture unit based upon the supplied parameter.
+	 * 
+	 * @see http://www.opengl.org/sdk/docs/man/xhtml/glActiveTexture.xml
+	 * @see Pipeline::getActiveTexture
+	 */
+	virtual void setActiveTexture(unsigned unit) = 0;
+
+	/**
+	 * Returns the currently active texture unit.
+	 * 
+	 * @see http://www.opengl.org/sdk/docs/man/xhtml/glActiveTexture.xml
+	 * @see Pipeline::setActiveTexture
+	 */
+	virtual unsigned getActiveTexture() const = 0;
+
+	/**
+	 * Allocates memory for a new texture and returns its index.
+	 * 
+	 * @see http://www.opengl.org/sdk/docs/man/xhtml/glGenTextures.xml
+	 * @see Pipeline::deleteTexture
+	 */
+	virtual unsigned generateTexture() = 0;
+
+	/**
+	 * De-allocates memory for the texture represented by the supplied 
+	 * index parameter.
+	 * 
+	 * @see http://www.opengl.org/sdk/docs/man/xhtml/glDeleteTextures.xml
+	 * @see Pipeline::generateTexture
+	 */
+	virtual void deleteTexture(unsigned* texture) = 0;
+
+	/**
+	 * Binds a texture indicated by the supplied parameter to the 
+	 * currently active texture unit.
+	 * 
+	 * @see http://www.opengl.org/sdk/docs/man/xhtml/glBindTexture.xml
+	 */
+	virtual void bindTexture(unsigned texture) = 0;
+
+	/**
+	 * Loads raw byte data into the currently active texture unit
+	 * 
+	 * @see http://www.opengl.org/sdk/docs/man/xhtml/glTexImage2D.xml
+	 */
+	virtual void loadTexture2D(const unsigned width, const unsigned height, const pixel_format format, const pixel_type type, const void* data) = 0;
 	
 	/**
 	 *  

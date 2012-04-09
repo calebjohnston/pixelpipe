@@ -338,6 +338,97 @@ void OpenGLPipeline::end()
 	glEnd();
 }
 
+void OpenGLPipeline::setActiveTexture(unsigned unit)
+{
+	glActiveTexture(unit);
+	// check for GL_INVALID_ENUM
+}
+
+unsigned OpenGLPipeline::getActiveTexture() const
+{
+	GLint val[1] = { 0 };
+	glGetIntegerv(GL_ACTIVE_TEXTURE, val);
+	return (unsigned) val[0];
+}
+
+unsigned OpenGLPipeline::generateTexture()
+{
+	GLuint tex[1] = { 0 };
+	glGenTextures(1, tex);
+	return (unsigned) tex[0];
+}
+
+void OpenGLPipeline::deleteTexture(unsigned* texture)
+{
+	glDeleteTextures(1, texture);
+	// get error codes, look for: GL_INVALID_VALUE, GL_INVALID_OPERATION
+}
+
+void OpenGLPipeline::bindTexture(unsigned texture)
+{
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, texture);
+	// get error codes, look for: GL_INVALID_ENUM, GL_INVALID_OPERATION
+	
+	// Configure textures
+	// TODO: this should be moved elsewhere, or controlled explictly
+	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+}
+
+void OpenGLPipeline::loadTexture2D(const unsigned width, const unsigned height, const pixel_format format, const pixel_type type, const void* data)
+{
+	GLenum pformat = GL_RGB;
+	GLenum ptype = GL_UNSIGNED_BYTE;
+	switch(type){
+		case PIXEL_TYPE_BYTE: ptype = GL_BYTE;
+			break;
+		case PIXEL_TYPE_UNSIGNED_BYTE: ptype = GL_UNSIGNED_BYTE;
+			break;
+		case PIXEL_TYPE_UNSIGNED_SHORT: ptype = GL_UNSIGNED_SHORT;
+			break;
+		case PIXEL_TYPE_SHORT: ptype = GL_SHORT;
+			break;
+		case PIXEL_TYPE_UNSIGNED_INT: ptype = GL_UNSIGNED_INT;
+			break;
+		case PIXEL_TYPE_INT: ptype = GL_INT;
+			break;
+		case PIXEL_TYPE_FLOAT: ptype = GL_FLOAT;
+			break;
+	}
+	
+	switch(format){
+		case PIXEL_FORMAT_COLOR_INDEX: pformat = GL_COLOR_INDEX;
+			break;
+		case PIXEL_FORMAT_RED: pformat = GL_RED;
+			break;
+		case PIXEL_FORMAT_GREEN: pformat = GL_GREEN;
+			break;
+		case PIXEL_FORMAT_BLUE: pformat = GL_BLUE;
+			break;
+		case PIXEL_FORMAT_ALPHA: pformat = GL_ALPHA;
+			break;
+		case PIXEL_FORMAT_RGB: pformat = GL_RGB;
+			break;
+		case PIXEL_FORMAT_BGR: pformat = GL_BGR;
+			break;
+		case PIXEL_FORMAT_RGBA: pformat = GL_RGBA;
+			break;
+		case PIXEL_FORMAT_BGRA: pformat = GL_BGRA;
+			break;
+		case PIXEL_FORMAT_LUMINANCE: pformat = GL_LUMINANCE;
+			break;
+		case PIXEL_FORMAT_LUMINANCE_ALPHA: pformat = GL_LUMINANCE_ALPHA;
+			break;
+	}
+	
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, pformat, ptype, data);
+	// collect error data
+}
+
 void OpenGLPipeline::clear(const buffer_bit bit)
 {
 	return;

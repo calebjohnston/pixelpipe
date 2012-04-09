@@ -153,6 +153,7 @@ private:
 	bool m_lightingEnabled;
 	bool m_depthTestEnabled;
 	bool m_texture2dEnabled;
+	unsigned m_activeTextureUnit;
 	
 };
 

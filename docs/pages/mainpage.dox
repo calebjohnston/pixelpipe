@@ -14,17 +14,17 @@
 			<li>Interactive framerates &ndash;despite total lack of optimization</li>
 			<li>Programmable vertex and fragment stages</li>
 			<li>View frustum culling</li>
-			<li>Many drawing modes including: triangles, triangle strips, quads, quad strips. <em>(point and line rendering coming "soon")</em></li>
+			<li>Many drawing modes including: triangles, triangle strips, quads, quad strips.</li>
 			<li>Texture loading (supports JPGs, PNGs, and TIFFs)</li>
+			<li>User supplied matrix stacks</li>
 			<li>Custom made linear algebra package</li>
 		</ul>
 		
 		<p>Currently, the pipeline <em>doesn't</em> support:</p>
 		<ul>
-			<li>Multitexturing</li>
-			<li>User supplied matrix stacks</li>
+			<li>Multi-texturing</li>
+			<li>point or line rendering</li>
 			<li>Anti-aliasing</li>
-			<li>Tessellation shaders</li>
 		</ul>
 		
 		<p>Some of these features are targets for future releases. However this is obviously a personal project, so I don't have a release schedule or an official roadmap.</p>
@@ -35,7 +35,7 @@
 
 		<ul>
 			<li><a href="http://www.cmake.org">CMake</a></li>
-			<li><a href="http://www.boost.org">Boost</a> (Threads, Program Options, uBLAS, Date-Time, System)</li>
+			<li><a href="http://www.boost.org">Boost</a> (Threads, Program Options, System)</li>
 			<li>OpenGL & GLUT</li>
 			<li><a href="http://www.grinninglizard.com/tinyxmldocs/index.html">TinyXML</a> (included in source tree)</li>
 			<li><a href="http://www.libpng.org/pub/png/libpng.html">libpng</a></li>
@@ -52,7 +52,7 @@
 
 <pre>
 PixelPipe - A 3D graphics software rendering pipeline
-Copyright (C) 2011 by Caleb Johnston
+Copyright (C) 2012 by Caleb Johnston
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

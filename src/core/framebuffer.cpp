@@ -62,20 +62,7 @@ void FrameBuffer::clear(float r, float g, float b, float z)
 void FrameBuffer::write(std::string filename)
 {
 	// IMG_PNG=1, IMG_TIFF=2, IMG_JPEG=3
-	// write_image(const char *filename, const ByteRaster&, int type=-1);
-	// try {
-	//   FileOutputStream stream = new FileOutputStream(filename);
-	//   String hdr = new String("P6 " + width + " " + height + " 255\n");
-	//   stream.write(hdr.getBytes());
-	//   for (int iy = height - 1; iy >= 0; iy--)
-	//     stream.write(cData, 3 * width * iy, 3 * width);
-	// }
-	// catch (java.io.FileNotFoundException e) {
-	//   throw new RuntimeException(e);
-	// }
-	// catch (java.io.IOException e) {
-	//   throw new RuntimeException(e);
-	// }
+	// cg::image::write_image(const char *filename, const ByteRaster&, int type=-1);
 }
 
 void FrameBuffer::allocateGLTexture()
@@ -96,16 +83,6 @@ void FrameBuffer::drawGLTexture(float x, float y) const
 	glBindTexture(GL_TEXTURE_2D, this->m_textureHandle);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB8, this->m_width, this->m_height, 0, GL_RGB, GL_UNSIGNED_BYTE, this->m_cData);
 	
-	/*
-	glBegin(GL_TRIANGLE_FAN);
-	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-	glTexCoord2f(0, 0); glVertex3f(x, y, 0);
-	glTexCoord2f(1, 0); glVertex3f(x + this->m_width, y, 0);
-	glTexCoord2f(1, 1); glVertex3f(x + this->m_width, y + this->m_height, 0);
-	glTexCoord2f(0, 1); glVertex3f(x, y + this->m_height, 0);
-	glEnd();
-	*/
-	
 	glBegin(GL_QUADS);
 	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 	glTexCoord2f(0, 1); glVertex3f(x, y, 0);
@@ -113,8 +90,7 @@ void FrameBuffer::drawGLTexture(float x, float y) const
 	glTexCoord2f(1, 0); glVertex3f(x + this->m_width, y + this->m_height, 0);
 	glTexCoord2f(0, 0); glVertex3f(x, y + this->m_height, 0);
 	glEnd();
-		
-	//glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+	
 	glDisable(GL_TEXTURE_2D);
 }
 

@@ -45,7 +45,7 @@ public:
 	* 
 	* @param texFile The file to read the image from.
 	*/
-	virtual void setTexture(const Texture* tex, int index)
+	virtual void setTexture(const Texture* tex, unsigned index)
 	{
 		if(index >= m_textures->size() || m_textures->empty()) m_textures->resize(index+1);
 		
@@ -60,15 +60,20 @@ public:
 	* 
 	* @return reference to the current texture unit
 	*/
-	virtual Texture& getTexture(int index)
+	virtual Texture& getTexture(unsigned index)
 	{
 		return *(m_textures->at(index));
 	}
 
 	/**
+	* Initializes buffers within the pipeline before rendering
+	* 
+	*/
+	virtual void init() = 0;
+	
+	/**
 	* The primary function to render the scene.
 	* 
-	* @param usePipeline a flag to determine whether or not to use OpenGL rendering or the internal PixelPipe.
 	*/
 	virtual void render() = 0;
 
@@ -93,15 +98,33 @@ public:
 	
 	~SceneSpheres() {}
 	
+	virtual void init()
+	{
+		if(!m_textures->empty()){
+			Texture* image0 = m_textures->at(0);
+			Texture* image1 = m_textures->at(1);
+			tex0 = m_pipeline.generateTexture();
+			// m_pipeline.bindTexture(tex0);
+			m_pipeline.loadTexture2D(image0->width(), image0->height(), PIXEL_FORMAT_RGB, PIXEL_TYPE_UNSIGNED_BYTE, image0->getTextureBytes());
+			tex1 = m_pipeline.generateTexture();
+			// m_pipeline.bindTexture(tex1);
+			m_pipeline.loadTexture2D(image1->width(), image1->height(), PIXEL_FORMAT_RGB, PIXEL_TYPE_UNSIGNED_BYTE, image1->getTextureBytes());
+		}
+	}
+	
 	virtual void render() 
 	{
-		if(!m_textures->empty()) m_pipeline.setTexture(*(m_textures->at(0)));
+		// if(!m_textures->empty()) m_pipeline.setTexture(*(m_textures->at(0)));
 
 		m_pipeline.setMatrixMode(MATRIX_MODELVIEW);
 		
+		m_pipeline.setActiveTexture(tex0);
+		m_pipeline.bindTexture(tex0);
 		m_pipeline.translate(m_locationA);
 	    Geometry::sphere(m_depth, m_colorA, m_pipeline);
 
+		m_pipeline.setActiveTexture(tex1);
+		m_pipeline.bindTexture(tex1);
 		m_pipeline.translate(m_locationB);
 		m_pipeline.pushMatrix();
 		m_pipeline.scale(Vector3f(0.4f, 0.5f, 0.8f));
@@ -110,6 +133,8 @@ public:
 	}
 	
 protected:
+	unsigned tex0;			//!< The first texture to be bound
+	unsigned tex1;			//!< The second texture to be bound
 	int m_depth;			//!< The triangulation depth of the spheres
 	Color3f m_colorA;		//!< The color of the first sphere.
 	Color3f m_colorB;		//!< The color of the second sphere.
@@ -124,11 +149,25 @@ class SceneCube : public Scene {
 public:
 	SceneCube(Pipeline& pipe) : Scene(pipe) {}
 	~SceneCube() {};
+	
+	virtual void init()
+	{
+		if(!m_textures->empty()){
+			Texture* image0 = m_textures->at(0);
+			tex0 = m_pipeline.generateTexture();
+			m_pipeline.bindTexture(tex0);
+			m_pipeline.loadTexture2D(image0->width(), image0->height(), PIXEL_FORMAT_RGB, PIXEL_TYPE_BYTE, image0->getTextureBytes());
+		}
+	}
+	
 	virtual void render() 
 	{
 		if(!m_textures->empty()) m_pipeline.setTexture(*(m_textures->at(0)));
 		Geometry::cube(m_pipeline);
 	}
+	
+protected:
+	unsigned tex0;
 
 };	// class SceneCube
 

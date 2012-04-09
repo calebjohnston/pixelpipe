@@ -20,9 +20,9 @@ PixelPipeWindow::PixelPipeWindow(std::string title, int width, int height, rende
 	float aspect = (float)m_width / (float)m_height;
 	m_camera->setAspect(aspect);
 	
-	// Texture* tex1 = new Texture("../resources/textures/checker.png");
-	Texture* tex1 = new Texture("../resources/textures/carbonite.jpg");
-	Texture* tex2 = new Texture("../resources/textures/silverblob.jpg");
+	Texture* tex1 = new Texture("../resources/textures/checker.png");
+	Texture* tex2 = new Texture("../resources/textures/carbonite.jpg");
+	// Texture* tex2 = new Texture("../resources/textures/silverblob.jpg");
 	m_textures.push_back(tex1);
 	m_textures.push_back(tex2);
 	
@@ -74,11 +74,14 @@ void PixelPipeWindow::init()
 	m_state->enableLighting(true);
 	m_state->enableDepthTest(true);
 	
-	// m_state->enableTexturing2D(true);
-	// if(!m_textures.empty()){
-	// 	m_scene->setTexture(m_textures.at(0), 0);
-	// 	m_scene->setTexture(m_textures.at(1), 1);
-	// }
+	m_state->enableTexturing2D(true);
+	if(!m_textures.empty()){
+		m_scene->setTexture(m_textures.at(0), 0);
+		m_scene->setTexture(m_textures.at(1), 1);
+	}
+	
+	m_scene->init();
+	
 	m_pipeline->configure();
 }
 

@@ -45,6 +45,14 @@ int Texture::height() const
 	return h;
 }
 
+void Texture::setTextureData(const unsigned width, const unsigned height, const unsigned channels, const void* data)
+{
+	if(m_raster!=NULL){
+		delete m_raster;
+	}
+	m_raster = new ByteRaster(width, height, channels, (unsigned char*) data);
+}
+
 void Texture::setTextureData(const cg::image::ByteRaster& buffer)
 {
 	if(m_raster!=NULL) delete m_raster;

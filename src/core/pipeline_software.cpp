@@ -26,6 +26,10 @@ SoftwarePipeline::SoftwarePipeline(int nx, int ny)
 {	
 	m_framebuffer = new FrameBuffer(nx, ny);
 	
+	m_textureUnits = new std::vector<Texture*>();
+	m_textureUnits->reserve(32);
+	m_textureIndex = 0;
+	
 	m_mode = PIPELINE_MODE_NONE;
 	m_modelviewMatrix = new Matrix4f();
 	m_projectionMatrix = new Matrix4f();
@@ -459,6 +463,92 @@ Matrix4f SoftwarePipeline::getProjectionMatrix()
 void SoftwarePipeline::end()
 {
 	m_mode = PIPELINE_MODE_NONE;
+}
+
+void SoftwarePipeline::setActiveTexture(unsigned unit)
+{
+	if(unit >= m_textureUnits->size()){
+		throw "Invalid texture unit.";
+	}
+	
+	m_textureIndex = unit;
+}
+
+unsigned SoftwarePipeline::getActiveTexture() const
+{
+	return m_textureIndex;
+}
+
+unsigned SoftwarePipeline::generateTexture()
+{
+	Texture* tex = new Texture();
+	m_textureUnits->push_back(tex);
+	return (unsigned) m_textureUnits->size()-1;
+}
+
+void SoftwarePipeline::deleteTexture(unsigned* texture)
+{
+	unsigned tex_offset = *texture;
+	if(tex_offset >= m_textureUnits->size()){
+		throw "Invalid texture unit.";
+	}
+	
+	m_textureUnits->erase(m_textureUnits->begin() + tex_offset);
+}
+
+void SoftwarePipeline::bindTexture(unsigned texture)
+{
+	if(texture >= m_textureUnits->size()){
+		throw "Invalid texture unit.";
+	}
+	
+	m_textureIndex = texture;
+	Texture* currentTexture = m_textureUnits->at(m_textureIndex);
+	// TODO: we should verify that it's allocated here
+	m_fp->setTexture(*currentTexture);
+}
+
+void SoftwarePipeline::loadTexture2D(const unsigned width, const unsigned height, const pixel_format format, const pixel_type type, const void* data)
+{
+	int channels = 0;
+	switch(format){
+		case PIXEL_FORMAT_LUMINANCE:
+		case PIXEL_FORMAT_LUMINANCE_ALPHA:
+		case PIXEL_FORMAT_COLOR_INDEX:
+		case PIXEL_FORMAT_RED:
+		case PIXEL_FORMAT_GREEN:
+		case PIXEL_FORMAT_BLUE:
+		case PIXEL_FORMAT_ALPHA:
+			channels = 1;
+			break;
+		case PIXEL_FORMAT_RGB:
+		case PIXEL_FORMAT_BGR:
+			channels = 3;
+			break;
+		case PIXEL_FORMAT_RGBA:
+		case PIXEL_FORMAT_BGRA:
+			channels = 4;
+			break;
+	}
+	
+	void* image = NULL;
+	switch(type){
+		case PIXEL_TYPE_BYTE: 
+		case PIXEL_TYPE_UNSIGNED_BYTE:
+		case PIXEL_TYPE_UNSIGNED_SHORT:
+		case PIXEL_TYPE_UNSIGNED_INT:
+		case PIXEL_TYPE_SHORT:
+		case PIXEL_TYPE_INT:
+			m_textureUnits->at(m_textureIndex)->setTextureData(width, height, channels, (unsigned char*) data);
+			break;
+		case PIXEL_TYPE_FLOAT:
+			// TODO: Modify Texture class to support a variety of types.
+			// image = new FloatRaster(width, height, channels, (float)data);
+			break;
+	}
+	
+	// TODO: This should probably not happen here.
+	m_fp->setTexture(*(m_textureUnits->at(m_textureIndex)));
 }
 
 // TODO: Implementation incomplete

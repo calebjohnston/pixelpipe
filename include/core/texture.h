@@ -41,10 +41,10 @@ public:
 	 */
 	Texture& operator=(const Texture& tex)
 	{
-		//*(this->m_raster) = tex.getTextureData();
-		if(m_raster!=NULL) delete m_raster;
-		m_raster = new cg::image::ByteRaster(tex.getTextureData().width(), tex.getTextureData().height(), tex.getTextureData().channels());
-		*m_raster = tex.getTextureData();
+		*(this->m_raster) = tex.getTextureData();
+		// if(m_raster!=NULL) delete m_raster;
+		// m_raster = new cg::image::ByteRaster(tex.getTextureData().width(), tex.getTextureData().height(), tex.getTextureData().channels());
+		// *m_raster = tex.getTextureData();
 		
 		return *this;
 	}
@@ -79,6 +79,17 @@ public:
 	 * @param buffer the new raster buffer to use
 	 */
 	void setTextureData(const cg::image::ByteRaster& buffer);
+
+	/**
+	 * Resets the texture data to the data supplied within the parameters. 
+	 * Any pre-existing data is deleted.
+	 * 
+	 * @param width the width of the new texture information
+	 * @param height the height of the new texture information
+	 * @param channels the number of channels to be used
+	 * @param data the raw byte data of the new texture
+	 */
+	void setTextureData(const unsigned width, const unsigned height, const unsigned channels, const void* data);
 	
 	/**
 	 * Accessor method for the ByteRaster object.
