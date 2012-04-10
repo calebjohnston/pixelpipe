@@ -6,7 +6,7 @@ namespace pixelpipe {
 void TexturedFP::fragment(Fragment& f, FrameBuffer& fb)
 {
 	if(f.attributes[0] < fb.getZ(f.x, f.y)){
-		color = texture.sample(f.attributes[4], f.attributes[5]);
+		color = m_texture->sample(f.attributes[4], f.attributes[5]);
 		color.x *= f.attributes[1];
 		color.y *= f.attributes[2];
 		color.z *= f.attributes[3];

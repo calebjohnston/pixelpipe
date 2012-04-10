@@ -26,10 +26,12 @@ public:
 	 * 
 	 * @param newTexture a reference to a new texture to use.
 	 */
-	void setTexture(const Texture& newTexture) { texture = newTexture; }
+	void setTexture(const Texture* newTexture) {
+		m_texture = const_cast<Texture*>(newTexture);
+	}
 	
 protected:
-	Texture texture;	//!< A reference to the currently loaded texture.
+	Texture* m_texture;	//!< A reference to the currently loaded texture.
 	
 };	// class FragmentProcessor
 

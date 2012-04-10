@@ -133,12 +133,12 @@ bool OpenGLPipeline::isFlatShaded()
 	return false;
 }
 
-void OpenGLPipeline::setTexture(const Texture& texture)
+void OpenGLPipeline::setTexture(const Texture* texture)
 {
 	glEnable(GL_TEXTURE_2D);
 	// glActiveTexture(GL_TEXTURE0 + 0);
 	glBindTexture(GL_TEXTURE_2D, this->m_textureHandle);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB8, texture.width(), texture.height(), 0, GL_RGB, GL_UNSIGNED_BYTE, texture.getTextureBytes());
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB8, texture->width(), texture->height(), 0, GL_RGB, GL_UNSIGNED_BYTE, texture->getTextureBytes());
 }
 
 void OpenGLPipeline::clearFrameBuffer()

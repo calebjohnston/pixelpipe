@@ -54,7 +54,7 @@ public:
 	 *
 	 * @param a constant texture reference
 	 */
-	virtual void setTexture(const Texture& texture);
+	virtual void setTexture(const Texture* texture);
 	
 	/**
 	 * Clears the current frame buffer.

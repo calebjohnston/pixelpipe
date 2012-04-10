@@ -25,7 +25,7 @@ void TexturedPhongFP::fragment(Fragment& f, FrameBuffer& fb)
 		viewVector.normalize();
 
 		//sample the texture
-		texColor = texture.sample(f.attributes[1], f.attributes[2]);
+		texColor = m_texture->sample(f.attributes[1], f.attributes[2]);
 		
 		//add lighting
 		outColor.set(0.0,0.0,0.0);

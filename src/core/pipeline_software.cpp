@@ -147,7 +147,7 @@ bool SoftwarePipeline::isFlatShaded()
 	return false;
 }
 
-void SoftwarePipeline::setTexture(const Texture& texture)
+void SoftwarePipeline::setTexture(const Texture* texture)
 {
 	m_fp->setTexture(texture);
 }
@@ -505,7 +505,7 @@ void SoftwarePipeline::bindTexture(unsigned texture)
 	m_textureIndex = texture;
 	Texture* currentTexture = m_textureUnits->at(m_textureIndex);
 	// TODO: we should verify that it's allocated here
-	m_fp->setTexture(*currentTexture);
+	m_fp->setTexture(currentTexture);
 }
 
 void SoftwarePipeline::loadTexture2D(const unsigned width, const unsigned height, const pixel_format format, const pixel_type type, const void* data)
@@ -540,6 +540,7 @@ void SoftwarePipeline::loadTexture2D(const unsigned width, const unsigned height
 		case PIXEL_TYPE_SHORT:
 		case PIXEL_TYPE_INT:
 			m_textureUnits->at(m_textureIndex)->setTextureData(width, height, channels, (unsigned char*) data);
+			DEV() << "texture " << m_textureIndex << " : size=" << m_textureUnits->at(m_textureIndex)->width() << "x" << m_textureUnits->at(m_textureIndex)->height();
 			break;
 		case PIXEL_TYPE_FLOAT:
 			// TODO: Modify Texture class to support a variety of types.
@@ -548,7 +549,9 @@ void SoftwarePipeline::loadTexture2D(const unsigned width, const unsigned height
 	}
 	
 	// TODO: This should probably not happen here.
-	m_fp->setTexture(*(m_textureUnits->at(m_textureIndex)));
+	m_fp->setTexture(m_textureUnits->at(m_textureIndex));
+	
+	
 }
 
 // TODO: Implementation incomplete

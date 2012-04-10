@@ -67,7 +67,7 @@ public:
 	 *
 	 * @param a constant texture reference
 	 */
-	virtual void setTexture(const Texture& texture);
+	virtual void setTexture(const Texture* texture);
 	
 	/**
 	 * Accessor method to change the current fragment processor.

@@ -104,26 +104,22 @@ public:
 			Texture* image0 = m_textures->at(0);
 			Texture* image1 = m_textures->at(1);
 			tex0 = m_pipeline.generateTexture();
-			// m_pipeline.bindTexture(tex0);
+			m_pipeline.bindTexture(tex0);
 			m_pipeline.loadTexture2D(image0->width(), image0->height(), PIXEL_FORMAT_RGB, PIXEL_TYPE_UNSIGNED_BYTE, image0->getTextureBytes());
 			tex1 = m_pipeline.generateTexture();
-			// m_pipeline.bindTexture(tex1);
+			m_pipeline.bindTexture(tex1);
 			m_pipeline.loadTexture2D(image1->width(), image1->height(), PIXEL_FORMAT_RGB, PIXEL_TYPE_UNSIGNED_BYTE, image1->getTextureBytes());
 		}
 	}
 	
 	virtual void render() 
 	{
-		// if(!m_textures->empty()) m_pipeline.setTexture(*(m_textures->at(0)));
-
 		m_pipeline.setMatrixMode(MATRIX_MODELVIEW);
 		
-		m_pipeline.setActiveTexture(tex0);
 		m_pipeline.bindTexture(tex0);
 		m_pipeline.translate(m_locationA);
 	    Geometry::sphere(m_depth, m_colorA, m_pipeline);
 
-		m_pipeline.setActiveTexture(tex1);
 		m_pipeline.bindTexture(tex1);
 		m_pipeline.translate(m_locationB);
 		m_pipeline.pushMatrix();
@@ -162,7 +158,7 @@ public:
 	
 	virtual void render() 
 	{
-		if(!m_textures->empty()) m_pipeline.setTexture(*(m_textures->at(0)));
+		if(!m_textures->empty()) m_pipeline.setTexture(m_textures->at(0));
 		Geometry::cube(m_pipeline);
 	}
 	

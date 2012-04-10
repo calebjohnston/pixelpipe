@@ -80,9 +80,9 @@ void PixelPipeWindow::init()
 		m_scene->setTexture(m_textures.at(1), 1);
 	}
 	
-	m_scene->init();
-	
 	m_pipeline->configure();
+	
+	m_scene->init();
 }
 
 int PixelPipeWindow::render() 
