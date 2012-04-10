@@ -99,10 +99,6 @@ void SoftwarePipeline::configure()
 			m_vp = new TexturedFragmentShadedVP();
 			m_fp = new TexturedPhongFP();
 		}
-		else if(false){
-			m_vp = new FragmentShadedVP();
-			m_fp = new PhongShadedFP();
-		}
 		else {
 			m_vp = new TexturedShadedVP();
 			m_fp = new TexturedFP();
@@ -540,7 +536,6 @@ void SoftwarePipeline::loadTexture2D(const unsigned width, const unsigned height
 		case PIXEL_TYPE_SHORT:
 		case PIXEL_TYPE_INT:
 			m_textureUnits->at(m_textureIndex)->setTextureData(width, height, channels, (unsigned char*) data);
-			DEV() << "texture " << m_textureIndex << " : size=" << m_textureUnits->at(m_textureIndex)->width() << "x" << m_textureUnits->at(m_textureIndex)->height();
 			break;
 		case PIXEL_TYPE_FLOAT:
 			// TODO: Modify Texture class to support a variety of types.

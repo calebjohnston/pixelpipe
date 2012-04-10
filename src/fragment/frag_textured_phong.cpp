@@ -47,9 +47,7 @@ void TexturedPhongFP::fragment(Fragment& f, FrameBuffer& fb)
 			
 			//compute dot products
 			nDotL = dot(normal, lightVector);
-			nDotH = dot(normal, halfVector);	
-			
-			//DEV() << "T = " << f.attributes[0] << "x" << f.attributes[1];
+			nDotH = dot(normal, halfVector);
 			
 	   		//add diffuse color
 	   		outColor.x += texColor.x * nDotL * State::getInstance()->getLights().at(i).getIntensity().x;
