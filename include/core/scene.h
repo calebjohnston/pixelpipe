@@ -152,13 +152,12 @@ public:
 			Texture* image0 = m_textures->at(0);
 			tex0 = m_pipeline.generateTexture();
 			m_pipeline.bindTexture(tex0);
-			m_pipeline.loadTexture2D(image0->width(), image0->height(), PIXEL_FORMAT_RGB, PIXEL_TYPE_BYTE, image0->getTextureBytes());
+			m_pipeline.loadTexture2D(image0->width(), image0->height(), PIXEL_FORMAT_RGB, PIXEL_TYPE_UNSIGNED_BYTE, image0->getTextureBytes());
 		}
 	}
 	
 	virtual void render() 
 	{
-		// if(!m_textures->empty()) m_pipeline.setTexture(m_textures->at(0));
 		m_pipeline.bindTexture(tex0);
 		Geometry::cube(m_pipeline);
 	}

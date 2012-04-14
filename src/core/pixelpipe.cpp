@@ -68,8 +68,8 @@ void PixelPipeWindow::init()
 	
 	m_pipeline->init();
 	
-	// m_scene = new SceneCube(*m_pipeline);
-	m_scene = new SceneSpheres(*m_pipeline);
+	m_scene = new SceneCube(*m_pipeline);
+	// m_scene = new SceneSpheres(*m_pipeline);
 	
 	m_state->enableLighting(true);
 	m_state->enableDepthTest(true);
