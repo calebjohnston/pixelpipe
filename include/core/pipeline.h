@@ -23,24 +23,15 @@ namespace pixelpipe {
  * 
  */
 class Pipeline {
-public:	
-	// Pipeline(int nx=800, int ny=600);
-	// ~Pipeline();
-	
+public:		
 	/**
 	 * Configures the pipeline so that the triangle and fragment processors are
 	 * now up to date. Forces some reinitialization in order to set up things like
 	 * the clipper and the rasterizer.
 	 * 
-	 * @param fpClass The class of the new fragment shader.
-	 * @param vpClass The class of the new triangle shader.
 	 */
 	virtual void configure() = 0;
 
-	/**
-	 * Initializes OpenGL state variables for displaying the framebuffer 
-	 * to the window.
-	 */
 	virtual void init() = 0;
 	
 	/**
@@ -55,13 +46,6 @@ public:
 	 * @return a boolean flag representing the current shading model
 	 */
 	virtual bool isFlatShaded() = 0;
-	
-	/**
-	 * Sets the current texture
-	 *
-	 * @param a constant texture reference
-	 */
-	// virtual void setTexture(const Texture* texture) = 0;
 	
 	/**
 	 * Clears the current frame buffer.

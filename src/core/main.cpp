@@ -1,12 +1,12 @@
 /**
  * @file
  * @author  Caleb Johnston <caleb.johnston@example.com>
- * @version 0.1
+ * @version 0.125
  *
  * @section LICENSE
  *
  * Object-order rendering pipeline
- * Copyright (C) 2011 by Caleb Johnston
+ * Copyright (C) 2012 by Caleb Johnston
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -70,7 +70,7 @@ int main(int argc, char **argv)
 {
 	// figure out how to automate this output...
 	std::cout << "PixelPipe version " << TARGET_VERSION_MAJOR << "." << TARGET_VERSION_MINOR << " of " << __DATE__ << " at " << __TIME__ << std::endl;
-	std::cout << "Copyright (c) 2011 Caleb Johnston" << std::endl;
+	std::cout << "Copyright (c) 2012 Caleb Johnston" << std::endl;
 	std::cout << "The source code to PixelPipe is covered by the GNU GPL." << std::endl;
 	std::cout << "See the LICENSE file for the conditions of the license." << std::endl;
 	
@@ -83,6 +83,8 @@ int main(int argc, char **argv)
 	image_size.push_back(600);
 	std::string inputfile = "";
 	
+	pixelpipe::render_mode r_mode;
+	int pipeMode = pixelpipe::RENDER_SOFTWARE;
 	int loggerLevel;
 	try {
 		po::options_description desc("Allowed options");
@@ -90,6 +92,7 @@ int main(int argc, char **argv)
 		    ("help,H", "produce help message")
 			("input-file,I", po::value<std::string>(&inputfile), "input scene file")
 			("image-size,S", po::value< std::vector<int> >(&image_size)->multitoken(), "[ X Y ]")
+			("pipeline-mode,m", po::value<int>(&pipeMode), "[ 0=software | 1=opengl ]")
 			("verbose,V", po::value<int>(&loggerLevel)->default_value(1), "Verbose logging?")
 		;
 
@@ -109,6 +112,20 @@ int main(int argc, char **argv)
         if (inputfile!="") {
             std::cout << "Loading file: " << inputfile << std::endl;
         }
+
+		std::string mode_str = "";
+		switch(pipeMode){
+			case pixelpipe::RENDER_SOFTWARE:
+				mode_str = "Software";
+				r_mode = pixelpipe::RENDER_SOFTWARE;
+				break;
+			default:
+			case pixelpipe::RENDER_OPENGL:
+				mode_str = "OpenGL";
+				r_mode = pixelpipe::RENDER_OPENGL;
+				break;
+		}
+		std::cout << "Pipeline mode: " << mode_str << std::endl;
 
 		std::string levelLabel = "";
 		if(loggerLevel >= 0){
@@ -137,7 +154,7 @@ int main(int argc, char **argv)
     }
 
 	// start it up!
-	pixelpipe::PixelPipeWindow* app = new pixelpipe::PixelPipeWindow("PixelPipe", image_size.at(0), image_size.at(1));
+	pixelpipe::PixelPipeWindow* app = new pixelpipe::PixelPipeWindow("PixelPipe", image_size.at(0), image_size.at(1), r_mode);
 	app->init();
 	
 	return app->run();

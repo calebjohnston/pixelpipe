@@ -62,8 +62,8 @@ enum drawing_mode {
 };
 	
 enum render_mode {
-	RENDER_OPENGL,
 	RENDER_SOFTWARE,
+	RENDER_OPENGL,
 	RENDER_CUDA
 };
 

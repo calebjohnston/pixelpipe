@@ -1,9 +1,7 @@
 /**
 	\mainpage PixelPipe Overview
 	
-	<p>PixelPipe is an open source, cross platform 3D graphics software pipeline written in C++.</p>
-	
-	<p>The software pipeline includes fragment and vertex shader stages.</p>
+	<p>PixelPipe is an open source, cross platform 3D graphics software pipeline written in C++. The pipeline uses an <a href="http://en.wikipedia.org/wiki/Bresenham's_line_algorithm">object order rendering algorithm</a> much like that of an OpenGL driver. This project does feature an alternative OpenGL pipeline to compare images with. The software pipeline includes fragment and vertex shader stages.</p>
 	
 	<h2>Development &amp; Features</h2><hr/>
 
@@ -11,13 +9,15 @@
 		
 		<p>The pipeline currently features:</p>
 		<ul>
-			<li>Interactive framerates &ndash;despite total lack of optimization</li>
+			<li>Interactive framerates &ndash;despite total lack of optimization!</li>
 			<li>Programmable vertex and fragment stages</li>
 			<li>View frustum culling</li>
 			<li>Many drawing modes including: triangles, triangle strips, quads, quad strips.</li>
 			<li>Texture loading (supports JPGs, PNGs, and TIFFs)</li>
+			<li>Multiple texture units</li>
 			<li>User supplied matrix stacks</li>
 			<li>Custom made linear algebra package</li>
+			<li>CLI for choosing a pipeline (software or hardware)</li>
 		</ul>
 		
 		<p>Currently, the pipeline <em>doesn't</em> support:</p>

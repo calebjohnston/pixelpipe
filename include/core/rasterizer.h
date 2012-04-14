@@ -17,7 +17,7 @@ namespace pixelpipe {
  * the triangle, and handing off the correctly interpolated values to the
  * fragment processor. Clipping also happens within this class.
  * 
- * \link http://en.wikipedia.org/wiki/Bresenham's_line_algorithm
+ * @see http://en.wikipedia.org/wiki/Bresenham's_line_algorithm
  */
 class Rasterizer {
 public:

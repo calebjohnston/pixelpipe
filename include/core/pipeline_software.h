@@ -23,9 +23,9 @@ class VertexProcessor;
 class FragmentProcessor;
 
 /*!
- * \class Pipeline "core/pipeline.h"
- * \brief The pipeline class establishes the graphics rendering process from input 
- * geometry and textures to an output framebuffer.
+ * \class SoftwarePipeline "core/pipeline_software.h"
+ * \brief The SoftwarePipeline class establishes the graphics rendering process from input 
+ * geometry and textures to an output framebuffer all performed on the CPU.
  * 
  */
 class SoftwarePipeline : public Pipeline {
@@ -38,14 +38,12 @@ public:
 	 * now up to date. Forces some reinitialization in order to set up things like
 	 * the clipper and the rasterizer.
 	 * 
-	 * @param fpClass The class of the new fragment shader.
-	 * @param vpClass The class of the new triangle shader.
 	 */
 	virtual void configure();
 
 	/**
-	 * Initializes OpenGL state variables for displaying the framebuffer 
-	 * to the window.
+	 * Initializes OpenGL state variables for binding the framebuffer 
+	 * to the window using GLUT.
 	 */
 	virtual void init();
 	
