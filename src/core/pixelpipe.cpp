@@ -73,7 +73,6 @@ void PixelPipeWindow::init()
 	
 	m_state->enableLighting(true);
 	m_state->enableDepthTest(true);
-	
 	m_state->enableTexturing2D(true);
 	if(!m_textures.empty()){
 		m_scene->setTexture(m_textures.at(0), 0);

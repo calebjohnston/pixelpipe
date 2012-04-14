@@ -63,13 +63,6 @@ public:
 	virtual bool isFlatShaded();
 	
 	/**
-	 * Sets the current texture
-	 *
-	 * @param a constant texture reference
-	 */
-	virtual void setTexture(const Texture* texture);
-	
-	/**
 	 * Accessor method to change the current fragment processor.
 	 *
 	 * @param fragProc the new fragment processor to use
@@ -290,8 +283,6 @@ protected:
 	cg::vecmath::Matrix4f* m_currentMatrix;				//!< The currently selected matrix using the MatrixMode methods.
 	std::list<cg::vecmath::Matrix4f*>* m_modelviewStack;	//!< A LIFO stack of user-defined modelview matrices
 	std::list<cg::vecmath::Matrix4f*>* m_projectionStack;	//!< A LIFO stack of user-defined projection matrices
-	// std::list<cg::vecmath::Matrix4f*>* m_viewportStack;		//!< A LIFO stack of user-defined viewport matrices
-	// std::list<cg::vecmath::Matrix4f*>* m_textureStack;		//!< A LIFO stack of user-defined texture matrices
 	std::vector<Texture*>* m_textureUnits;	//!< The set of texture units that can be used for texture mapping
 	int m_textureIndex;	//!< The currently selected texture unit index
 	

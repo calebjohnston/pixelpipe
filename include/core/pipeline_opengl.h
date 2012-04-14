@@ -50,13 +50,6 @@ public:
 	virtual bool isFlatShaded();
 	
 	/**
-	 * Sets the current texture
-	 *
-	 * @param a constant texture reference
-	 */
-	virtual void setTexture(const Texture* texture);
-	
-	/**
 	 * Clears the current frame buffer.
 	 */
 	virtual void clearFrameBuffer();
@@ -232,18 +225,7 @@ public:
 protected:
 	GLuint m_textureHandle;
 	
-private:	
-	// void swap(Vertex* va, int i, int j) const;
-	
-	/**
-	 * Renders a triangle from already-processed vertices.
-	 * 
-	 * @param v The 3 vertices of the triangle.
-	 * @param c The 3 colors of the triangle - one for each vertex.
-	 * @param n The 3 normals of the triangle - one for each vertex.
-	 * @param t The 3 texture coordinates of the triangle - one for each vertex.
-	 */
-	// virtual void renderTriangle(const Vertex* vertices);
+private:
 	
 };	// class OpenGLPipeline
 

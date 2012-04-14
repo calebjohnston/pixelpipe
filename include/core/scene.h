@@ -158,7 +158,8 @@ public:
 	
 	virtual void render() 
 	{
-		if(!m_textures->empty()) m_pipeline.setTexture(m_textures->at(0));
+		// if(!m_textures->empty()) m_pipeline.setTexture(m_textures->at(0));
+		m_pipeline.bindTexture(tex0);
 		Geometry::cube(m_pipeline);
 	}
 	

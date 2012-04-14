@@ -143,11 +143,6 @@ bool SoftwarePipeline::isFlatShaded()
 	return false;
 }
 
-void SoftwarePipeline::setTexture(const Texture* texture)
-{
-	m_fp->setTexture(texture);
-}
-
 void SoftwarePipeline::clearFrameBuffer()
 {
 	m_framebuffer->clear(0, 0, 0, 1);
@@ -545,8 +540,6 @@ void SoftwarePipeline::loadTexture2D(const unsigned width, const unsigned height
 	
 	// TODO: This should probably not happen here.
 	m_fp->setTexture(m_textureUnits->at(m_textureIndex));
-	
-	
 }
 
 // TODO: Implementation incomplete
