@@ -6,15 +6,16 @@
 
 namespace pixelpipe {
 
-FrameBuffer::FrameBuffer(int newNx, int newNy) : m_width(newNx), m_height(newNy)
+FrameBuffer::FrameBuffer(const unsigned width, const unsigned height, const unsigned channels) : Texture(width, height, channels)
 {
 	m_bAllocated = false;
 }
 
 FrameBuffer::~FrameBuffer()
 {
-	free(this->m_cData);
-	free(this->m_zData);
+	allocateGLTexture();
+	// free(this->m_cData);
+	// free(this->m_zData);
 }
 
 void FrameBuffer::init()
@@ -75,6 +76,17 @@ void FrameBuffer::allocateGLTexture()
 		this->m_bAllocated = true;
 	}
 }
+void FrameBuffer::allocateGLTexture()
+{	
+	if(!this->m_bAllocated){
+		glGenTextures(1, &(this->m_textureHandle));
+		glBindTexture(GL_TEXTURE_2D, this->m_textureHandle);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		this->m_bAllocated = true;
+	}
+}
+void deallocateGLTexture();
 
 void FrameBuffer::drawGLTexture(float x, float y) const 
 {

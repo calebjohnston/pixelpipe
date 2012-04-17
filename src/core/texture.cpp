@@ -14,6 +14,37 @@ Texture::Texture()
 	m_raster = NULL;
 }
 
+// TODO: Not supporting the last parameter yet!
+Texture::Texture(const unsigned width, const unsigned height, const unsigned channels, pixel_type format)
+{
+	/*
+	switch(format){
+		case PIXEL_TYPE_BYTE:
+			m_raster = new Raster<char>(width, height, channels);
+			break;
+		case PIXEL_TYPE_UNSIGNED_BYTE:
+			m_raster = new Raster<unsigned char>(width, height, channels);
+			break;
+		case PIXEL_TYPE_UNSIGNED_SHORT:
+			m_raster = new Raster<unsigned short>(width, height, channels);
+			break;
+		case PIXEL_TYPE_SHORT:
+			m_raster = new Raster<short>(width, height, channels);
+			break;
+		case PIXEL_TYPE_UNSIGNED_INT:
+			m_raster = new Raster<unsigned int>(width, height, channels);
+			break;
+		case PIXEL_TYPE_INT:
+			m_raster = new Raster<int>(width, height, channels);
+			break;
+		case PIXEL_TYPE_FLOAT:
+			m_raster = new Raster<float>(width, height, channels);
+			break;
+	}
+	*/
+	m_raster = new ByteRaster(width, height, channels);
+}
+
 Texture::Texture(std::string filename)
 {
 	m_raster = NULL;
