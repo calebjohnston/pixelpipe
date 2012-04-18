@@ -6,32 +6,36 @@
 
 namespace pixelpipe {
 
-FrameBuffer::FrameBuffer(int newNx, int newNy) : m_width(newNx), m_height(newNy)
+FrameBuffer::FrameBuffer(const unsigned width, const unsigned height, const unsigned channels) : Texture(width, height, channels)
 {
 	m_bAllocated = false;
 }
 
 FrameBuffer::~FrameBuffer()
 {
-	free(this->m_cData);
-	free(this->m_zData);
+	this->deallocateGLTexture();
+	// free(this->m_cData);
+	// free(this->m_zData);
 }
 
 void FrameBuffer::init()
 {
+	/*
 	size_t c_len = 3 * m_width * m_height * sizeof(char);
 	size_t z_len = m_width * m_height * sizeof(float);
 	m_cData = (char*) malloc(c_len);
 	m_zData = (float*) malloc(z_len);
 	memset(m_cData, 0, c_len);
 	memset(m_zData, 0, z_len);
+	*/
 	
 	allocateGLTexture();
 }
 
 float FrameBuffer::getZ(const int x, const int y) const
 {
-	return this->m_zData[x + this->m_width * y];
+	// return this->m_zData[x + this->m_width * y];
+	return this->m_raster->head() + (y * this->m_raster->width() + x)*this->m_raster->channels();
 }
 
 void FrameBuffer::set(int ix, int iy, float r, float g, float b, float z)
@@ -73,6 +77,13 @@ void FrameBuffer::allocateGLTexture()
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		this->m_bAllocated = true;
+	}
+}
+void FrameBuffer::deallocateGLTexture()
+{	
+	if(!this->m_bAllocated){
+		glDeleteTextures(1, &(this->m_textureHandle));	//???
+		this->m_bAllocated = false;
 	}
 }
 

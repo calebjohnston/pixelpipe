@@ -29,6 +29,16 @@ public:
 	 * @param imageFile The file where the texture is stored.
 	 */
 	Texture(std::string filename);
+
+	/**
+	 * Allocates an empty texture with the given parameters
+	 * 
+	 * @param width measured in pixels
+	 * @param height measured in pixels
+	 * @param channels channels (1=luminance|alpha, 3=rgb, 4=rgba, etc)
+	 * @param format storage format for texture (float, int, etc)
+	 */
+	Texture(const unsigned width, const unsigned height, const unsigned channels = 4, pixel_type format = PIXEL_TYPE_UNSIGNED_BYTE);
 	
 	/**
 	 * Copy constructor.
