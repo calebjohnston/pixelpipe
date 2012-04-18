@@ -11,7 +11,9 @@ namespace pixelpipe {
 
 /*!
  * \class Texture "core/texture.h"
- * \brief This class holds all of the information necessary to describe texture data.
+ * \brief This class holds all of the information necessary to describe texture
+ * data. This class essentially acts as a wrapper for the cg::image::ByteRaster
+ * data structure and augments it with special sampling functions.
  * 
  */
 class Texture {
