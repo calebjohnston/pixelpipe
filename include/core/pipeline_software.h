@@ -89,7 +89,7 @@ public:
 	 *
 	 * @return a constant pointer to the raw frame data.
 	 */
-	virtual const char* getFrameData();
+	virtual const void* getFrameData();
 	
 	/**
 	 * Accessor method for the framebuffer instance.

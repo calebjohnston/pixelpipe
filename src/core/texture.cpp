@@ -51,6 +51,7 @@ Texture::Texture(std::string filename)
 	//char nom[100];
 	///char* nom = (char*)'/Users/Caleb/Development/OpenSource/pixelpipe/resources/textures/carbonite.png';
 	m_raster = cg::image::read_image(filename.c_str());	// only supports TIFF, JPEG, and PNG
+	DEV() << "Texture::Texture(" << filename.c_str() << ")";
 
 	//reinterpret_cast<const char*>( interleaved_view_get_raw_data(imageView) ) 
 	//ByteRaster* img = read_png_image(filename.c_str());
@@ -89,6 +90,15 @@ void Texture::setTextureData(const cg::image::ByteRaster& buffer)
 	if(m_raster!=NULL) delete m_raster;
 	
 	*m_raster = buffer;
+}
+
+// TODO: Implement this function, apparently this doesn't work
+void Texture::write(std::string filename)
+{
+	if(m_raster==NULL) return;
+	
+	// IMG_PNG=1, IMG_TIFF=2, IMG_JPEG=3
+	cg::image::write_image(filename.c_str(), *m_raster, IMG_PNG);
 }
 
 Color3f Texture::sample(const float u, const float v) const

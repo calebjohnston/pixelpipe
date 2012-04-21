@@ -25,6 +25,8 @@ PixelPipeWindow::PixelPipeWindow(std::string title, int width, int height, rende
 	// Texture* tex2 = new Texture("../resources/textures/silverblob.jpg");
 	m_textures.push_back(tex1);
 	m_textures.push_back(tex2);
+	// tex1->write("../resources/textures/test_checker.png");
+	// tex2->write("../resources/textures/test_carbonite.png");
 	
 	// set the textures
 	m_state = State::getInstance();
@@ -68,16 +70,16 @@ void PixelPipeWindow::init()
 	
 	m_pipeline->init();
 	
-	m_scene = new SceneCube(*m_pipeline);
-	// m_scene = new SceneSpheres(*m_pipeline);
+	// m_scene = new SceneCube(*m_pipeline);
+	m_scene = new SceneSpheres(*m_pipeline);
 	
 	m_state->enableLighting(true);
-	m_state->enableDepthTest(true);
-	m_state->enableTexturing2D(true);
-	if(!m_textures.empty()){
-		m_scene->setTexture(m_textures.at(0), 0);
-		m_scene->setTexture(m_textures.at(1), 1);
-	}
+	// m_state->enableDepthTest(true);
+	// m_state->enableTexturing2D(true);
+	// if(!m_textures.empty()){
+	// 	m_scene->setTexture(m_textures.at(0), 0);
+	// 	m_scene->setTexture(m_textures.at(1), 1);
+	// }
 	
 	m_pipeline->configure();
 	

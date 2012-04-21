@@ -116,11 +116,11 @@ public:
 	{
 		m_pipeline.setMatrixMode(MATRIX_MODELVIEW);
 		
-		m_pipeline.bindTexture(tex0);
+		if(!m_textures->empty()) m_pipeline.bindTexture(tex0);
 		m_pipeline.translate(m_locationA);
 	    Geometry::sphere(m_depth, m_colorA, m_pipeline);
 
-		m_pipeline.bindTexture(tex1);
+		if(!m_textures->empty()) m_pipeline.bindTexture(tex1);
 		m_pipeline.translate(m_locationB);
 		m_pipeline.pushMatrix();
 		m_pipeline.scale(Vector3f(0.4f, 0.5f, 0.8f));
@@ -158,7 +158,7 @@ public:
 	
 	virtual void render() 
 	{
-		m_pipeline.bindTexture(tex0);
+		if(!m_textures->empty()) m_pipeline.bindTexture(tex0);
 		Geometry::cube(m_pipeline);
 	}
 	

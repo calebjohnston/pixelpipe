@@ -80,7 +80,7 @@ void SoftwarePipeline::setFragmentProcessor(const FragmentProcessor* fragProc)
 	if(m_fp != NULL) delete m_fp;
 	
 	m_fp = const_cast<FragmentProcessor*>(fragProc);
-	if(m_rasterizer==NULL) m_rasterizer = new Rasterizer(m_fp->nAttr(), m_framebuffer->getWidth(), m_framebuffer->getHeight());
+	if(m_rasterizer==NULL) m_rasterizer = new Rasterizer(m_fp->nAttr(), m_framebuffer->width(), m_framebuffer->height());
 }
 
 void SoftwarePipeline::setVertexProcessor(const VertexProcessor* vertProc)
@@ -125,7 +125,7 @@ void SoftwarePipeline::configure()
 	
 	if(m_fp->nAttr() != m_vp->nAttr()) throw "Unsupported configuration.";
 	
-	m_rasterizer = new Rasterizer(m_fp->nAttr(), m_framebuffer->getWidth(), m_framebuffer->getHeight());
+	m_rasterizer = new Rasterizer(m_fp->nAttr(), m_framebuffer->width(), m_framebuffer->height());
 	m_rasterizer->setAttributeCount(m_fp->nAttr());
 	m_clipper->setAttributeCount(m_fp->nAttr());
 		
@@ -155,9 +155,9 @@ void SoftwarePipeline::drawFrameBuffer()
 	glutSwapBuffers();
 }
 
-const char* SoftwarePipeline::getFrameData()
+const void* SoftwarePipeline::getFrameData()
 {
-	return m_framebuffer->getData();
+	return (unsigned char*) m_framebuffer->getTextureBytes();
 }
 
 void SoftwarePipeline::loadIdentity()

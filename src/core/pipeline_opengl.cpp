@@ -143,7 +143,7 @@ void OpenGLPipeline::drawFrameBuffer()
 	glutSwapBuffers();
 }
 
-const char* OpenGLPipeline::getFrameData()
+const void* OpenGLPipeline::getFrameData()
 {
 	// return framebuffer->getData();
 	

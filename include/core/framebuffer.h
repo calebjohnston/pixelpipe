@@ -83,13 +83,6 @@ public:
 	void clear(float r, float g, float b, float z);
 	
 	/**
-	 * Attempts to write the current framebuffer out to a PNG file.
-	 * 
-	 * @param filename The name of the output file.
-	 */
-	void write(std::string filename) const;
-	
-	/**
 	 * Draws this framebuffer by copying the buffer data to an OpenGL texture and 
 	 * drawing the texture.
 	 * 

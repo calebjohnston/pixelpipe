@@ -62,7 +62,7 @@ public:
 	 *
 	 * @return a constant pointer to the raw frame data.
 	 */
-	virtual const char* getFrameData() = 0;
+	virtual const void* getFrameData() = 0;
 	
 	/**
 	 * Replaces the currently selected matrix with the identity matrix

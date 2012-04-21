@@ -66,6 +66,7 @@ public:
     void reverse(int start=0, int end=-1);
     void hflip();
     void vflip();
+    void clear();
 
     bool is_valid_address(const PixelAddress& a) const
     {
@@ -143,6 +144,12 @@ inline void Raster<T>::vflip()
 {
     reverse();
     hflip();
+}
+
+template<class T>
+inline void Raster<T>::clear()
+{
+	memcpy(this->head(), 0, this->length()*sizeof(T));
 }
 
 

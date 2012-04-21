@@ -64,7 +64,7 @@ public:
 	 *
 	 * @return a constant pointer to the raw frame data.
 	 */
-	virtual const char* getFrameData();
+	virtual const void* getFrameData();
 	
 	/**
 	 * ! @copydoc Pipeline::loadIdentity()

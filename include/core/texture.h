@@ -3,6 +3,7 @@
 
 #include <string>
 
+#include "core/common.h"
 #include "cg/image/raster.h"
 #include "cg/vecmath/vec3.hpp"
 #include "cg/vecmath/color.h"
@@ -38,7 +39,7 @@ public:
 	 * @param channels channels (1=luminance|alpha, 3=rgb, 4=rgba, etc)
 	 * @param format storage format for texture (float, int, etc)
 	 */
-	Texture(const unsigned width, const unsigned height, const unsigned channels = 4, pixel_type format = PIXEL_TYPE_UNSIGNED_BYTE);
+	Texture(const unsigned width, const unsigned height, const unsigned channels = 4, pixelpipe::pixel_type format = PIXEL_TYPE_UNSIGNED_BYTE);
 	
 	/**
 	 * Copy constructor.
@@ -102,6 +103,13 @@ public:
 	 * @param data the raw byte data of the new texture
 	 */
 	void setTextureData(const unsigned width, const unsigned height, const unsigned channels, const void* data);
+
+	/**
+	 * Attempts to write the current texture out to a PNG file.
+	 * 
+	 * @param filename The name of the output file.
+	 */
+	void write(std::string filename);
 	
 	/**
 	 * Accessor method for the ByteRaster object.
