@@ -70,16 +70,16 @@ void PixelPipeWindow::init()
 	
 	m_pipeline->init();
 	
-	// m_scene = new SceneCube(*m_pipeline);
-	m_scene = new SceneSpheres(*m_pipeline);
+	m_scene = new SceneCube(*m_pipeline);
+	// m_scene = new SceneSpheres(*m_pipeline);
 	
 	m_state->enableLighting(true);
-	// m_state->enableDepthTest(true);
-	// m_state->enableTexturing2D(true);
-	// if(!m_textures.empty()){
-	// 	m_scene->setTexture(m_textures.at(0), 0);
-	// 	m_scene->setTexture(m_textures.at(1), 1);
-	// }
+	m_state->enableDepthTest(true);
+	m_state->enableTexturing2D(true);
+	if(!m_textures.empty()){
+		m_scene->setTexture(m_textures.at(0), 0);
+		m_scene->setTexture(m_textures.at(1), 1);
+	}
 	
 	m_pipeline->configure();
 	

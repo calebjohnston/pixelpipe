@@ -13,7 +13,7 @@ void ConstColorVP::triangle(const Vector3f* vs, const Color3f* cs, const Vector3
 
 void ConstColorVP::vertex(const Vector3f& v, const Color3f& c, const Vector3f& n_ign, const Vector2f& t_ign, Vertex& output)
 {
-	output.v.set(v.x, v.y, v.z, 1);
+	output.v.set(v.x, v.y, v.z, 1.0);
 	cg::vecmath::Vector4f temp = output.v;
 	output.v = MVP * temp;
 

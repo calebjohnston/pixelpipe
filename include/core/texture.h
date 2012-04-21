@@ -91,7 +91,7 @@ public:
 	 * 
 	 * @param buffer the new raster buffer to use
 	 */
-	void setTextureData(const cg::image::ByteRaster& buffer);
+	void setTextureData(const cg::image::FloatRaster& buffer);
 
 	/**
 	 * Resets the texture data to the data supplied within the parameters. 
@@ -116,19 +116,19 @@ public:
 	 * 
 	 * @return a const reference to the current Raster object.
 	 */
-	const cg::image::ByteRaster& getTextureData() const { return *m_raster; }
+	const cg::image::FloatRaster& getTextureData() const { return *m_raster; }
 	
 	/**
 	 * Accessor method for the raw texture data.
 	 * 
 	 * @return a const reference to the current texture data.
 	 */
-	unsigned char* getTextureBytes() const { return m_raster->head(); }
+	float* getTextureBytes() const { return m_raster->head(); }
 
 	
 protected:
 	// std::string m_filename;				//!< The name of the file from where the data was loaded.
-	cg::image::ByteRaster* m_raster;	//!< The RGB data for each pixel.
+	cg::image::FloatRaster* m_raster;	//!< The RGB data for each pixel.
 
 };	// class Texture
 

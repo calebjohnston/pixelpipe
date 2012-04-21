@@ -42,7 +42,7 @@ Texture::Texture(const unsigned width, const unsigned height, const unsigned cha
 			break;
 	}
 	*/
-	m_raster = new ByteRaster(width, height, channels);
+	m_raster = new FloatRaster(width, height, channels);
 }
 
 Texture::Texture(std::string filename)
@@ -50,11 +50,12 @@ Texture::Texture(std::string filename)
 	m_raster = NULL;
 	//char nom[100];
 	///char* nom = (char*)'/Users/Caleb/Development/OpenSource/pixelpipe/resources/textures/carbonite.png';
-	m_raster = cg::image::read_image(filename.c_str());	// only supports TIFF, JPEG, and PNG
-	DEV() << "Texture::Texture(" << filename.c_str() << ")";
+	ByteRaster* byte_image = cg::image::read_image(filename.c_str());	// only supports TIFF, JPEG, and PNG
+	m_raster = new FloatRaster(*byte_image);
+	// DEV() << "Texture::Texture(" << filename.c_str() << ")";
 
 	//reinterpret_cast<const char*>( interleaved_view_get_raw_data(imageView) ) 
-	//ByteRaster* img = read_png_image(filename.c_str());
+	//FloatRaster* img = read_png_image(filename.c_str());
 	//DEV() << "loaded " << m_raster->width() << " x " << m_raster->height() << " texture with " << m_raster->channels() << " channels.";
 }
 
@@ -65,16 +66,12 @@ Texture::~Texture()
 
 int Texture::width() const 
 {
-	int w = 0;
-	if(m_raster!=NULL) w = m_raster->width();
-	return w;
+	return (m_raster!=NULL)? m_raster->width(): 0;
 }
 
 int Texture::height() const 
 {
-	int h = 0;
-	if(m_raster!=NULL) h = m_raster->height();
-	return h;
+	return (m_raster!=NULL)? m_raster->height(): 0;
 }
 
 void Texture::setTextureData(const unsigned width, const unsigned height, const unsigned channels, const void* data)
@@ -82,23 +79,24 @@ void Texture::setTextureData(const unsigned width, const unsigned height, const 
 	if(m_raster!=NULL){
 		delete m_raster;
 	}
-	m_raster = new ByteRaster(width, height, channels, (unsigned char*) data);
+	m_raster = new FloatRaster(width, height, channels, (float*) data);
 }
 
-void Texture::setTextureData(const cg::image::ByteRaster& buffer)
+void Texture::setTextureData(const cg::image::FloatRaster& buffer)
 {
 	if(m_raster!=NULL) delete m_raster;
 	
 	*m_raster = buffer;
 }
 
-// TODO: Implement this function, apparently this doesn't work
+// TODO: Re-implement this function, apparently this doesn't work
 void Texture::write(std::string filename)
 {
 	if(m_raster==NULL) return;
 	
 	// IMG_PNG=1, IMG_TIFF=2, IMG_JPEG=3
-	cg::image::write_image(filename.c_str(), *m_raster, IMG_PNG);
+	ByteRaster* byte_image = new ByteRaster(*m_raster);
+	cg::image::write_image(filename.c_str(), *byte_image, IMG_PNG);
 }
 
 Color3f Texture::sample(const float u, const float v) const
@@ -111,54 +109,52 @@ Color3f Texture::sample(const float u, const float v) const
 	// TO-DO: Check for null input in cOut parameter...
 	int nx = m_raster->width();
 	int ny = m_raster->height();
-	float iX = s * nx + 0.5f;
-	float iY = t * ny + 0.5f;
+	int channels = m_raster->channels();
+	float iX = s * nx + 0.5;
+	float iY = t * ny + 0.5;
 	
+	// compute interpolation weights
 	int x = (int) std::floor(iX);
 	int y = (int) std::floor(iY);
 	float uRatio = iX - x;
 	float vRatio = iY - y;
-	float uWeighted = 1.0f - uRatio;
-	float vWeighted = 1.0f - vRatio;
-	// DEV() << "test nx=" << x <<", ny=" << y << ", s=" << s << ", t=" << t;
+	float uWeighted = 1.0 - uRatio;
+	float vWeighted = 1.0 - vRatio;
 	
 	Color3f leftTop;
 	Color3f rightTop;
 	Color3f leftBottom;
 	Color3f rightBottom;
 	
-	unsigned char r,g,b;
-	
-	int offset = 3 * (nx * y + x);
-	if(offset >= m_raster->length()) offset = m_raster->length() - 3;
-	r = m_raster->at(offset + 0);
-	g = m_raster->at(offset + 1);
-	b = m_raster->at(offset + 2);
-	leftTop.set((r & 0xff) / 255.0f, (g & 0xff) / 255.0f, (b & 0xff) / 255.0f);
+	// store color of first corner
+	int offset = channels * (nx * y + x);
+	if(offset >= m_raster->length()) offset = m_raster->length() - channels;
+	leftTop.set(m_raster->at(offset + 0), m_raster->at(offset + 1), m_raster->at(offset + 2));
 	leftTop *= uWeighted;
-	// DEV() << "test 1 offset=" << offset <<", length=" << m_raster->length();
 	
-	offset = 3 * (nx * y + x + 1);
-	if(offset >= m_raster->length()) offset = m_raster->length() - 3;
-	rightTop.set((m_raster->at(offset + 0) & 0xff) / 255.0f, (m_raster->at(offset + 1) & 0xff) / 255.0f, (m_raster->at(offset + 2) & 0xff) / 255.0f);
+	// store color of second corner
+	offset = channels * (nx * y + x + 1);
+	if(offset >= m_raster->length()) offset = m_raster->length() - channels;
+	rightTop.set(m_raster->at(offset + 0), m_raster->at(offset + 1), m_raster->at(offset + 2));
 	rightTop *= uRatio;
 	
+	// apply interpolation
 	rightTop += leftTop;
 	rightTop *= vWeighted;
-	// DEV() << "test 2 offset=" << offset;
 	
-	offset = 3 * (nx * (y+1) + x);
-	if(offset >= m_raster->length()) offset = m_raster->length() - 3;
-	leftBottom.set((m_raster->at(offset + 0) & 0xff) / 255.0f, (m_raster->at(offset + 1) & 0xff) / 255.0f, (m_raster->at(offset + 2) & 0xff) / 255.0f);
+	// store color of third corner
+	offset = channels * (nx * (y+1) + x);
+	if(offset >= m_raster->length()) offset = m_raster->length() - channels;
+	leftBottom.set(m_raster->at(offset + 0), m_raster->at(offset + 1), m_raster->at(offset + 2));
 	leftBottom *= uWeighted;
-	// DEV() << "test 3 offset=" << offset;
 	
-	offset = 3 * (nx * (y+1) + x + 1);
-	if(offset >= m_raster->length()) offset = m_raster->length() - 3;
-	rightBottom.set((m_raster->at(offset + 0) & 0xff) / 255.0f, (m_raster->at(offset + 1) & 0xff) / 255.0f, (m_raster->at(offset + 2) & 0xff) / 255.0f);
+	// store color of fourth corner
+	offset = channels * (nx * (y+1) + x + 1);
+	if(offset >= m_raster->length()) offset = m_raster->length() - channels;
+	rightBottom.set(m_raster->at(offset + 0), m_raster->at(offset + 1), m_raster->at(offset + 2));
 	rightBottom *= uRatio;
-	// DEV() << "test 4 offset=" << offset;
 	
+	// apply interpolation
 	rightBottom += leftBottom;
 	rightBottom *= vRatio;
 	
