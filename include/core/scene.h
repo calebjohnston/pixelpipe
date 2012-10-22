@@ -139,6 +139,47 @@ protected:
 
 };	// class SceneSpheres
 
+class SceneSpherePlane : public Scene {
+
+public:
+	SceneSpherePlane(Pipeline& pipe) : Scene(pipe) {}
+	~SceneSpherePlane() {};
+	
+	virtual void init()
+	{
+		m_depth = 2;
+		
+		m_colorA = Color3f(1.0f, 1.0f, 1.0f);
+		m_colorB = Color3f(1.0f, 1.0f, 1.0f);
+
+		m_locationA = Vector3f(2.2f, 0.0f, 0.0f);
+		m_locationB = Vector3f(0.5f, -0.5f, -0.5f);
+	}
+	
+	virtual void render() 
+	{
+		// create sphere
+		m_pipeline.pushMatrix();
+		m_pipeline.translate(m_locationA);
+	    Geometry::sphere(m_depth, m_colorA, m_pipeline);
+		m_pipeline.popMatrix();
+		
+		// create plane
+		m_pipeline.pushMatrix();
+		m_pipeline.translate(m_locationB);
+		m_pipeline.scale(Vector3f(0.0f, 2.0f, 2.0f));
+		Geometry::plane(m_colorB, m_pipeline);
+		m_pipeline.popMatrix();
+	}
+	
+protected:
+	int m_depth;			//!< The triangulation depth of the spheres
+	Color3f m_colorA;		//!< The color of the sphere.
+	Color3f m_colorB;		//!< The color of the plane.
+	Vector3f m_locationA;	//!< The amount to translate the center of the sphere.
+	Vector3f m_locationB;	//!< The amount to translate the center of the plane. 
+
+};	// class SceneSpherePlane
 
 class SceneCube : public Scene {
 

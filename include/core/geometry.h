@@ -99,6 +99,14 @@ public:
 	}
 
 	/**
+	 * Draws a unit plane (1x1) at the origin using the software pipeline.
+	 */
+	static void plane(Color3f c, Pipeline& pipe)
+	{
+		quad(pnn, ppn, ppp, pnp, rNormal, c, pipe);
+	}
+
+	/**
 	 * Draws a unit cube (2x2x2) at the origin using the software pipeline. The
 	 * colors are fixed above.
 	 */
@@ -112,7 +120,6 @@ public:
 		quad(nnp, pnp, ppp, npp, fNormal, fColor, pipe);
 	}
 	
-
 	/**
 	 * Draws a sphere out of triangles, using the spheretri function. 
 	 */
