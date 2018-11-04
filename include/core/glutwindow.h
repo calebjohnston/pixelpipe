@@ -6,14 +6,9 @@
 #include <algorithm>
 #include <iterator>
 #include <stdexcept>
+#include <thread>
 #include <assert.h>
 #include <math.h>
-
-#include <boost/bind.hpp>
-#include <boost/mem_fn.hpp>
-#include <boost/function.hpp>
-#include <boost/thread.hpp>
-#include <boost/signal.hpp>
 
 #include "cg/vecmath/vec2.hpp"
 #include "core/camera.h"
@@ -107,7 +102,7 @@ protected:
 	bool m_button1Down;					//!< Flag that represents whether or not the first mouse button is pressed.
 	bool m_button2Down;					//!< Flag that represents whether or not the second mouse button is pressed.
 	std::string m_windowTitle;			//!< The title of the GLUT window.
-	boost::mutex m_mutex;				//!< The member mutex used for any thread-sensitive data.
+	std::mutex m_mutex;					//!< The member mutex used for any thread-sensitive data.
 	cg::vecmath::Point2* m_lastMousePt;	//!< The last mouse point recorded during a click.
 	cg::vecmath::Point2* m_currMousePt;	//!< The most recent mouse point recorded for a click.
 	cg::vecmath::Vector2* m_mouseDelta;	//!< The difference between the last mouse click location and the new mouse click location.

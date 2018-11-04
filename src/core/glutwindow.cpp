@@ -5,10 +5,6 @@
 #include <assert.h>
 #include <math.h>
 
-#include <boost/bind.hpp>
-#include <boost/thread.hpp>
-#include <boost/signal.hpp>
-
 #include "logger/logger.h"
 #include "core/glutwindow.h"
 

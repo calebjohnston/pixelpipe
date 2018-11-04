@@ -2,7 +2,6 @@
 #define __PIPELINE_COMMON_H
 
 #include "logger/logger.h"
-#include <boost/filesystem.hpp>
 
 static const double PI = 3.141592653589793;
 

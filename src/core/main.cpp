@@ -70,7 +70,7 @@ int main(int argc, char **argv)
 {
 	// figure out how to automate this output...
 	std::cout << "PixelPipe version " << TARGET_VERSION_MAJOR << "." << TARGET_VERSION_MINOR << " of " << __DATE__ << " at " << __TIME__ << std::endl;
-	std::cout << "Copyright (c) 2012 Caleb Johnston" << std::endl;
+	std::cout << "Copyright (c) 2018 Caleb Johnston" << std::endl;
 	std::cout << "The source code to PixelPipe is covered by the GNU GPL." << std::endl;
 	std::cout << "See the LICENSE file for the conditions of the license." << std::endl;
 	

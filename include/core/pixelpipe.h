@@ -4,6 +4,7 @@
 #include <string>
 #include <stdlib.h>
 #include <stdio.h>
+
 #include "core/common.h"
 #include "core/glutwindow.h"
 #include "core/pipeline_opengl.h"
