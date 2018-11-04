@@ -2,13 +2,13 @@
 # PixelPipe CMake file
 #================================================================================
 
-cmake_minimum_required(VERSION 2.6)
+cmake_minimum_required(VERSION 3.1)
 # set(CMAKE_BUILD_TYPE Debug)
 if("${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
   set(CMAKE_VERBOSE_MAKEFILE TRUE)
 endif()
 
-set(BOOST_LIBS thread date_time system program_options)
+set(BOOST_LIBS system program_options)
 find_package(Boost COMPONENTS ${BOOST_LIBS} REQUIRED)
 
 find_package(GLUT REQUIRED)
@@ -55,9 +55,6 @@ set( pipeline_SRCS
 include_directories (
   ${INC_PATH}
   ${CMAKE_CURRENT_BINARY_DIR}
-  # ${PNG_INCLUDE_DIR}
-  # ${JPEG_INCLUDE_DIR}
-  # ${TIFF_INCLUDE_DIR}
   ${Boost_INCLUDE_DIRS}
   ${PROJECT_SOURCE_DIR}/extern
   ${PROJECT_SOURCE_DIR}/include
@@ -79,5 +76,4 @@ target_link_libraries ( pixelpipe
   ${GLUT_LIBRARY}
   ${OPENGL_LIBRARY}
   ${CG_LIBRARIES}
-  tinyxml
 )

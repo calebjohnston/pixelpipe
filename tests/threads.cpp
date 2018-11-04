@@ -13,7 +13,7 @@
 
 
 #include <iostream>
-#include <boost/thread.hpp>
+#include <thread>
 
 class Worker
 {
@@ -25,7 +25,7 @@ public:
 
     void start(int N)
     {
-        m_Thread = boost::thread(&Worker::processQueue, this, N);
+        m_Thread = std::thread(&Worker::processQueue, this, N);
     }
 
     void join()
@@ -36,20 +36,20 @@ public:
     void processQueue(unsigned N)
     {
         float ms = N * 1e3;
-        boost::posix_time::milliseconds workTime(ms);
+        std::posix_time::milliseconds workTime(ms);
 
         std::cout << "Worker: started, will work for "
                   << ms << "ms"
                   << std::endl;
 
         // We're busy, honest!
-        boost::this_thread::sleep(workTime);
+        std::this_thread::sleep(workTime);
 
         std::cout << "Worker: completed" << std::endl;
     }
 
 private:
-    boost::thread m_Thread;
+    std::thread m_Thread;
 };
 
 int main(int argc, char* argv[])

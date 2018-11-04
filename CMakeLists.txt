@@ -2,7 +2,7 @@
 # PixelPipe CMake file
 #================================================================================
 
-cmake_minimum_required( VERSION 2.6 )
+cmake_minimum_required( VERSION 3.1 )
 project( PixelPipe )
 set( CMAKE_BUILD_TYPE Debug)
 
@@ -16,9 +16,13 @@ endif("${CMAKE_GENERATOR}" STREQUAL "Xcode")
 
 set( CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake/modules/)
 
+# compiler configs...
 include( CMakeForceCompiler )
 # cmake_force_cxx_compiler( g++ g++ )
 cmake_force_cxx_compiler( clang++ Clang++ )
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
 
 # include( cmake/modules/FindOpenCL.cmake )
 set( CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake/modules/)
@@ -27,7 +31,7 @@ set( PixelPipe_BUILD_DOCS ON CACHE BOOL "Build documentation")
 
 # add_subdirectory( lib )
 add_subdirectory( src )
-add_subdirectory( src/tinyxml )
+# add_subdirectory( src/tinyxml )
 if(PixelPipe_BUILD_TESTS)
   add_subdirectory( tests )
   add_subdirectory( tests/openCL )

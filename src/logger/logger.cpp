@@ -20,6 +20,10 @@
 
 namespace pixelpipe {
 	
+const int Logger::LEVEL_FLOOR;
+const int Logger::ALL;
+const int Logger::DEFAULT_REPORTING_LEVEL;
+	
 int Logger::_level = Logger::DEFAULT_REPORTING_LEVEL;
 std::vector<int> Logger::_levelStack( 1, Logger::DEFAULT_REPORTING_LEVEL );
 std::list<LogWriter *> Logger::_registeredWriters;

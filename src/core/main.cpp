@@ -6,7 +6,7 @@
  * @section LICENSE
  *
  * Object-order rendering pipeline
- * Copyright (C) 2012 by Caleb Johnston
+ * Copyright (C) 2018 by Caleb Johnston
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -41,7 +41,7 @@ namespace po = boost::program_options;
 #include "logger/logger.h"
 #include "logger/stdiowriter.h"
 
-#include "tinyxml.h"
+// #include "tinyxml.h"
 
 #ifndef TARGET_VERSION_MAJOR
 #define TARGET_VERSION_MAJOR 99
@@ -93,8 +93,7 @@ int main(int argc, char **argv)
 			("input-file,I", po::value<std::string>(&inputfile), "input scene file")
 			("image-size,S", po::value< std::vector<int> >(&image_size)->multitoken(), "[ X Y ]")
 			("pipeline-mode,m", po::value<int>(&pipeMode), "[ 0=software | 1=opengl ]")
-			("verbose,V", po::value<int>(&loggerLevel)->default_value(1), "Verbose logging?")
-		;
+			("verbose,V", po::value<int>(&loggerLevel)->default_value(1), "Verbose logging?");
 
         po::variables_map vm;
 		po::store(po::command_line_parser(argc, argv).options(desc).style(po::command_line_style::default_style
