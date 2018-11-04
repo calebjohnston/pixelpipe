@@ -89,26 +89,28 @@ public:
 	{
 		m_depth = 3;
 		
-		m_colorA = Color3f(0.4f, 0.5f, 0.8f);
-		m_colorB = Color3f(0.8f, 0.5f, 0.4f);
+		// m_colorA = Color3f(0.4f, 0.5f, 0.8f);
+		// m_colorB = Color3f(0.8f, 0.5f, 0.4f);
+		m_colorA = Color3f(1.0f, 1.0f, 1.0f);
+		m_colorB = Color3f(1.0f, 1.0f, 1.0f);
 
 		m_locationA = Vector3f(2.2f, 0.0f, 0.0f);
-		m_locationB = Vector3f(-2.4f, 0.0f, 0.0f);
+		m_locationB = Vector3f(-1.4f, 0.0f, 0.0f);
 	}
 	
 	~SceneSpheres() {}
 	
 	virtual void init()
 	{
-		if(!m_textures->empty()){
+		if(false && !m_textures->empty()){
 			Texture* image0 = m_textures->at(0);
 			Texture* image1 = m_textures->at(1);
 			tex0 = m_pipeline.generateTexture();
 			m_pipeline.bindTexture(tex0);
-			m_pipeline.loadTexture2D(image0->width(), image0->height(), PIXEL_FORMAT_RGB, PIXEL_TYPE_UNSIGNED_BYTE, image0->getTextureBytes());
+			m_pipeline.loadTexture2D(image0->width(), image0->height(), PIXEL_FORMAT_RGB, PIXEL_TYPE_FLOAT, image0->getTextureBytes());
 			tex1 = m_pipeline.generateTexture();
 			m_pipeline.bindTexture(tex1);
-			m_pipeline.loadTexture2D(image1->width(), image1->height(), PIXEL_FORMAT_RGB, PIXEL_TYPE_UNSIGNED_BYTE, image1->getTextureBytes());
+			m_pipeline.loadTexture2D(image1->width(), image1->height(), PIXEL_FORMAT_RGB, PIXEL_TYPE_FLOAT, image1->getTextureBytes());
 		}
 	}
 	
@@ -189,11 +191,11 @@ public:
 	
 	virtual void init()
 	{
-		if(!m_textures->empty()){
+		if(false && !m_textures->empty()){
 			Texture* image0 = m_textures->at(0);
 			tex0 = m_pipeline.generateTexture();
 			m_pipeline.bindTexture(tex0);
-			m_pipeline.loadTexture2D(image0->width(), image0->height(), PIXEL_FORMAT_RGB, PIXEL_TYPE_UNSIGNED_BYTE, image0->getTextureBytes());
+			m_pipeline.loadTexture2D(image0->width(), image0->height(), PIXEL_FORMAT_RGB, PIXEL_TYPE_FLOAT, image0->getTextureBytes());
 		}
 	}
 	

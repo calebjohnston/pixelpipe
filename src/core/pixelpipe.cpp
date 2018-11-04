@@ -10,7 +10,7 @@ namespace pixelpipe {
 PixelPipeWindow::PixelPipeWindow(std::string title, int width, int height, render_mode mode)
 	: GlutWindow(title, width, height)
 {		
-	Vector3f* eye = new Vector3f(3.0, 3.0, 3.0);
+	Vector3f* eye = new Vector3f(4.65472, 1.67148, 1.59367);//new Vector3f(3.0, 3.0, 3.0);
 	Vector3f* target = new Vector3f(0.0, 0.0, 0.0);
 	Vector3f* upVec = new Vector3f(0.0, 1.0, 0.0);
 	float near = 1.0;
@@ -70,12 +70,14 @@ void PixelPipeWindow::init()
 	
 	m_pipeline->init();
 	
-	m_scene = new SceneCube(*m_pipeline);
+	// m_scene = new SceneCube(*m_pipeline);
 	// m_scene = new SceneSpheres(*m_pipeline);
+	m_scene = new SceneSpherePlane(*m_pipeline);
 	
+	// m_state->setAmbientIntensity(0.6f);
 	m_state->enableLighting(true);
 	m_state->enableDepthTest(true);
-	m_state->enableTexturing2D(true);
+	m_state->enableTexturing2D(false);
 	if(!m_textures.empty()){
 		m_scene->setTexture(m_textures.at(0), 0);
 		m_scene->setTexture(m_textures.at(1), 1);
@@ -95,6 +97,7 @@ int PixelPipeWindow::render()
 	glEnable(GL_COLOR_MATERIAL);
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_TEXTURE_2D);
+	glEnable(GL_CULL_FACE);
 	
 	m_pipeline->setMatrixMode(MATRIX_PROJECTION);
 	m_pipeline->loadIdentity();
@@ -211,7 +214,8 @@ int PixelPipeWindow::mousePressed(int button, int x, int y)
 
 int PixelPipeWindow::mouseReleased(int button, int x, int y)
 {
-	DEV() << "mouseReleased: " << x << ", " << y;
+	// DEV() << "mouseReleased: " << x << ", " << y;
+	DEV() << *m_camera;
 	
 	return 0;
 }

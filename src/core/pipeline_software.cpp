@@ -91,7 +91,7 @@ void SoftwarePipeline::setVertexProcessor(const VertexProcessor* vertProc)
 }
 
 void SoftwarePipeline::configure()
-{		
+{
 	State* state = State::getInstance();
 	
 	if(state->getTexturing2D()){
@@ -522,7 +522,6 @@ void SoftwarePipeline::loadTexture2D(const unsigned width, const unsigned height
 			break;
 	}
 	
-	void* image = NULL;
 	switch(type){
 		case PIXEL_TYPE_BYTE: 
 		case PIXEL_TYPE_UNSIGNED_BYTE:
@@ -533,13 +532,15 @@ void SoftwarePipeline::loadTexture2D(const unsigned width, const unsigned height
 			m_textureUnits->at(m_textureIndex)->setTextureData(width, height, channels, (unsigned char*) data);
 			break;
 		case PIXEL_TYPE_FLOAT:
-			// TODO: Modify Texture class to support a variety of types.
-			// image = new FloatRaster(width, height, channels, (float)data);
+		DEV() << "w=" << width << ", h=" << height << ", c=" << channels;
+			m_textureUnits->at(m_textureIndex)->setTextureData(width, height, channels, (float*) data);
+			// m_textureUnits->at(m_textureIndex)
 			break;
 	}
 	
+	Texture* tex1 = new Texture("../resources/textures/checker.png");
 	// TODO: This should probably not happen here.
-	m_fp->setTexture(m_textureUnits->at(m_textureIndex));
+	m_fp->setTexture(tex1);
 }
 
 // TODO: Implementation incomplete

@@ -53,7 +53,7 @@ void OpenGLPipeline::configure()
 		glDisable(GL_TEXTURE_2D);
 	}
 	
-	glShadeModel(GL_SMOOTH);
+	// glShadeModel(GL_SMOOTH);
 	if(state->getLighting()){
 		if(state->getTexturing2D()){
 			if(true){
@@ -123,7 +123,6 @@ void OpenGLPipeline::configure()
 /** NOT YET IMPLEMENTED */
 bool OpenGLPipeline::validConfiguration()
 {	
-	// return true;
 	return (glGetError() == GL_NO_ERROR);
 }
 
@@ -281,8 +280,11 @@ void OpenGLPipeline::begin(const drawing_mode mode)
 			gl_mode = GL_TRIANGLES;
 			break;
 	}
-	
+
+	// glPointSize(3.0f);
+	// glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	glBegin(gl_mode);
+	// glBegin(gl_mode);
 }
 
 void OpenGLPipeline::vertex(const Vector3f& v, const Color3f& c, const Vector3f& n, const Vector2f& t)
@@ -358,7 +360,8 @@ void OpenGLPipeline::deleteTexture(unsigned* texture)
 
 void OpenGLPipeline::bindTexture(unsigned texture)
 {
-	glEnable(GL_TEXTURE_2D);
+	if(State::getInstance()->getTexturing2D()) glEnable(GL_TEXTURE_2D);
+	else glDisable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, texture);
 	// get error codes, look for: GL_INVALID_ENUM, GL_INVALID_OPERATION
 	
@@ -417,7 +420,7 @@ void OpenGLPipeline::loadTexture2D(const unsigned width, const unsigned height, 
 			break;
 	}
 	
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, pformat, ptype, data);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB8, width, height, 0, pformat, ptype, data);
 	// collect error data
 }
 

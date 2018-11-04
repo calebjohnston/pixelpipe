@@ -129,6 +129,7 @@ public:
 protected:
 	// std::string m_filename;				//!< The name of the file from where the data was loaded.
 	cg::image::FloatRaster* m_raster;	//!< The RGB data for each pixel.
+	cg::image::ByteRaster* m_rasterByte;	//!< The RGB data for each pixel.
 
 };	// class Texture
 
